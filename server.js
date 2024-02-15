@@ -170,8 +170,8 @@ app.post("/stripe-checkout", async (req, res) => {
           },
           allow_promotion_codes: true,
         mode: "payment",
-        success_url: `https://coin-ecommerce-store.onrender.com/success.html?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `https://coin-ecommerce-store.onrender.com/cancel.html?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `https://test-admin-wdmf.onrender.com/success.html?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `https://test-admin-wdmf.onrender.com/cancel.html?session_id={CHECKOUT_SESSION_ID}`,
         billing_address_collection: "required",
         line_items: lineItems, 
     })
