@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css"/>
+    <script src="main.js" defer></script>
+    <script src="cart.js" defer></script>
+    <script src="chatbot.js" defer></script>
+    <script src="script.js" defer></script>
+    <script src="products.js" defer></script>
+    <title>Cointology - Enquiries</title>
+    <style>
+    #productList, #cartItems, #cartTotal {
+          display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="productList" disabled></div>
+<div id="cartItems"></div>
+<div id="cartTotal"></div>
+<button class="chatbot-toggler">
+    <span class="material-icons-outlined">chat</span>
+    <span class="material-icons-outlined">close</span>
+  </button>
+  <div class="chatbot">
+    <header>
+      <h2>Chatbot</h2>
+      <span class="material-icons-outlined close-btn">close</span>
+    </header>
+    <ul class="chatbox">
+      <li class="chat incoming">
+        <span class="material-icons-outlined">x</span>
+        <p>Hi there! Sorry, I am out of credits!<br><br>
+            Please see important links:<br>
+            *To see our <strong>products</strong>, click <a href="products.html">here</a>.<br>
+            *To <strong>contact</strong> us, click <a href="faq.html">here</a>.<br>
+            *To see our <strong>shipping & returns</strong> policy, cick <a href="delivery.html">here</a>.<br>
+            *To see your <strong>cart</strong>, click <a href="cart.html">here</a>.
+        </p>
+      </li>
+    </ul>
+    <div class="chat-input">
+      <textarea placeholder="Enter a message..." required></textarea>
+      <span id="sent-btn" class="material-icons-outlined">send</span>
+    </div>
+  </div>
+
+    <header>
+      <i class="bi bi-list" id="menu-icon"></i>
+        <img src="/images/cointology.png" alt="" class="logo">
+        
+
+        <ul class="navbar">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Shop</a></li>
+            <li><a href="history.html">History</a></li>
+        </ul>
+
+        <div class="icons">
+            <a href="cart.html"><i class="bi bi-bag" id="cart-icon" data-quantity="0"></i></a>
+        </div>
+    </header>
+
+    <h1 class="history-heading" id="about">Enquiries</h1>
+    <p class="history-p">There's no question too small or request too big for the Cointology customer service experts. From enqueries
+        from latest coin releases to information about a recent order, we're always at your service. Please use 
+        the form below to get in touch or scroll down to see our frequently asked questions.</p>
+  
+
+    <section class="contact-us">
+        <div class="contact-us-content">
+            <h2 id="faq-here" class="faq-desc">Get in Touch</h2>
+        </div>
+        <form action="https://formsubmit.co/butcherleader06@gmail.com" method="POST" enctype="multipart/form-data">
+
+        <input type="hidden" name="_next" value="https://ecommerce-store-hleq.onrender.com/thanks.html">
+        <input type="hidden" name="_subject" value="New submission!">
+
+
+        <input type="text" class="name" id="name" id="name-border" placeholder="* First name" required onkeyup="validateName()" >
+        <p class="name-err-msg"></p>
+        <input type="email" class="email" id="email" placeholder="* Email" required onkeyup="validateEmail()" >
+        <p class="email-err-msg"></p>
+        <input type="number" class="number" id="number" placeholder="Phone Number (optional)" onkeyup="validateNumber()" >
+        <p class="num-err-msg"></p>
+        <textarea name="message" minlength="50" id="message" cols="10" rows="10" required placeholder="* Please enter your message" onkeyup="validateMessage()" ></textarea>
+        <p class="msg-err-msg"></p>
+        <input type="file" name="attachment" id="attachment" accept="image/png, image/jpeg">
+        <button onclick="validateForm()">Send</button>
+        <p class="submit-err"></p>
+    </form>
+    </section>
+
+
+    <section class="faq">
+        <h1 id="faqsection" class="faq-text">Frequently Asked Questions</h1>
+        <ul class="accordian">
+            <li>
+                <input type="radio" name="accordian" id="first" checked>
+                <label for="first">Do I get free shipping?</label>
+                <div class="accordian-content">
+                    <p>There are two options for shipping. Our first option is Standard Shipping which is free of charge.
+                        Delivery time is estimated to be between 5-10 working days. We also offer a Premium Shipping which
+                        is £5. Delivery time is estimated to be between 1-2 working days. Please keep in mind that we only
+                        ship to the UK, although we do have plans to expand soon!
+                    </p>
+                </div>
+            </li>
+            <li>
+                <input type="radio" name="accordian" id="second">
+                <label for="second">What if I want to return my coin?</label>
+                <div class="accordian-content">
+                    <p>All items come with our standard 31 day return. However, items must be in the same condition
+                        as you purchased them in. If items are damaged, we would not be able to offer a full refund
+                        as the value would be much lower. We advised all customers to take care of their coins. We also
+                        offer exchanges.<br><br> If you would like to swap the coin you purchased for another within the 31 days,
+                        you are able to do this if the coin is in the same condition. If so, please
+                        <a href="products.html">view our products</a>.
+                    </p>
+                </div>
+            </li>
+            <li>
+                <input type="radio" name="accordian" id="third">
+                <label for="third">When will my product be delivered?</label>
+                <div class="accordian-content">
+                    <p>We always aim to get your product to you as soon as possible. We will dispatch and ship your
+                        item within 24 hours of purchase. As we are based in London and deliver to the whole of the 
+                        UK, people living further away may experience slight delays. We expect all products to be delivered
+                        within 10 working days. If you upgrade to our Premium Shipping, then your produdt will be
+                        with you the next day. If you have made an order and you have not recieved your products within
+                        5 working, please <a href="#faq-here">contact us</a>.<br><br>
+                        Please view our information on <a href="delivery.html">delivery</a> and <a href="delivery.html">shipping</a>.
+                    </p>
+                </div>
+            </li>
+            <li>
+                <input type="radio" name="accordian" id="fourth">
+                <label for="fourth">Are these coins real?</label>
+                <div class="accordian-content">
+                    <p>Yes, our coins are legitimate. We get our coins via the Royal Mint when they are first released.
+                        We also purchase them of other collectors/customers and we work with experts to ensure they are 
+                        genuine coins. All our coins are in mint condition as we do not sell coins that are not in mint
+                        condition. To view our coins, please click <a href="products.html">here.</a>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <input type="radio" name="accordian" id="fifth">
+                <label for="fifth">I have a coin, will you buy it?</label>
+                <div class="accordian-content">
+                    <p>We do offer a service where we can value a coin and let you know how much we would purchase it for. Please
+                        get in touch at cointology@cointology.com or contact us
+                        <a class="link" href="#faq-here"> here</a> for more information. If you are looking to sell us a coin, you
+                        <strong>MUST</strong> attach a file to the form so that we can get an initial look at the coin to give you a
+                        valuation. Following this, we would look to get better quality pictures and or better, you visit us in store.
+                    </p>
+                </div>
+            </li>
+            <li>
+                <input type="radio" name="accordian" id="sixth">
+                <label for="sixth">Any other questions?</label>
+                <div class="accordian-content">
+                    <p>If you do have any other questions, please feel free to reach out to us at cointology@cointology.com
+                        or contact us<a class="link" href="#faq-here"> here.</a>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </section> 
+
+    <section class="contact" id="contact">
+        <div class="main-contact">
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Cointology</a></li>
+                <li><a href="products.html">Shop</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="index.html#u-reviews">Reviews</a></li>
+                <li><a href="index.html#u-news">News</a></li>
+                <li><a href="history.html">History</a></li>
+                <li><a href="cart.html">Cart</a></li>
+
+            </div>
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Info</a></li>
+                <li><a href="delivery.html">Shipping</a></li>
+                <li><a href="delivery.html">Returns</a></li>
+                <li><a href="delivery.html#delivery-title">Exchanges</a></li>
+                <li><a href="">Store Policy</a></li>
+                <li><a href="delivery.html#payment">Payment Methods</a></li>
+            </div>
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Get in touch</a></li>
+                <li><a href="faq.html#faqsection">FAQ</a></li>
+                <li><a href="faq.html#faq-here">Contact us</a></li>
+            </div>
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Social Media</a></li>
+                <li><a href="https://www.facebook.com/theroyalmint/" target="_blank">Facebook</a></li>
+                <li><a href="https://www.instagram.com/royalmintuk/?hl=en" target="_blank">Instagram</a></li>
+                <li><a href="https://twitter.com/RoyalMintUK" target="_blank">Twitter</a></li>
+                <li><a href="https://www.youtube.com/@royalmint" target="_blank">YouTube</a></li>
+            </div>
+        </div>
+
+        <div class="action">
+            <form>
+                <input type="email" name="email" placeholder="Your email" required>
+                <input type="submit" name="submit" value="Submit" required>
+            </form>
+        </div>
+    </section>
+
+    <div class="copyright">
+        <p>Copyright 2023 by CoinsMarketPlace.</p>
+    </div>
+
+
+</body>
+</html>

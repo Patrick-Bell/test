@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="main.js" defer></script>
+    <script src="chatbot.js" defer></script>
+    <script src="cart.js" defer></script>
+    <script src="script.js" defer></script>
+    <script src="products.js" defer></script>
+    <script src="server.js" defer></script>
+    <title>Cointology - Home of Coins</title>
+</head>
+<body>
+      <button class="chatbot-toggler">
+    <span class="material-icons-outlined">chat</span>
+    <span class="material-icons-outlined">close</span>
+  </button>
+  <div class="chatbot">
+    <header>
+      <h2>CoinBot</h2>
+      <span class="material-icons-outlined close-btn">close</span>
+    </header>
+    <ul class="chatbox">
+      <li class="chat incoming">
+        <span class="material-icons-outlined">x</span>
+        <p>Hi there! Sorry, I am out of credits!<br><br>
+            Please see important links:<br>
+            *To see our <strong>products</strong>, click <a href="products.html">here</a>.<br>
+            *To <strong>contact</strong> us, click <a href="faq.html">here</a>.<br>
+            *To see our <strong>shipping & returns</strong> policy, cick <a href="delivery.html">here</a>.<br>
+            *To see your <strong>cart</strong>, click <a href="cart.html">here</a>.
+        </p>
+      </li>
+    </ul>
+    <div class="chat-input">
+      <textarea placeholder="Enter a message..." required></textarea>
+      <span id="sent-btn" class="material-icons-outlined">send</span>
+    </div>
+  </div>
+    <header>
+      <i class="bi bi-list" id="menu-icon"></i>
+        <img src="/images/cointology.png" alt="" class="logo">
+        
+
+        <ul class="navbar">
+            <li><a href="products.html">Shop</a></li>
+            <li><a href="history.html">History</a></li>
+            <li><a href="faq.html">Enquiries</a></li>
+        </ul>
+        <div class="icons">
+            <a href="cart.html"><i class="bi bi-bag" id="cart-icon" data-quantity="0"></i></a>
+        </div>
+    </header>
+
+    <div class="sale-wrapper">
+        <div class="launch-time">
+            <div class="sale-text">Sale!</div>
+            <div class="time-containers">
+              <p class="time-measure" id="days">00 :</p>
+              <span class="times">DAYS</span>
+            </div>
+            <div class="time-containers">
+              <p class="time-measure" id="hours">00 :</p>
+              <span class="times">HRS</span>
+            </div>
+            <div class="time-containers">
+              <p class="time-measure" id="minutes">00 :</p>
+              <span class="times">MINS</span>
+            </div>
+            <div class="time-containers">
+              <p class="time-measure" id="seconds">00</p>
+              <span class="times">SECS</span>
+            </div>
+          </div>
+        </div>
+        </div>
+
+
+    <section class="shop" id="shop" id="products">
+        <h1>Coins on Sale!</h1>
+        <div class="container" id="productList"></div>
+        <div class="to-shop"><a href="products.html">Shop All Products</a></div>
+    </section> 
+
+   
+
+    <section class="about" id="about">
+        <div class="about-content">
+            <h2>About</h2>
+            <p>Cointology is your premier destination for exceptional coins, offering a diverse array of high-quality 
+                collections for our valued customers. Explore our website to discover a curated selection of coins 
+                available for purchase. Additionally, we actively engage in purchasing coins. If you're looking to 
+                appraise or sell your coins, we invite you to <a class="link">connect</a> with us. Your treasures are our passion, 
+                and we look forward to assisting you on your numismatic journey!</p>
+        </div>
+        <div class="container">
+            <div class="about-boxes">
+                <i class="bi bi-coin"></i>
+                <h4 class="about-number" data-val="55+">00</h4>
+                <h5 class="about-desc">Products Available</h5>
+            </div>
+            <div class="about-boxes">
+                <i class="bi bi-globe-americas"></i>
+                <h4 class="about-number" data-val="18+">00</h4>
+                <h5 class="about-desc">Countries we deliver in</h5>
+            </div>
+            <div class="about-boxes">
+                <i class="bi bi-star-fill star-icon"></i>
+                <h4 class="about-number" data-val="95+">00</h4>
+                <h5 class="about-desc">Five Stars</h5>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="reviews" id="reviews">
+        <div class="about-content">
+            <h2 id="u-reviews">What our Customers say:</h2>
+        </div>
+        <div class="review-slider">
+            <div class="review-wrapper">
+                <div class="container">
+                <div class="review-box swiper-slide">
+                    <img src="images/profile1.png" alt="">
+                    <p>Extremely great product! Really recommmend!</p>
+                    <h3>Elizabeth</h3>
+                    <div class="stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                    </div>
+                </div>
+
+                <div class="review-box swiper-slide">
+                    <img src="images/profile1.png" alt="">
+                    <p>Product was delivered promptly and in great condition.</p>
+                    <h3>Charles</h3>
+                    <div class="stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                </div>
+
+                <div class="review-box swiper-slide">
+                    <img src="images/profile1.png" alt="">
+                    <p>Great variety of products to choose from. Great prices too!</p>
+                    <h3>William</h3>
+                    <div class="stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <section class="news" id="about">
+        <div class="about-content">
+            <h2 id="u-news">Updated News</h2>
+        </div>
+        <div class="container">
+            <div class="news-boxes">
+                <div class="swiper">
+                    <!-- Additional required wrapper -->
+                    <div class="swiper-wrapper">
+                      <!-- Slides -->
+                      <img class="news-img swiper-slide" src="images/charless.jpeg" alt="">
+                      <img class="news-img swiper-slide" src="images/charlesfront.jpeg" alt="">
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <!-- If we need scrollbar -->
+                    <div class="swiper-scrollbar"></div>
+                  </div>
+                <p class="news-upload">26th May 2023</p>
+                <p class="news-title">Coronation of Charles III</p>
+                <p class="news-desc">The 2023 Charles III Coronation range from The Royal Mint features £5 coins, 
+                    a new 50p and a range of troy ounce coins struck in silver and gold. There's even a special 
+                    gold Sovereign, due to be struck on the day of His Majesty's coronation. Perhaps most excitingly, 
+                    coins in the range will feature a new portrait of The King, specially created for this occasion...
+            
+                </p>
+                <p class="news-read"><a target="_blank" href="https://britanniacoincompany.com/buy-coins/bu-coins/2023-charles-coronation-50p-bu/#:~:text=Crowned%20Coronation%20Portrait%20Of%20Charles%20III&text=Though%20Jennings%20new%20portrait%20has,personally%20approved%20by%20His%20Majesty.">Continue reading...</a></p>
+            </div>
+            <div class="news-boxes">
+                <img class="news-img" src="images/kews.jpeg" alt="">
+                <p class="news-upload">8th August 2023</p>
+                <p class="news-title">Rarest 50p coin?</p>
+                <p class="news-desc">An eBay seller from Swindon has made more than a few quid after selling the rare Kew Gardens 
+                    design for more than its face value. They are among many people on the selling site (eBau, Amazon etc.) trying to sell
+                    a 50ps for a high price. The Kew Gardens coin was released in 2009 and, according to The Royal 
+                    Mint, is one of the most sought-after 50p coins...
+                    </p>
+                <p class="news-read"><a target="_blank" href="https://www.swindonadvertiser.co.uk/news/23936394.royal-mint-rare-kew-garden-50p-sells-face-value/">Continue reading...</a></p>
+            </div>
+            <div class="news-boxes">
+                <div class="swiper">
+                    <!-- Additional required wrapper -->
+                    <div class="swiper-wrapper">
+                      <!-- Slides -->
+                      <img class="news-img swiper-slide" src="images/10p.jpeg" alt="">
+                      <img class="news-img swiper-slide" src="images/10p1.jpeg" alt="">
+                      <img class="news-img swiper-slide" src="images/10p2.jpeg" alt="">
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-scrollbar"></div>
+                  </div>
+                <p class="news-upload">13th November 2023</p>
+                <p class="news-title">10p Alphabet Coins List</p>
+                <p class="news-desc">We estimate that there are 2.6 billion 10p coins in circulation today - 7.82 
+                    million A to Z 10p coins entered circulation. If all were still in circulation, you could expect 
+                    to find one letter 10p in every 332 coins received as change. Collectors have already removed 
+                    millions from circulation - The Royal Mint British letter coins are all quite rare and very hard 
+                    to find in... 
+                </p>
+                <p class="news-read"><a target="_blank" href="https://coinhunter.co.uk/10p/">Continue reading...</a></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="find" id="find">
+        <div class="find-content">
+            <h2>Find us on</h2>
+            <div class="social-icons">
+                <a href="https://twitter.com/RoyalMintUK" target="_blank"><i class="bi bi-twitter"></i></a>
+                <a href="https://www.facebook.com/theroyalmint/" target="_blank"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.instagram.com/royalmintuk/?hl=en" target="_blank"><i class="bi bi-instagram"></i></a>
+                <a href="https://www.youtube.com/@royalmint" target="_blank"><i class="bi bi-youtube"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="main-contact">
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Cointology</a></li>
+                <li><a href="products.html">Shop</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="index.html#u-reviews">Reviews</a></li>
+                <li><a href="index.html#u-news">News</a></li>
+                <li><a href="history.html">History</a></li>
+                <li><a href="cart.html">Cart</a></li>
+
+            </div>
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Info</a></li>
+                <li><a href="delivery.html">Shipping</a></li>
+                <li><a href="delivery.html">Returns</a></li>
+                <li><a href="delivery.html#delivery-title">Exchanges</a></li>
+                <li><a href="">Store Policy</a></li>
+                <li><a href="delivery.html#payment">Payment Methods</a></li>
+            </div>
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Get in touch</a></li>
+                <li><a href="faq.html#faqsection">FAQ</a></li>
+                <li><a href="faq.html#faq-here">Contact us</a></li>
+            </div>
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Social Media</a></li>
+                <li><a href="https://www.facebook.com/theroyalmint/" target="_blank">Facebook</a></li>
+                <li><a href="https://www.instagram.com/royalmintuk/?hl=en" target="_blank">Instagram</a></li>
+                <li><a href="https://twitter.com/RoyalMintUK" target="_blank">Twitter</a></li>
+                <li><a href="https://www.youtube.com/@royalmint" target="_blank">YouTube</a></li>
+            </div>
+        </div>
+
+        <div class="action">
+            <form>
+                <input type="email" name="email" placeholder="Your email" required>
+                <input type="submit" name="submit" value="Submit" required>
+            </form>
+        </div>
+    </section>
+
+    <div class="copyright">
+        <p>Copyright 2023 by CoinsMarketPlace.</p>
+    </div>
+</body>
+</html>

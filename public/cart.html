@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css"/>
+    <script src="main.js" defer></script>
+    <script src="cart.js" defer></script>
+    <script src="script.js" defer></script>
+    <script src="chatbot.js" defer></script>
+    <script src="script.js" defer></script>
+    <script src="products.js" defer></script>
+    <title>Cointology - Your Cart</title>
+</head>
+<body>
+    <ul class="notifications"></ul>
+
+    <button class="chatbot-toggler">
+        <span class="material-icons-outlined">chat</span>
+        <span class="material-icons-outlined">close</span>
+      </button>
+      <div class="chatbot">
+        <header>
+          <h2>Chatbot</h2>
+          <span class="material-icons-outlined close-btn">close</span>
+        </header>
+        <ul class="chatbox">
+          <li class="chat incoming">
+            <span class="material-icons-outlined">x</span>
+            <p>Hi there! Sorry, I am out of credits!<br><br>
+                Please see important links:<br>
+                *To see our <strong>products</strong>, click <a href="products.html">here</a>.<br>
+                *To <strong>contact</strong> us, click <a href="faq.html">here</a>.<br>
+                *To see our <strong>shipping & returns</strong> policy, cick <a href="delivery.html">here</a>.<br>
+                *To see your <strong>cart</strong>, click <a href="cart.html">here</a>.
+            </p>
+          </li>
+        </ul>
+        <div class="chat-input">
+          <textarea placeholder="Enter a message..." required></textarea>
+          <span id="sent-btn" class="material-icons-outlined">send</span>
+        </div>
+      </div>
+    <header>
+        <i class="bi bi-list" id="menu-icon"></i>
+        <img src="/images/cointology.png" alt="" class="logo">
+
+        <ul class="navbar">
+            <li><a href="products.html">Shop</a></li>
+            <li><a href="history.html">History</a></li>
+            <li><a href="faq.html">Enquiries</a></li>
+        </ul>
+
+        <div class="icons">
+            <a href=""><i class="bi bi-bag" id="cart-icon" data-quantity="0"></i></a>
+        </div>
+    </header>
+
+    <section class="cart-container carts-container">
+        <a href="index.html" class="back-homepage">
+            <i class="bi bi-arrow-left"></i>
+            <span>Back To Home</span>
+        </a>
+        <h2 class="cart-s-title">Shopping Cart</h2>
+        <div class="cart-box">
+            <div class="cart-data">
+                <div id="cartItems">
+                    
+                </div>
+            </div>
+            <div class="cart-t">
+                <div id="cartTotal"></div>
+                <a href="" class="checkout-btn">Checkout</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="main-contact">
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Cointology</a></li>
+                <li><a href="products.html">Shop</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="history.html">History</a></li>
+                <li><a href="cart.html">Cart</a></li>
+
+            </div>
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Info</a></li>
+                <li><a href="delivery.html">Shipping</a></li>
+                <li><a href="delivery.html">Returns</a></li>
+                <li><a href="delivery.html#delivery-title">Exchanges</a></li>
+                <li><a href="">Store Policy</a></li>
+                <li><a href="">Payment Methods</a></li>
+            </div>
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Get in touch</a></li>
+                <li><a href="faq.html#faqsection">FAQ</a></li>
+                <li><a href="faq.html#faq-here">Contact us</a></li>
+            </div>
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Social Media</a></li>
+                <li><a href="https://www.facebook.com/theroyalmint/" target="_blank">Facebook</a></li>
+                <li><a href="https://www.instagram.com/royalmintuk/?hl=en" target="_blank">Instagram</a></li>
+                <li><a href="https://twitter.com/RoyalMintUK" target="_blank">Twitter</a></li>
+            </div>
+        </div>
+
+        <div class="action">
+            <form>
+                <input type="email" name="email" placeholder="Your email" required>
+                <input type="submit" name="submit" value="Submit" required>
+            </form>
+        </div>
+    </section>
+
+    <div class="copyright">
+        <p>Copyright 2023 by CoinsMarketPlace.</p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Cointology - Admin Panel </title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   </head>
+<body>
+  <div class="sidebar">
+    <div class="logo-details">
+      <i class='bx bxl-c-plus-plus icon'></i>
+        <div class="logo_name">Cointology</div>
+        <i class='bx bx-menu' id="btn" ></i>
+    </div>
+    <ul class="nav-list">
+      <li>
+        <a href="dashboard.html">
+          <i class='bx bx-grid-alt'></i>
+          <span class="links_name">Dashboard</span>
+        </a>
+         <span class="tooltip">Dashboard</span>
+      </li>
+      <li>
+       <a href="players.html">
+         <i class='bx bx-user' ></i>
+         <span class="links_name">Products</span>
+       </a>
+       <span class="tooltip">Products</span>
+     </li>
+     <li>
+       <a href="matches.html">
+        <i class='bx bx-stats'></i>
+         <span class="links_name">Orders</span>
+       </a>
+       <span class="tooltip">Orders</span>
+     </li>
+     <li>
+       <a href="table.html">
+        <i class='bx bx-table'></i>
+         <span class="links_name">Revenue</span>
+       </a>
+       <span class="tooltip">Revenue</span>
+     </li>
+     <li>
+       <a href="teamgenerator.html">
+        <i class='bx bxl-microsoft-teams'></i>
+         <span class="links_name">Refunds</span>
+       </a>
+       <span class="tooltip">Refunds</span>
+     </li>
+     <li>
+       <a href="awards.html">
+        <i class='bx bx-award'></i>
+         <span class="links_name">Deliveries</span>
+       </a>
+       <span class="tooltip">Deliveries</span>
+     </li>
+     <li>
+       <a href="comingsoon.html">
+        <i class='bx bx-video-recording' ></i>
+         <span class="links_name">Updates</span>
+       </a>
+       <span class="tooltip">Updates</span>
+     </li>
+     <li>
+       <a href="compare.html">
+        <i class='bx bx-git-compare'></i>
+        <span class="links_name">Contact</span>
+       </a>
+       <span class="tooltip">Contact</span>
+     </li>
+    </ul>
+  </div>
+  <section class="home-section">
+      <div class="top-container">
+        <div class="big-text">Products</div>
+        <button class="add-product">Add a Product</button>
+      </div>
+
+      <div class="add-product-container">
+        <h2>Add a Product</h2>
+        <input type="number" name="productID" id="productID" placeholder="Product ID" disabled required>
+        <input type="text" name="producTitlte" id="productTitle" placeholder="Product Name" required>
+        <input type="text" name="productDescription" id="productDescription" placeholder="Product Description" required>
+        <input type="text" name="productImage" id="productImage" placeholder="Product Image" required>
+        <input type="text" name="productPrice" id="productPrice" placeholder="Product Price" required>
+        <input type="text" name="productStock" id="productStock" placeholder="Product Stock" required>
+        <button class="submit-product">Submit Product</button>
+        <button class="close-btns">Close</button>
+      </div>
+
+      <!-- Edit Product Container -->
+<div class="edit-product-container">
+  <h2>Edit a Product</h2>
+  <input type="text" name="editProductTitle" id="editProductTitle" placeholder="Product Name" required>
+  <input type="text" name="editProductPrice" id="editProductPrice" placeholder="Product Price" required>
+  <input type="text" name="editProductDescription" id="editProductDescription" placeholder="Product Description" required>
+  <input type="text" name="editProductImage" id="editProductImage" placeholder="Product Image" required>
+  <input type="text" name="editProductStock" id="editProductStock" placeholder="Product Stock" required>
+  <button class="confirm-edit">Confirm Edit</button>
+  <button class="cancel-edit">Cancel Edit</button>
+</div>
+
+<!-- Other HTML content for your product list -->
+
+
+
+      <table id="product-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price (£)</th>
+            <th>Image</th>
+            <th>Stock</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      
+
+
+
+  </section>
+
+
+<script src="menu.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

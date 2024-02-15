@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="main.js" defer></script>
+    <script src="delivery.js" defer></script>
+    <script src="cart.js" defer></script>
+    <script src="chatbot.js" defer></script>
+    <script src="script.js" defer></script>
+    <script src="products.js" defer></script>
+    <title>Cointology - Shipping, Returns & Delivery</title>
+    <style>
+        #productList, #cartItems, #cartTotal {
+              display: none;
+            }
+    </style>
+</head>
+<body>
+<div id="productList" disabled></div>
+<div id="cartItems"></div>
+<div id="cartTotal"></div>
+
+
+<button class="chatbot-toggler">
+    <span class="material-icons-outlined">chat</span>
+    <span class="material-icons-outlined">close</span>
+  </button>
+  <div class="chatbot">
+    <header>
+      <h2>Chatbot</h2>
+      <span class="material-icons-outlined close-btn">close</span>
+    </header>
+    <ul class="chatbox">
+      <li class="chat incoming">
+        <span class="material-icons-outlined">x</span>
+        <p>Hi there! Sorry, I am out of credits!<br><br>
+            Please see important links:<br>
+            *To see our <strong>products</strong>, click <a href="products.html">here</a>.<br>
+            *To <strong>contact</strong> us, click <a href="faq.html">here</a>.<br>
+            *To see our <strong>shipping & returns</strong> policy, cick <a href="delivery.html">here</a>.<br>
+            *To see your <strong>cart</strong>, click <a href="cart.html">here</a>.
+        </p>
+      </li>
+    </ul>
+    <div class="chat-input">
+      <textarea placeholder="Enter a message..." required></textarea>
+      <span id="sent-btn" class="material-icons-outlined">send</span>
+    </div>
+  </div>
+
+
+
+<header>
+  <i class="bi bi-list" id="menu-icon"></i>
+    <img src="/images/cointology.png" alt="" class="logo">
+    
+
+    <ul class="navbar">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Shop</a></li>
+        <li><a href="history.html">History</a></li>
+    </ul>
+
+    <div class="icons">
+        <a href="cart.html"><i class="bi bi-bag" id="cart-icon" data-quantity="0"></i></a>
+    </div>
+</header>
+
+<h1 class="delivery-heading">Shipping & Returns</h1>
+<h2 class="delivery-subheading">See below for information about shipping & returns options.</h2>
+
+<section class="tabs">
+    <div class="container-1">
+        <div class="tab-item" id="tab-1" data-color="black">
+            <i class="bi bi-truck" style="color: black"></i>
+            <p class="hide-sm under-color" style="color: black">Shipping</p>
+        </div>
+        <div class="tab-item" id="tab-2" data-color="black">
+            <i class="bi bi-box-seam" style="color: lightgray"></i>
+            <p class="hide-sm" style="color: lightgray;">Returns</p>
+        </div>
+    </div>
+</section>
+
+<section class="tab-content">
+    <div class="container-1">
+        <div id="tab-1-content" class="tab-content-item show">
+            <div class="tab-1-content-inner">
+                <ul class="delivery-accordian">
+                    <li>
+                        <input type="radio" name="accordian" id="first" checked>
+                        <label for="first">Same Day In Store Collection
+                            <i class="bi bi-shop"></i>
+                            <p class="delivery-price">Free</p>
+                        </label>
+                        <div class="accordian-content">
+                            <p>Collection from store on the same day as order, typically between 1-6 hours.<br><br>
+                               Subject to product availability. Please see our <a href="products.html">products</a>.<br><br>
+                               If you select this option and are no longer able to collect your order, please <a href="faq.html#faq-here">contact us</a>.
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <input type="radio" name="accordian" id="second">
+                        <label for="second">In Store Collection
+                            <i class="bi bi-shop"></i>
+                            <p class="delivery-price">Free</p>
+                        </label>
+                        <div class="accordian-content">
+                            <p>In store collection, typically available for collection between 1 to 3 days.<br><br>
+                                If you select this option and are no longer able to collect your order, please <a href="faq.html#faq-here">contact us</a>.
+
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <input type="radio" name="accordian" id="third">
+                        <label for="third">Standard Shipping
+                            <i class="bi bi-truck"></i>
+                            <p class="delivery-price">Free</p>
+                        </label>
+                        <div class="accordian-content">
+                            <p>Standard shipping, typically delivers between 5 - 10  working days.<br><br>
+                                Delivery is Monday to Friday.<br><br>
+                                Standard shipping is free on all orders. There is no criteria to qualify.
+
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <input type="radio" name="accordian" id="fourth">
+                        <label for="fourth">Premium Shipping
+                            <i class="bi bi-truck"></i>
+                            <p class="delivery-price">£5.00</p>
+                        </label>
+                        <div class="accordian-content">
+                            <p>Premium Shipping, gurantees to deliver between 1 - 3 working days.<br><br>
+                               Delivered between 7am - 10pm.<br><br>
+                               Delivery is Monday to Sunday (not public holidays)
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <input type="radio" name="accordian" id="fifth">
+                        <label for="fifth">Next Day Delivery
+                            <i class="bi bi-ev-front"></i>                            
+                            <p class="delivery-price">£7.50</p>
+                        </label>
+                        <div class="accordian-content">
+                            <p>Next Day Delivery, gurantees to deliver your products the very next day.<br><br>
+                               The cut of time for deliveries to come the next day is 21:00.<br><br>
+                               Delivered between 7am - 10pm.<br><br>
+                               Delivery is Monday to Sunday (not public holidays).
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+        </div>
+    </div>
+    <div class="container-2">
+        <div id="tab-2-content" class="tab-content-item">
+            <div class="tab-2-content-inner">
+                <ul class="delivery-accordian">
+                    <li>
+                        <input type="radio" name="accordian" id="sixth" checked>
+                        <label for="sixth">Royal Mail
+                            <i class="bi bi-mailbox"></i>
+                            <p class="delivery-price">Free</p>
+                        </label>
+                        <div class="accordian-content">
+                            <p>Return through your local Post Office branch or Royal Mail Customer Service Point in over 12,500 locations.<br><br>
+                                Your return will be processed in approximately 10 days.<br><br>
+                                Open 7 days a week, early until late.
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <input type="radio" name="accordian" id="seventh">
+                        <label for="seventh">Royal Mail (Collection)
+                            <i class="bi bi-mailbox"></i>
+                            <p class="delivery-price">Free</p>
+                        </label>
+                        <div class="accordian-content">
+                            <p> Return from the comfort of your home Monday to Saturday, book collections up to 5 days in advance.<br><br>
+                                No printer required - The Royal Mail Post Person will bring the returns label with them on collection.<br><br>
+                                Collection Time ETA provided at point of booking the collection.<br><br>
+                                Optional safe place option for your collection including Porch / Garage / Outbuilding / Shed.<br><br>
+                                Your return will be processed in approximately 10 days.
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <input type="radio" name="accordian" id="eighth">
+                        <label for="eighth">Evri Collection
+                            <i class="bi bi-truck-flatbed"></i>
+                            <p class="delivery-price">Free</p>
+                        </label>
+                        <div class="accordian-content">
+                            <p>Return from the comfort of your home Monday to Saturday, book collections up to 7 days in advance.<br><br>
+                                Receive a 2 hour ETA email on the morning of collection.<br><br>
+                                Your return will be processed in approximately 10 days.
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <input type="radio" name="accordian" id="ninth">
+                        <label for="ninth">Cointology Pickup
+                            <i class="bi bi-airplane-engines"></i>
+                            <p class="delivery-price">£5.00</p>
+                        </label>
+                        <div class="accordian-content">
+                            <p>Return from the comfort of your own home, Monday to Sunday, book collections up to 7 days in advance - including same day collection<br><br>
+                                Recieve an email 2 hours prior to collection.<br><br>
+                                Your return will be processed in approximately 3 days.
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="delivery-more-info" id="delivery-title">
+    <p>Need more information? Please view our<a href="faq.html"> frequently asked questions</a> or contact us<a href="faq.html"> here</a></p>
+</div>
+
+<h1 class="exchange-heading">Exchange Policy</h1>
+<p class="exchange-p">Our standard return policy for anything you buy from us is <strong>35 days.</strong> This applies to 
+    online purchases, except in case of sale items. You have <strong>14 days</strong> for sale items bought online, 
+    unless otherwise stated. If the item is unused, in its original packaging and accompanied 
+    by a valid proof of purchase, we’ll offer an exchange in our coin stores (store returns only) or 
+    a full refund. This does not affect your statutory rights. If you have an issue with the quality of a product 
+    purchased from us, please get in touch and <a class="exchange-link" href="">contact us.</a></p>
+    <h1 class="exchange-heading">Exchanging Items</h1>
+<p class="exchange-p">If items are unused or in the same condition as you bought them in, you are entitled to exchange
+    your coin with another that we have in store. If the product you want costs less than the one you are returning, we
+    are able to refund you for remainder of the amount. If the item you want costs more than the one you are returning, <strong>you
+    will need to pay the difference</strong>. If you are considering swapping your coin for another, please view our
+    <a href="products.html">products</a>. If you have any questions for our customer servie team, please <a href="faq.html">contact us</a>. If you
+    prefer to speak on the phone, please call <strong>07111 111111</strong>.
+</p>
+
+<h1 class="exchange-heading" id="payment">How can I pay for an order?</h1>
+<p class="exchange-p">You can use any of the payment types listed below to pay for your order. We take your
+    security very seriously, therefore your details are safe with us.
+</p>
+<div class="payment-types">
+    <img src="images/american-express-png.webp" alt="">
+    <img src="images/apple-pay-png.webp" alt="">
+    <img src="images/mastercard-png.webp" alt="">
+    <img src="images/visa-png.webp" alt="">
+</div>
+<p class="exchange-p">We also take fraud very seriously, so all credit and debit card holders are subject to validation
+    and authorisation by both of us and the card issuer. To better protect our customers when making online payments
+    you may be presented with 3D secure security measures when paying. This is dependent on your bank issuer and may
+    be require you to enter a password or get a security code via email or phone.
+</p>
+<p class="exchange-p">If you don't want to save your payment details to your account, you can also enter them when
+    you get to checkout. If there are no saved payment details, you'll be asked to enter them when you are on the
+    <strong>checkout</strong> page.
+</p>
+
+<p class="exchange-p">At the moment, we do not have any buy now, pay later payment options.</p>
+
+<section class="contact" id="contact">
+    <div class="main-contact">
+        <div class="contact-content">
+            <li><a href="" class="footer-color">Cointology</a></li>
+            <li><a href="products.html">Shop</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="history.html">History</a></li>
+            <li><a href="cart.html">Cart</a></li>
+
+        </div>
+        <div class="contact-content">
+            <li><a href="" class="footer-color">Info</a></li>
+            <li><a href="delivery.html">Shipping</a></li>
+            <li><a href="delivery.html">Returns</a></li>
+            <li><a href="delivery.html#delivery-title">Exchanges</a></li>
+            <li><a href="">Store Policy</a></li>
+            <li><a href="delivery.html#payment">Payment Methods</a></li>
+        </div>
+        <div class="contact-content">
+            <li><a href="" class="footer-color">Get in touch</a></li>
+            <li><a href="faq.html#faqsection">FAQ</a></li>
+            <li><a href="faq.html#faq-here">Contact us</a></li>
+        </div>
+        <div class="contact-content">
+            <li><a href="" class="footer-color">Social Media</a></li>
+            <li><a href="https://www.facebook.com/theroyalmint/" target="_blank">Facebook</a></li>
+            <li><a href="https://www.instagram.com/royalmintuk/?hl=en" target="_blank">Instagram</a></li>
+            <li><a href="https://twitter.com/RoyalMintUK" target="_blank">Twitter</a></li>
+        </div>
+    </div>
+
+    <div class="action">
+        <form>
+            <input type="email" name="email" placeholder="Your email" required>
+            <input type="submit" name="submit" value="Submit" required>
+        </form>
+    </div>
+</section>
+
+<div class="copyright">
+    <p>Copyright 2023 by CoinsMarketPlace.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css"/>
+    <script src="main.js" defer></script>
+    <script src="cart.js" defer></script>
+    <script src="script.js" defer></script>
+    <script src="products.js" defer></script>
+    <script src="chatbot.js"></script>
+    <title>Cointology - History</title>
+    <style>
+        #productList, #cartItems, #cartTotal {
+              display: none;
+            }
+    </style>
+</head>
+<body>
+
+<div id="productList" disabled></div>
+<div id="cartItems"></div>
+<div id="cartTotal"></div>
+
+<button class="chatbot-toggler">
+    <span class="material-icons-outlined">chat</span>
+    <span class="material-icons-outlined">close</span>
+  </button>
+  <div class="chatbot">
+    <header>
+      <h2>Chatbot</h2>
+      <span class="material-icons-outlined close-btn">close</span>
+    </header>
+    <ul class="chatbox">
+      <li class="chat incoming">
+        <span class="material-icons-outlined">x</span>
+        <p>Hi there! Sorry, I am out of credits!<br><br>
+            Please see important links:<br>
+            *To see our <strong>products</strong>, click <a href="products.html">here</a>.<br>
+            *To <strong>contact</strong> us, click <a href="faq.html">here</a>.<br>
+            *To see our <strong>shipping & returns</strong> policy, cick <a href="delivery.html">here</a>.<br>
+            *To see your <strong>cart</strong>, click <a href="cart.html">here</a>.
+        </p>
+      </li>
+    </ul>
+    <div class="chat-input">
+      <textarea placeholder="Enter a message..." required></textarea>
+      <span id="sent-btn" class="material-icons-outlined">send</span>
+    </div>
+  </div>
+
+    <header>
+      <i class="bi bi-list" id="menu-icon"></i>
+        <img src="/images/cointology.png" alt="" class="logo">
+        
+
+        <ul class="navbar">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Shop</a></li>
+            <li><a href="faq.html">Enquiries</a></li>
+        </ul>
+
+        <div class="icons">
+            <a href="cart.html"><i class="bi bi-bag" id="cart-icon" data-quantity="0"></i></a>
+        </div>
+    </header>
+
+
+    <h1 class="history-heading">Creation of the 50p Coin</h1>
+    <p class="history-p">In October 1969, 50p coins joined the 5p (shilling) and 10p (florin) coins in circulation, leaving only 
+        the three copper coins - to be introduced on 15 February 1971 - to complete the new series of decimal coins. 
+        The design on the reverse of the 50p coin features a symbol of Britannia that has appeared on our coinage
+        since 1672. While this design may have been traditional, the shape of the new 50p coin, an equilateral 
+        curve heptagon, was revolutionary. This made it easily distinguishable from round coins both by feel and 
+        by sight, while its constant breadth allowed it to roll into vending machines.</p>
+    <p class="history-p">With the introduction of smaller 5p and 10p coins in 1990 and 1992 respectively, 50p 
+        coins became the largest in circulation. In October 1994, the Government announced a further review of the 
+        United Kingdom coinage. The results revealed a requirement for a smaller 50p coin, which was duly introduced 
+        on 1 September 1997.</p>
+        <div class="coin-container">
+        <div class="coins-container">
+            <div class="coin-left coin-bold">First Issued</div>
+            <div class="coin-right">October, 1969</div>
+        </div>
+        <div class="coins-container">
+            <div class="coin-left coin-bold">Diameter</div>
+            <div class="coin-right">27.3mm</div>
+        </div>
+        <div class="coins-container">
+            <div class="coin-left coin-bold">Weight</div>
+            <div class="coin-right">8.0g</div>
+        </div>
+        <div class="coins-container">
+            <div class="coin-left coin-bold">Thickness</div>
+            <div class="coin-right">1.78mm</div>
+        </div>
+        <div class="coins-container">
+            <div class="coin-left coin-bold">Composition</div>
+            <div class="coin-right">Curpo-nickel (75% copper, 25% nickel)</div>
+        </div>
+        <div class="coins-container">
+            <div class="coin-left coin-bold">Edge</div>
+            <div class="coin-right">Plain</div>
+        </div>
+        <div class="coins-container">
+            <div class="coin-left coin-bold">Collections</div>
+            <div class="coin-right"><a href="products.html">click here</a></div>
+        </div>
+    </div>
+
+
+    <section class="contact" id="contact">
+        <div class="main-contact">
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Cointology</a></li>
+                <li><a href="products.html">Shop</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="history.html">History</a></li>
+                <li><a href="cart.html">Cart</a></li>
+
+            </div>
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Info</a></li>
+                <li><a href="delivery.html">Shipping</a></li>
+                <li><a href="delivery.html">Returns</a></li>
+                <li><a href="delivery.html#delivery-title">Exchanges</a></li>
+                <li><a href="">Store Policy</a></li>
+                <li><a href="">Payment Methods</a></li>
+            </div>
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Get in touch</a></li>
+                <li><a href="faq.html#faqsection">FAQ</a></li>
+                <li><a href="faq.html#faq-here">Contact us</a></li>
+            </div>
+            <div class="contact-content">
+                <li><a href="" class="footer-color">Social Media</a></li>
+                <li><a href="https://www.facebook.com/theroyalmint/" target="_blank">Facebook</a></li>
+                <li><a href="https://www.instagram.com/royalmintuk/?hl=en" target="_blank">Instagram</a></li>
+                <li><a href="https://twitter.com/RoyalMintUK" target="_blank">Twitter</a></li>
+            </div>
+        </div>
+
+        <div class="action">
+            <form>
+                <input type="email" name="email" placeholder="Your email" required>
+                <input type="submit" name="submit" value="Submit" required>
+            </form>
+        </div>
+    </section>
+
+    <div class="copyright">
+        <p>Copyright 2023 by CoinsMarketPlace.</p>
+    </div>
+   
+
+
+
+
+
+</body>
+</html>
