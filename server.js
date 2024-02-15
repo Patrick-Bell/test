@@ -1,6 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
-import stripe from "stripe";
+import stripeLib from "stripe";
+import bodyParser from 'body-parser';
+import { handleWebhookEvent } from './webhooks';
+
 
 dotenv.config();
 
@@ -8,6 +11,11 @@ const app = express();
 
 app.use(express.static("public"));
 app.use(express.json());
+app.use(bodyParser.raw({ type: 'application/json' }));
+
+app.use('/webhook', handleWebhookEvent);
+
+
 
 app.get("/", (req, res) => {
     res.sendFile("index.html", { root: "public" });
@@ -41,10 +49,15 @@ app.get("/delivery.html", (req, res) => {
   res.sendFile("delivery.html", { root: "public" });
 });
 
+app.get("/admin.html", (req, res) => {
+  res.sendFile("admin.html", { root: "public" });
+});
 
 
 
-let stripeGateway = stripe(process.env.stripe_key);
+
+
+let stripeGateway = stripeLib(process.env.stripe_key);
 app.post("/stripe-checkout", async (req, res) => {
     const lineItems = req.body.items.map((item) => {
         const unitAmount = parseInt(parseFloat(item.price) * 100)
@@ -180,34 +193,6 @@ app.post("/stripe-checkout", async (req, res) => {
 
     res.json({ url: session.url })
 })
-
-
-app.post("/webhook", express.raw({ type: "application/json" }), (request, response) => {
-  const sig = request.headers["stripe-signature"];
-  let event;
-
-  try {
-    event = stripe.webhooks.constructEvent(request.body, sig, process.env.STRIPE_ENDPOINT_SECRET);
-  } catch (err) {
-    response.status(400).send(`Webhook Error: ${err.message}`);
-    return;
-  }
-
-  // Handle the event
-  switch (event.type) {
-    case "payment_intent.succeeded":
-      const paymentIntentSucceeded = event.data.object;
-      console.log("Payment Intent Succeeded:", paymentIntentSucceeded);
-      // Handle the successful payment event here
-      break;
-    // Add more cases for other event types as needed
-    default:
-      console.log(`Unhandled event type ${event.type}`);
-  }
-
-  // Return a 200 response to acknowledge receipt of the event
-  response.send();
-});
 
 
 app.listen(3000, () => {
