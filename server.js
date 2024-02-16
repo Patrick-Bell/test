@@ -193,22 +193,24 @@ app.post("/stripe-checkout", async (req, res) => {
 
 
 
-app.post('/webhook', async (request, response) => {
+app.post('/webhook', express.raw({ type: 'application/json' }), async (request, response) => {
   const sig = request.headers['stripe-signature'];
   let event;
 
   try {
     console.log('Before constructEvent');
-      const payload = request.body
-      const payloadString = JSON.stringify(payload, null, 2)
+    const payload = request.body;
+
+    // Note: Ensure the raw request body is passed to constructEvent
     event = stripeGateway.webhooks.constructEvent(
-        payloadString,
-        sig,
-        process.env.STRIPE_ENDPOINT_SECRET
+      payload,  // Use the raw payload
+      sig,
+      process.env.STRIPE_ENDPOINT_SECRET
     );
+
     console.log('After constructEvent');
-    console.log('Webhook Event:', event);}
-     catch (err) {
+    console.log('Webhook Event:', event);
+  } catch (err) {
     console.error('Webhook Error:', err.message);
     console.error('Request Body:', JSON.stringify(request.body)); // Convert the request body to a string for logging
     response.status(400).send(`Webhook Error: ${err.message}`);
@@ -230,6 +232,7 @@ app.post('/webhook', async (request, response) => {
   // Return a 200 response to acknowledge receipt of the event
   response.send();
 });
+
 
 
 
