@@ -12,6 +12,9 @@ const app = express();
 app.use(express.static("public"));
 app.use(express.json());
 
+let stripeGateway = stripeLib(process.env.stripe_key); // Define stripeGateway here
+
+
 
 app.get("/", (req, res) => {
     res.sendFile("index.html", { root: "public" });
@@ -71,7 +74,6 @@ app.post("/stripe-checkout", async (req, res) => {
     })
 
     
-    let stripeGateway = stripeLib(process.env.stripe_key);
     const session = await stripeGateway.checkout.sessions.create({
         payment_method_types: ['card'],
         shipping_address_collection: {
