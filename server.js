@@ -192,14 +192,15 @@ app.post("/stripe-checkout", async (req, res) => {
 
 
 
-app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (request, response) => {
+app.post('/webhook', express.raw({ type: 'application/json' }), async (request, response) => {
   const sig = request.headers['stripe-signature'];
   let event;
 
   try {
     console.log('Before constructEvent');
+      const rawBody = request.body.toString('utf8'); // Convert the buffer to a string
     event = stripeGateway.webhooks.constructEvent(
-        request.body,
+        rawBody,
         sig,
         process.env.STRIPE_ENDPOINT_SECRET
     );
@@ -207,6 +208,7 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
     console.log('Webhook Event:', event);}
      catch (err) {
     console.error('Webhook Error:', err.message);
+    console.error('Request Body:', request.body.toString()); // Log the raw request body
     response.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
