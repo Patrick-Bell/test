@@ -189,30 +189,16 @@ app.post("/stripe-checkout", async (req, res) => {
 })
 
 
-async function createWebhookEndpoint() {
-  try {
-    const webhookEndpoint = await stripeLib.webhookEndpoint.create({
-      url: "https://test-admin-wdmf.onrender.com/webhook",
-      enabled_events: 'checkout.session.completed'
-    });
-    console.log('Webhook Endpoint Created:', webhookEndpoint);
-  } catch (error) {
-    console.error("Error creating webhook endpoint:", error.message);
-  }
-}
-
-createWebhookEndpoint();
 
 app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (request, response) => {
   const sig = request.headers['stripe-signature'];
   let event;
 
   try {
-    let endpointSecret = "whsec_mHFOnyPSekvhCnrNyiqDvKCa9JPJvuHJ"
     event = await stripeGateway.webhooks.constructEvent(
       request.body,
       sig,
-      endpointSecret
+      process.env.STRIPE_ENDPOINT_SECRET
     );
     console.log('Webhook Event:', event);
   } catch (err) {
