@@ -197,6 +197,7 @@ app.post('/webhook', async (request, response) => {
   let event;
 
   try {
+    let stripeGateway = stripeLib(process.env.stripe_key);
     event = await stripeGateway.webhooks.constructEvent(
       request.body,
       sig,
