@@ -209,7 +209,6 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
 
   try {
     let endpointSecret = "whsec_mHFOnyPSekvhCnrNyiqDvKCa9JPJvuHJ"
-    let stripeGateway = stripeLib("sk_test_51O0icJJzMnAV4zWXKmp4OKguCDTZXDMlnCYAdIVj93iT0Nq6HVoNygGQj14HABqlqKPQGVuIjYs0lsOm0IyCZ7M700OD7HHHmj");
     event = await stripeGateway.webhooks.constructEvent(
       request.body,
       sig,
