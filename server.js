@@ -3,8 +3,6 @@ import dotenv from "dotenv";
 import stripeLib from "stripe";
 import bodyParser from 'body-parser';
 
-let stripeGateway = stripeLib(process.env.stripe_key);
-
 
 
 dotenv.config();
@@ -14,6 +12,7 @@ const app = express();
 app.use(express.static("public"));
 app.use(express.json());
 app.use(bodyParser.raw({ type: 'application/json' }));
+
 
 
 app.get("/", (req, res) => {
@@ -74,7 +73,7 @@ app.post("/stripe-checkout", async (req, res) => {
     })
 
     
-
+    let stripeGateway = stripeLib(process.env.stripe_key);
     const session = await stripeGateway.checkout.sessions.create({
         payment_method_types: ['card'],
         shipping_address_collection: {
@@ -191,36 +190,32 @@ app.post("/stripe-checkout", async (req, res) => {
     res.json({ url: session.url })
 })
 
-app.post('/webhook', (request, response) => {
-  console.log('Received webhook event:', request.body);
 
+
+app.post('/webhook', async (request, response) => {
   const sig = request.headers['stripe-signature'];
   let event;
 
   try {
-      event = stripeGateway.webhooks.constructEvent(request.body, sig, process.env.STRIPE_ENDPOINT_SECRET);
+    event = await stripeGateway.webhooks.constructEvent(
+      request.body,
+      sig,
+      process.env.STRIPE_ENDPOINT_SECRET
+    );
   } catch (err) {
-      console.error('Webhook Error:', err.message);
-      response.status(400).send(`Webhook Error: ${err.message}`);
-      return;
+    console.error('Webhook Error:', err.message);
+    response.status(400).send(`Webhook Error: ${err.message}`);
+    return;
   }
 
   // Handle the event
   switch (event.type) {
-      case 'payment_intent.succeeded':
-          const paymentIntentSucceeded = event.data.object;
-          console.log('Payment Intent Succeeded:', paymentIntentSucceeded);
-          // Handle the successful payment event here
-          break;
-      // Add more cases for other event types as needed
-      default:
-          console.log(`Unhandled event type ${event.type}`);
+    // Your event handling code
   }
 
   // Return a 200 response to acknowledge receipt of the event
   response.send();
 });
-
 
 
 
