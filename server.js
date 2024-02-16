@@ -189,18 +189,33 @@ app.post("/stripe-checkout", async (req, res) => {
 })
 
 
+async function createWebhookEndpoint() {
+  try {
+    const webhookEndpoint = await stripeLib.webhookEndpoint.create({
+      url: "https://test-admin-wdmf.onrender.com/webhook",
+      enabled_events: 'checkout.session.completed'
+    });
+    console.log('Webhook Endpoint Created:', webhookEndpoint);
+  } catch (error) {
+    console.error("Error creating webhook endpoint:", error.message);
+  }
+}
 
-app.post('/webhook', async (request, response) => {
+createWebhookEndpoint();
+
+app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (request, response) => {
   const sig = request.headers['stripe-signature'];
   let event;
 
   try {
-    let stripeGateway = stripeLib(process.env.stripe_key);
+    let endpointSecret = "whsec_mHFOnyPSekvhCnrNyiqDvKCa9JPJvuHJ"
+    let stripeGateway = stripeLib("sk_test_51O0icJJzMnAV4zWXKmp4OKguCDTZXDMlnCYAdIVj93iT0Nq6HVoNygGQj14HABqlqKPQGVuIjYs0lsOm0IyCZ7M700OD7HHHmj");
     event = await stripeGateway.webhooks.constructEvent(
       request.body,
       sig,
-      process.env.STRIPE_ENDPOINT_SECRET
+      endpointSecret
     );
+    console.log('Webhook Event:', event);
   } catch (err) {
     console.error('Webhook Error:', err.message);
     response.status(400).send(`Webhook Error: ${err.message}`);
@@ -209,10 +224,10 @@ app.post('/webhook', async (request, response) => {
 
   // Handle the event
   switch (event.type) {
-    case 'payment_intent.succeeded':
-      const paymentIntentSucceeded = event.data.object;
-      console.log('Payment Intent Succeeded:', paymentIntentSucceeded);
-      // Handle the successful payment event here
+    case 'checkout.session.completed':
+      const sessionCompleted = event.data.object;
+      console.log('Checkout Session Completed:', sessionCompleted);
+      // Handle the successful checkout event here
       break;
     // Add more cases for other event types as needed
     default:
