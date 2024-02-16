@@ -210,12 +210,20 @@ app.post('/webhook', async (request, response) => {
 
   // Handle the event
   switch (event.type) {
-    // Your event handling code
+    case 'payment_intent.succeeded':
+      const paymentIntentSucceeded = event.data.object;
+      console.log('Payment Intent Succeeded:', paymentIntentSucceeded);
+      // Handle the successful payment event here
+      break;
+    // Add more cases for other event types as needed
+    default:
+      console.log(`Unhandled event type ${event.type}`);
   }
 
   // Return a 200 response to acknowledge receipt of the event
   response.send();
 });
+
 
 
 
