@@ -7,12 +7,13 @@ import bodyParser from 'body-parser';
 
 dotenv.config();
 
+
 const app = express();
+let stripeGateway = stripeLib(process.env.stripe_key); // Define stripeGateway here
 
 app.use(express.static("public"));
 app.use(express.json());
-
-let stripeGateway = stripeLib(process.env.stripe_key); // Define stripeGateway here
+app.use('/webhook', express.raw({ type: 'application/json' }))
 
 
 
@@ -192,15 +193,16 @@ app.post("/stripe-checkout", async (req, res) => {
 
 
 
-app.post('/webhook', express.raw({ type: 'application/json' }), async (request, response) => {
+app.post('/webhook', async (request, response) => {
   const sig = request.headers['stripe-signature'];
   let event;
 
   try {
     console.log('Before constructEvent');
-      const rawBody = request.body.toString('utf8'); // Convert the buffer to a string
+      const payload = request.body
+      const payloadString = JSON.stringify(payload, null, 2)
     event = stripeGateway.webhooks.constructEvent(
-        rawBody,
+        payloadString,
         sig,
         process.env.STRIPE_ENDPOINT_SECRET
     );
@@ -208,7 +210,7 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (request, 
     console.log('Webhook Event:', event);}
      catch (err) {
     console.error('Webhook Error:', err.message);
-    console.error('Request Body:', request.body.toString()); // Log the raw request body
+    console.error('Request Body:', JSON.stringify(request.body)); // Convert the request body to a string for logging
     response.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
