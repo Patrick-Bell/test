@@ -14,6 +14,7 @@ let products = [];  // Initialize an empty array for products
 
 
 app.use(express.static("public"));
+app.use(bodyParser.raw({ type: 'application/json' })); // Place bodyParser.raw before route handlers
 app.use(express.json());
 
 app.get("/get-products", (req, res) => {
@@ -72,11 +73,15 @@ function fetchProductDetails(items) {
 
 app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, res) => {
   let event;
-  let sig = req.headers['stripe-signature'];
+  const sig = req.headers['stripe-signature'];
 
   try {
+    // Convert the raw buffer to a string
+    const rawBody = req.body.toString('utf-8');
+
+    // Construct the event using the raw body
     event = stripeGateway.webhooks.constructEvent(
-      req.body, // Use the raw body here
+      rawBody,
       sig,
       process.env.STRIPE_ENDPOINT_SECRET
     );
@@ -96,6 +101,7 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, r
 
   res.json({ received: true });
 });
+
 
 
 
