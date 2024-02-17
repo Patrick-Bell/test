@@ -3,18 +3,70 @@ import dotenv from "dotenv";
 import stripe from "stripe";
 import bodyParser from 'body-parser';
 
-
-
 dotenv.config();
 
-
 const app = express();
-let stripeGateway = stripe(process.env.stripe_key); // Define stripeGateway here
-let products = [];  // Initialize an empty array for products
+let stripeGateway = stripe(process.env.stripe_key);
+let products = [];
+
+// Set up middleware
+app.use(bodyParser.raw({ type: 'application/json', verify: (req, res, buf) => { req.rawBody = buf; } }));
 
 
+// Webhook endpoint
+app.post('/webhook', async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    event = stripeGateway.webhooks.constructEvent(
+      req.rawBody,
+      sig,
+      process.env.STRIPE_ENDPOINT_SECRET
+    );
+  } catch (err) {
+    console.error('Webhook error:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // Handle the event
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+
+    // Fetch product details based on the session information
+    const productDetails = fetchProductDetails(session.line_items);
+    console.log('Product Details:', productDetails);
+  }
+
+  res.json({ received: true });
+});
+
+// Your other routes and logic...
+
+
+
+
+function fetchProductDetails(items) {
+  // Check if items is defined and is an array
+  if (!items || !Array.isArray(items)) {
+    console.error('Invalid items:', items);
+    return [];
+  }
+
+  // Your logic to fetch product details from the dynamic array
+  const productDetails = items.map((item) => {
+    const product = products.find((p) => p.id === item.id);
+    return {
+      ...item,
+      productDetails: product,
+    };
+  });
+
+  return productDetails;
+}
+
+app.use(express.json());
 app.use(express.static("public"));
-app.use(express.json())
 
 app.get("/get-products", (req, res) => {
   res.json(products);
@@ -55,24 +107,6 @@ app.get("/delivery.html", (req, res) => {
 app.get("/admin.html", (req, res) => {
   res.sendFile("admin.html", { root: "public" });
 });
-
-
-function fetchProductDetails(items) {
-  // Your logic to fetch product details from the dynamic array
-  const productDetails = items.map((item) => {
-    const product = products.find((p) => p.id === item.id);
-    return {
-      ...item,
-      productDetails: product,
-    };
-  });
-
-  return productDetails;
-}
-
-
-
-
 
 
 app.post("/stripe-checkout", async (req, res) => {
@@ -205,10 +239,8 @@ app.post("/stripe-checkout", async (req, res) => {
         line_items: lineItems, 
     })
     
-    console.log(session); // Log the session object to the console    
-    const retrievedSession = await stripeGateway.checkout.sessions.retrieve(session.id);
-    const productDetails = fetchProductDetails(retrievedSession.line_items);
-    console.log('Product Details:', productDetails); 
+    console.log(session); // Log the session object to the console   
+
 
     res.json({ url: session.url });
 
