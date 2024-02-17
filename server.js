@@ -15,7 +15,6 @@ let products = [];  // Initialize an empty array for products
 
 app.use(express.static("public"));
 app.use(express.json())
-app.use(express.raw({ type: 'application/json', verify: (req, res, buf) => { req.rawBody = buf; } }));
 
 app.get("/get-products", (req, res) => {
   res.json(products);
@@ -70,33 +69,6 @@ function fetchProductDetails(items) {
 
   return productDetails;
 }
-
-app.post('/webhook', async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-
-  try {
-    const rawBody = req.body;
-    console.log('Received Raw Body:', rawBody); // Log raw body for debugging
-
-    const event = stripeGateway.webhooks.constructEvent(
-      rawBody,
-      sig,
-      process.env.STRIPE_ENDPOINT_SECRET
-    );
-
-    // Handle the event
-    if (event.type === 'checkout.session.completed') {
-      const session = event.data.object;
-      const productDetails = fetchProductDetails(session.line_items);
-      console.log('Product Details:', productDetails);
-    }
-
-    res.json({ received: true });
-  } catch (err) {
-    console.error('Webhook error:', err.message);
-    res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-});
 
 
 
@@ -233,7 +205,10 @@ app.post("/stripe-checkout", async (req, res) => {
         line_items: lineItems, 
     })
     
-    console.log(session); // Log the session object to the console     
+    console.log(session); // Log the session object to the console    
+    const retrievedSession = await stripeGateway.checkout.sessions.retrieve(session.id);
+    const productDetails = fetchProductDetails(retrievedSession.line_items);
+    console.log('Product Details:', productDetails); 
 
     res.json({ url: session.url });
 
