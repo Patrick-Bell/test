@@ -14,7 +14,6 @@ let products = [];  // Initialize an empty array for products
 
 
 app.use(express.static("public"));
-app.use(express.json());
 
 app.get("/get-products", (req, res) => {
   res.json(products);
@@ -74,9 +73,12 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, r
   let event;
   let sig = req.headers['stripe-signature'];
 
-
   try {
-    event = stripeGateway.webhooks.constructEvent(req.body, sig, process.env.STRIPE_ENDPOINT_SECRET);
+    event = stripeGateway.webhooks.constructEvent(
+      req.body, // Use the raw body here
+      sig,
+      process.env.STRIPE_ENDPOINT_SECRET
+    );
   } catch (err) {
     console.error('Webhook error:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
@@ -93,6 +95,7 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, r
 
   res.json({ received: true });
 });
+
 
 
 app.post("/stripe-checkout", async (req, res) => {
