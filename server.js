@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import stripeLib from "stripe";
+import stripe from "stripe";
 import bodyParser from 'body-parser';
 
 
@@ -9,13 +9,16 @@ dotenv.config();
 
 
 const app = express();
-let stripeGateway = stripeLib(process.env.stripe_key); // Define stripeGateway here
+let stripeGateway = stripe(process.env.stripe_key); // Define stripeGateway here
+let products = [];  // Initialize an empty array for products
+
 
 app.use(express.static("public"));
 app.use(express.json());
-app.use('/webhook', express.raw({ type: 'application/json' }))
 
-
+app.get("/get-products", (req, res) => {
+  res.json(products);
+});
 
 app.get("/", (req, res) => {
     res.sendFile("index.html", { root: "public" });
@@ -54,6 +57,42 @@ app.get("/admin.html", (req, res) => {
 });
 
 
+function fetchProductDetails(items) {
+  // Your logic to fetch product details from the dynamic array
+  const productDetails = items.map((item) => {
+    const product = products.find((p) => p.id === item.id);
+    return {
+      ...item,
+      productDetails: product,
+    };
+  });
+
+  return productDetails;
+}
+
+app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, res) => {
+  let event;
+  let sig = req.headers['stripe-signature'];
+
+
+  try {
+    event = stripeGateway.webhooks.constructEvent(req.body, sig, process.env.STRIPE_ENDPOINT_SECRET);
+  } catch (err) {
+    console.error('Webhook error:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // Handle the event
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+
+    // Fetch product details based on the session information
+    const productDetails = fetchProductDetails(session.line_items);
+    console.log('Product Details:', productDetails);
+  }
+
+  res.json({ received: true });
+});
 
 
 app.post("/stripe-checkout", async (req, res) => {
@@ -180,61 +219,17 @@ app.post("/stripe-checkout", async (req, res) => {
           },
           allow_promotion_codes: true,
         mode: "payment",
-        success_url: `https://test-admin-wdmf.onrender.com/success.html?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `https://test-admin-wdmf.onrender.com/cancel.html?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: "https://test-admin-wdmf.onrender.com/success.html?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url: "https://test-admin-wdmf.onrender.com?session_id={CHECKOUT_SESSION_ID}",
         billing_address_collection: "required",
         line_items: lineItems, 
     })
     
-    console.log(session); // Log the session object to the console
+    console.log(session); // Log the session object to the console     
 
-    res.json({ url: session.url })
+    res.json({ url: session.url });
+
 })
-
-
-
-app.post('/webhook', express.raw({ type: 'application/json' }), async (request, response) => {
-  const sig = request.headers['stripe-signature'];
-  let event;
-
-  try {
-    console.log('Before constructEvent');
-    const payload = request.body;
-
-    // Note: Ensure the raw request body is passed to constructEvent
-    event = stripeGateway.webhooks.constructEvent(
-      payload,  // Use the raw payload
-      sig,
-      process.env.STRIPE_ENDPOINT_SECRET
-    );
-
-    console.log('After constructEvent');
-    console.log('Webhook Event:', event);
-  } catch (err) {
-    console.error('Webhook Error:', err.message);
-    console.error('Request Body:', JSON.stringify(request.body)); // Convert the request body to a string for logging
-    response.status(400).send(`Webhook Error: ${err.message}`);
-    return;
-  }
-
-  // Handle the event
-  switch (event.type) {
-    case 'checkout.session.completed':
-      const sessionCompleted = event.data.object;
-      console.log('Checkout Session Completed:', sessionCompleted);
-      // Handle the successful checkout event here
-      break;
-    // Add more cases for other event types as needed
-    default:
-      console.log(`Unhandled event type ${event.type}`);
-  }
-
-  // Return a 200 response to acknowledge receipt of the event
-  response.send();
-});
-
-
-
 
 
 app.listen(3000, () => {
