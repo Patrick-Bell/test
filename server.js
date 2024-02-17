@@ -14,6 +14,7 @@ let products = [];  // Initialize an empty array for products
 
 
 app.use(express.static("public"));
+app.use(express.json());
 
 app.get("/get-products", (req, res) => {
   res.json(products);
