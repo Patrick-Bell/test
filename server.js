@@ -46,6 +46,10 @@ app.post('/webhook', async (req, res) => {
 
 
 
+
+app.use(express.json());
+app.use(express.static("public"));
+
 function fetchProductDetails(items) {
   // Check if items is defined and is an array
   if (!items || !Array.isArray(items)) {
@@ -64,9 +68,6 @@ function fetchProductDetails(items) {
 
   return productDetails;
 }
-
-app.use(express.json());
-app.use(express.static("public"));
 
 app.get("/get-products", (req, res) => {
   res.json(products);
