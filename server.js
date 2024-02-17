@@ -14,6 +14,7 @@ let products = [];  // Initialize an empty array for products
 
 
 app.use(express.static("public"));
+app.use(express.json())
 app.use(bodyParser.raw({ type: 'application/json' })); // Place bodyParser.raw before route handlers
 
 app.get("/get-products", (req, res) => {
