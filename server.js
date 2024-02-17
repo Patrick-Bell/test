@@ -73,30 +73,31 @@ function fetchProductDetails(items) {
 
 app.post('/webhook', async (req, res) => {
   const sig = req.headers['stripe-signature'];
-  let event;
 
   try {
-    event = stripeGateway.webhooks.constructEvent(
-      req.rawBody,
+    const rawBody = req.body;
+    console.log('Received Raw Body:', rawBody); // Log raw body for debugging
+
+    const event = stripeGateway.webhooks.constructEvent(
+      rawBody,
       sig,
       process.env.STRIPE_ENDPOINT_SECRET
     );
+
+    // Handle the event
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object;
+      const productDetails = fetchProductDetails(session.line_items);
+      console.log('Product Details:', productDetails);
+    }
+
+    res.json({ received: true });
   } catch (err) {
     console.error('Webhook error:', err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+    res.status(400).send(`Webhook Error: ${err.message}`);
   }
-
-  // Handle the event
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-
-    // Fetch product details based on the session information
-    const productDetails = fetchProductDetails(session.line_items);
-    console.log('Product Details:', productDetails);
-  }
-
-  res.json({ received: true });
 });
+
 
 
 
