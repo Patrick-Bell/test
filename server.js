@@ -10,64 +10,10 @@ let stripeGateway = stripe(process.env.stripe_key);
 let products = [];
 
 // Set up middleware
-app.use(bodyParser.raw({ type: 'application/json', verify: (req, res, buf) => { req.rawBody = buf; } }));
-
-
-// Webhook endpoint
-app.post('/webhook', async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  let event;
-
-  try {
-    event = stripeGateway.webhooks.constructEvent(
-      req.rawBody,
-      sig,
-      process.env.STRIPE_ENDPOINT_SECRET
-    );
-  } catch (err) {
-    console.error('Webhook error:', err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-
-  // Handle the event
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-
-    // Fetch product details based on the session information
-    const productDetails = fetchProductDetails(session.line_items);
-    console.log('Product Details:', productDetails);
-  }
-
-  res.json({ received: true });
-});
-
-// Your other routes and logic...
-
-
-
-
-
 app.use(express.json());
+app.use(bodyParser.raw({ type: 'application/json', verify: (req, res, buf) => { req.rawBody = buf; } }));
 app.use(express.static("public"));
 
-function fetchProductDetails(items) {
-  // Check if items is defined and is an array
-  if (!items || !Array.isArray(items)) {
-    console.error('Invalid items:', items);
-    return [];
-  }
-
-  // Your logic to fetch product details from the dynamic array
-  const productDetails = items.map((item) => {
-    const product = products.find((p) => p.id === item.id);
-    return {
-      ...item,
-      productDetails: product,
-    };
-  });
-
-  return productDetails;
-}
 
 app.get("/get-products", (req, res) => {
   res.json(products);
@@ -246,6 +192,35 @@ app.post("/stripe-checkout", async (req, res) => {
     res.json({ url: session.url });
 
 })
+
+// Webhook endpoint
+app.post('/webhooks', express.raw({ type: "application/json" }), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    event = stripeGateway.webhooks.constructEvent(
+      req.rawBody,
+      sig,
+      process.env.STRIPE_ENDPOINT_SECRET
+    );
+  } catch (err) {
+    console.error('Webhook error:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // Handle the event
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    console.log(session)
+    const customerDetails = session.customer_details;
+
+    // Logging customer name to the console
+    console.log('Customer Name:', customerDetails.name);
+  }
+
+  res.json({ received: true });
+});
 
 
 app.listen(3000, () => {
