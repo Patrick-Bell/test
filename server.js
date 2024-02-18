@@ -11,7 +11,6 @@ let products = [];
 
 // Set up middleware
 app.use(express.json());
-app.use(bodyParser.raw({ type: 'application/json', verify: (req, res, buf) => { req.rawBody = buf; } }));
 app.use(express.static("public"));
 
 
@@ -193,36 +192,9 @@ app.post("/stripe-checkout", async (req, res) => {
 
 })
 
-// Webhook endpoint
-app.post('/webhooks', express.raw({ type: "application/json" }), async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  let event;
-
-  try {
-    event = stripeGateway.webhooks.constructEvent(
-      req.rawBody,
-      sig,
-      process.env.STRIPE_ENDPOINT_SECRET
-    );
-  } catch (err) {
-    console.error('Webhook error:', err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-
-  // Handle the event
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-    console.log(session)
-    const customerDetails = session.customer_details;
-
-    // Logging customer name to the console
-    console.log('Customer Name:', customerDetails.name);
-  }
-
-  res.json({ received: true });
-});
-
-
 app.listen(3000, () => {
     console.log("Listening on port 3000");
 });
+
+export { app, stripeGateway, products };
+
