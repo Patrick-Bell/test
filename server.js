@@ -192,7 +192,7 @@ app.post("/stripe-checkout", async (req, res) => {
 
 })
 
-app.post('/webhooks', bodyParser.raw({ type: 'application/json' }), async (req, res) => {
+app.post('/webhooks', bodyParser.text({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];
   let event;
 
