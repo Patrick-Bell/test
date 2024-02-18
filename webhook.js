@@ -1,11 +1,14 @@
 import { stripeGateway } from './server';  // Adjust the import path based on your project structure
+import bodyParser from 'body-parser';
 
+
+const express = require('express');
 const app = express();
 app.use(bodyParser.raw({ type: 'application/json', verify: (req, res, buf) => { req.rawBody = buf; } }));
 
 
 // Webhook endpoint
-app.post('/webhook', express.raw({ type: "application/json" }), async (req, res) => {
+app.post('/webhook', async (req, res) => {
     const sig = req.headers['stripe-signature'];
     let event;
   

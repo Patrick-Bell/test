@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import stripe from "stripe";
 import bodyParser from 'body-parser';
+import webhookApp from './webhook';  // Adjust the import path based on your project structure
+
 
 dotenv.config();
 
@@ -13,6 +15,9 @@ let products = [];
 app.use(express.json());
 app.use(express.static("public"));
 
+
+
+app.use('/webhook', webhookApp);
 
 app.get("/get-products", (req, res) => {
   res.json(products);
