@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 import stripe from "stripe";
 import bodyParser from 'body-parser';
-import webhookApp from './webhook';  // Adjust the import path based on your project structure
 
 
 dotenv.config();
@@ -15,9 +14,6 @@ let products = [];
 app.use(express.json());
 app.use(express.static("public"));
 
-
-
-app.use('/webhook', webhookApp);
 
 app.get("/get-products", (req, res) => {
   res.json(products);
@@ -192,14 +188,44 @@ app.post("/stripe-checkout", async (req, res) => {
     
     console.log(session); // Log the session object to the console   
 
-
-    res.json({ url: session.url });
+    res.json({ sessionId: session.id, url: session.url });
 
 })
+
+app.post('/webhooks', bodyParser.raw({ type: 'application/json' }), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    event = stripeGateway.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.STRIPE_ENDPOINT_SECRET
+    );
+  } catch (err) {
+    console.error('Webhook error:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // Handle the event
+  if (event.type === 'invoice.finalized') {
+    const invoice = event.data.object;
+    console.log('Invoice Finalized:', invoice);
+
+    // Perform any additional actions based on the finalized invoice
+    // For example, you can retrieve information from the invoice and log it
+
+    res.json({ received: true });
+  }
+
+  // Handle other event types if needed...
+
+  res.json({ received: true });
+});
+
 
 app.listen(3000, () => {
     console.log("Listening on port 3000");
 });
 
-export { app, stripeGateway, products };
 
