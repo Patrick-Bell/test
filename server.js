@@ -11,8 +11,21 @@ let stripeGateway = stripe(process.env.stripe_key);
 let products = [];
 
 // Set up middleware
-app.use(express.json());
-app.use(bodyParser.text({ type: 'application/json' }));
+app.use((req, res, next) => {
+  if (req.path === '/webhooks') {
+    let data = '';
+    req.setEncoding('utf8');
+    req.on('data', (chunk) => {
+      data += chunk;
+    });
+    req.on('end', () => {
+      req.rawBody = data;
+      next();
+    });
+  } else {
+    express.json()(req, res, next);
+  }
+});
 app.use(express.static("public"));
 
 
@@ -194,39 +207,38 @@ app.post("/stripe-checkout", async (req, res) => {
 
 })
 
-app.post('/webhooks', bodyParser.text({ type: 'application/json' }), async (req, res) => {
-  console.log("Received Stripe Webhook request:", req.body);
+app.post('/webhooks', async (req, res) => {
+      console.log("Received Stripe Webhook request:", req.body);
 
   const sig = req.headers['stripe-signature'];
-  const rawBody = Buffer.from(req.body);
+  const rawBody = req.rawBody;
 
   let event;
 
   try {
-      event = stripeGateway.webhooks.constructEvent(
-          rawBody,
-          sig,
-          process.env.STRIPE_ENDPOINT_SECRET
-      );
-      console.log("Webhook event constructed:", event);
+    event = stripeGateway.webhooks.constructEvent(
+      rawBody,
+      sig,
+      process.env.STRIPE_ENDPOINT_SECRET
+    );
   } catch (err) {
-      console.error('Webhook error:', err.message);
-      return res.status(400).send(`Webhook Error: ${err.message}`);
+    console.error('Webhook error:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
   // Handle the event
   if (event.type === 'invoice.finalized') {
-      const invoice = event.data.object;
-      console.log('Invoice Finalized:', invoice);
+    const invoice = event.data.object;
+    console.log('Invoice Finalized:', invoice);
 
-      // Perform any additional actions based on the finalized invoice
-      // For example, you can retrieve information from the invoice and log it
+    // Perform any additional actions based on the finalized invoice
+    // For example, you can retrieve information from the invoice and log it
 
-      res.json({ received: true });
+    res.json({ received: true });
   }
 
   // Handle other event types if needed...
-  console.log("Unhandled webhook event type:", event.type);
+
   res.json({ received: true });
 });
 
