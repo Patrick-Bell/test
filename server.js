@@ -11,8 +11,8 @@ let stripeGateway = stripe(process.env.stripe_key);
 let products = [];
 
 // Set up middleware
-app.use(bodyParser.text({ type: 'application/json' }));
 app.use(express.json());
+app.use(bodyParser.text({ type: 'application/json' }));
 app.use(express.static("public"));
 
 
