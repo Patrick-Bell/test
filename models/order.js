@@ -9,10 +9,12 @@ const orderSchema = new mongoose.Schema({
     name: String,
     email: String,
     address: String,
-    totalPrice: Number,
     lineItems: [{ name: String, quantity: Number, unitPrice: Number }],
+    totalPrice: Number,
   });
-  
+    
+
+
   const OrderModel = mongoose.model('Order', orderSchema);
 
   module.exports = OrderModel

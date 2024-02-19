@@ -83,11 +83,11 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>Items</th>
-            <th>Price (£)</th>
-            <th>Stock</th>
-            <th>Address</th>
+            <th>Name</th>
             <th>Email</th>
+            <th>Address</th>
+            <th>Products</th>
+            <th>Price</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -131,19 +131,21 @@
     orders.forEach(order => {
       const row = orderTbody.insertRow();
       row.insertCell(0).textContent = order._id;
-      row.insertCell(1).textContent = order.lineItems;
-      row.insertCell(2).textContent = order.price;
-      const imageCell = row.insertCell(3);
-      const img = document.createElement('img');
-      img.className = 'table-image';
-      img.src = order.image;
-      img.alt = 'order Image';
-      imageCell.appendChild(img);
-      row.insertCell(4).textContent = order.stock;
-      row.insertCell(5).textContent = order.address;
-      row.insertCell(6).textContent = order.email;
+      row.insertCell(1).textContent = order.name;
+      row.insertCell(2).innerHTML = order.email;
+      row.insertCell(3).textContent = order.address   
+      row.insertCell(4).innerHTML = renderLineItems(order.lineItems);
+      row.insertCell(5).innerHTML = `£${(order.totalPrice / 100).toFixed(2)}`;
     });
   }
+
+  function renderLineItems(lineItems) {
+  return lineItems.map(item => `${item.quantity} x ${item.name} | £${(item.unitPrice * item.quantity) / 100}`).join('<br>');
+}
+
+
+
+
 
   // Periodically fetch and render orders (adjust the interval as needed)
   setInterval(fetchAndRenderOrders, 5000);

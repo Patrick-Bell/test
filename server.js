@@ -260,15 +260,15 @@ app.post('/webhooks', async (req, res) => {
     const orderData = {
       id: invoice.id,
       name: invoice.customer_name,
-      email: invoice.customer_email,
-      address: `${invoice.customer_address.line1}, ${invoice.customer_address.city}, ${invoice.customer_address.postal_code}, ${invoice.customer_address.country}`,
+      address: `${invoice.customer_address.line1}\n${invoice.customer_address.city}, ${invoice.customer_address.postal_code}\n${invoice.customer_address.country}`,
       totalPrice: invoice.total,
       lineItems: invoice.lines.data.map(item => ({
-          name: item.description,
-          quantity: item.quantity,
-          unitPrice: item.amount / item.quantity,
+        name: item.description,
+        quantity: item.quantity,
+        unitPrice: item.amount / item.quantity,
       })),
-  };
+    };
+    
 
     // Call a function to add this order data to your orders
     addOrderToTable(orderData);
