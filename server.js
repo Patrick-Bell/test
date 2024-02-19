@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 const stripe = require('stripe')
 const mongoose = require('mongoose')
 const OrderModel = require('./models/order')
-const { Order, addOrderToTable, renderOrdersTable } = require('./orders'); // Assuming the orders.js file is in the same directory
+const { addOrderToTable, renderOrdersTable } = require('./orders'); // Updated import statement
 
 const bodyParser = require('body-parser')
 
@@ -83,8 +83,9 @@ app.get("/admin.html", (req, res) => {
 });
 
 app.get('/orders', (req, res) => {
-  res.render('orders.js')
-})
+  const ordersArray = getOrdersArray();
+  res.render('orders.mjs', { orders: ordersArray });
+});
 
 
 app.post("/stripe-checkout", async (req, res) => {
