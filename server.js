@@ -235,11 +235,11 @@ app.post('/webhooks', async (req, res) => {
     // For example, you can retrieve information from the invoice and log it
 
     res.json({ received: true });
+  } else {
+    // Optionally handle other event types differently, or just ignore them
+    // res.json({ received: true });  // Commented out or remove this line
+    console.log('Received a webhook event of type:', event.type);
   }
-
-  // Handle other event types if needed...
-
-  res.json({ received: true });
 });
 
 app.listen(3000, () => {
