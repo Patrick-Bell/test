@@ -7,6 +7,7 @@ const orderSchema = new mongoose.Schema({
     unique: true,
     },
     name: String,
+    email: String,
     address: String,
     totalPrice: Number,
     lineItems: [{ name: String, quantity: Number, unitPrice: Number }],

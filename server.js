@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 const stripe = require('stripe')
 const mongoose = require('mongoose')
 const OrderModel = require('./models/order')
-const { addOrderToTable, renderOrdersTable } = require('./orders'); // Updated import statement
+const { addOrderToTable, getOrdersFromTable } = require('./orders'); // Updated import statement
 
 const bodyParser = require('body-parser')
 
@@ -84,7 +84,17 @@ app.get("/admin.html", (req, res) => {
 
 app.get('/orders', (req, res) => {
   const ordersArray = getOrdersArray();
-  res.render('orders.mjs', { orders: ordersArray });
+  res.render('orders.html', { orders: ordersArray });
+});
+
+app.get('/api/orders', async (req, res) => {
+  try {
+    const orders = await getOrdersFromTable();
+    res.json(orders);
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 
@@ -250,6 +260,7 @@ app.post('/webhooks', async (req, res) => {
     const orderData = {
       id: invoice.id,
       name: invoice.customer_name,
+      email: invoice.customer_email,
       address: `${invoice.customer_address.line1}, ${invoice.customer_address.city}, ${invoice.customer_address.postal_code}, ${invoice.customer_address.country}`,
       totalPrice: invoice.total,
       lineItems: invoice.lines.data.map(item => ({
