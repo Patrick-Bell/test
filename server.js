@@ -83,7 +83,7 @@ app.get("/admin.html", (req, res) => {
 });
 
 app.get('/orders', (req, res) => {
-  res.render('orders.mjs')
+  res.render('orders.js')
 })
 
 
