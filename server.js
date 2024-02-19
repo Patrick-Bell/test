@@ -1,7 +1,11 @@
-import express from "express";
-import dotenv from "dotenv";
-import stripe from "stripe";
-import bodyParser from 'body-parser';
+const express = require('express')
+const dotenv = require('dotenv')
+const stripe = require('stripe')
+const mongoose = require('mongoose')
+const OrderModel = require('./models/order')
+const { Order, addOrderToTable, renderOrdersTable } = require('./orders'); // Assuming the orders.js file is in the same directory
+
+const bodyParser = require('body-parser')
 
 
 dotenv.config();
@@ -11,6 +15,7 @@ let stripeGateway = stripe(process.env.stripe_key);
 let products = [];
 
 // Set up middleware
+app.use(express.static("public"));
 app.use((req, res, next) => {
   if (req.path === '/webhooks') {
     let data = '';
@@ -26,9 +31,16 @@ app.use((req, res, next) => {
     express.json()(req, res, next);
   }
 });
-app.use(express.static("public"));
 
+const uri = process.env.MONGO_URI
 
+mongoose.connect(uri);
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+  console.log('Connected to MongoDB database');
+});
 
 app.get("/get-products", (req, res) => {
   res.json(products);
@@ -69,6 +81,10 @@ app.get("/delivery.html", (req, res) => {
 app.get("/admin.html", (req, res) => {
   res.sendFile("admin.html", { root: "public" });
 });
+
+app.get('/orders', (req, res) => {
+  res.render('orders.mjs')
+})
 
 
 app.post("/stripe-checkout", async (req, res) => {
@@ -229,10 +245,24 @@ app.post('/webhooks', async (req, res) => {
   // Handle the event
   if (event.type === 'invoice.finalized') {
     const invoice = event.data.object;
-    console.log('Invoice Finalized:', invoice);
+    
+    const orderData = {
+      id: invoice.id,
+      name: invoice.customer_name,
+      address: `${invoice.customer_address.line1}, ${invoice.customer_address.city}, ${invoice.customer_address.postal_code}, ${invoice.customer_address.country}`,
+      totalPrice: invoice.total,
+      lineItems: invoice.lines.data.map(item => ({
+          name: item.description,
+          quantity: item.quantity,
+          unitPrice: item.amount / item.quantity,
+      })),
+  };
 
-    // Perform any additional actions based on the finalized invoice
-    // For example, you can retrieve information from the invoice and log it
+    // Call a function to add this order data to your orders
+    addOrderToTable(orderData);
+
+    console.log('Order data:', orderData);
+
 
     res.json({ received: true });
   } else {
@@ -241,6 +271,8 @@ app.post('/webhooks', async (req, res) => {
     console.log('Received a webhook event of type:', event.type);
   }
 });
+
+
 
 app.listen(3000, () => {
     console.log("Listening on port 3000");

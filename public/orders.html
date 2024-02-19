@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Cointology - Admin Panel </title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   </head>
+<body>
+  <div class="sidebar">
+    <div class="logo-details">
+      <i class='bx bxl-c-plus-plus icon'></i>
+        <div class="logo_name">Cointology</div>
+        <i class='bx bx-menu' id="btn" ></i>
+    </div>
+    <ul class="nav-list">
+      <li>
+        <a href="dashboard.html">
+          <i class='bx bx-grid-alt'></i>
+          <span class="links_name">Dashboard</span>
+        </a>
+         <span class="tooltip">Dashboard</span>
+      </li>
+      <li>
+       <a href="players.html">
+         <i class='bx bx-user' ></i>
+         <span class="links_name">Products</span>
+       </a>
+       <span class="tooltip">Products</span>
+     </li>
+     <li>
+       <a href="matches.html">
+        <i class='bx bx-stats'></i>
+         <span class="links_name">Orders</span>
+       </a>
+       <span class="tooltip">Orders</span>
+     </li>
+     <li>
+       <a href="table.html">
+        <i class='bx bx-table'></i>
+         <span class="links_name">Revenue</span>
+       </a>
+       <span class="tooltip">Revenue</span>
+     </li>
+     <li>
+       <a href="teamgenerator.html">
+        <i class='bx bxl-microsoft-teams'></i>
+         <span class="links_name">Refunds</span>
+       </a>
+       <span class="tooltip">Refunds</span>
+     </li>
+     <li>
+       <a href="awards.html">
+        <i class='bx bx-award'></i>
+         <span class="links_name">Deliveries</span>
+       </a>
+       <span class="tooltip">Deliveries</span>
+     </li>
+     <li>
+       <a href="comingsoon.html">
+        <i class='bx bx-video-recording' ></i>
+         <span class="links_name">Updates</span>
+       </a>
+       <span class="tooltip">Updates</span>
+     </li>
+     <li>
+       <a href="compare.html">
+        <i class='bx bx-git-compare'></i>
+        <span class="links_name">Contact</span>
+       </a>
+       <span class="tooltip">Contact</span>
+     </li>
+    </ul>
+  </div>
+  <section class="home-section">
+      <div class="top-container">
+        <div class="big-text">Orders</div>
+        <button class="add-product">Add a Product</button>
+      </div>
+
+      <table id="orders-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Items</th>
+            <th>Price (£)</th>
+            <th>Stock</th>
+            <th>Address</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      
+
+
+
+  </section>
+
+
+<script src="menu.js"></script>
+<script src="orders.js"></script>
+</body>
+</html>
