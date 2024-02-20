@@ -79,19 +79,9 @@
         <button class="add-product">Add a Product</button>
       </div>
 
-      <table id="orders-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Products</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <div class="orders-container">
+      
+    </div>
       
 
 
@@ -119,32 +109,58 @@
       });
   }
 
-  // Function to render orders table
   function renderOrdersTable(orders) {
-    // Assuming your table has an id "orders-table"
-    const orderTbody = document.querySelector('#orders-table tbody');
+  const orderContainer = document.querySelector(".orders-container");
+  const orderCardsHTML = orders.map(order => `
+    <div class="order-card">
+      <div class="order-details-container">
+        <p>${order.id}</p>
+        <p>${new Date().toLocaleString()}</p>
+        <p>${order.customer_email}</p>
+      </div>
+      <div class="info-container">
+        <h2>Total: 21.99 Status: PAID</h2>
+      </div>
+      <div class="view-stats"><i class="bx bxs-up-arrow-circle"></i>View Order Information</div>
+      <div class="full-order">
+        <div class="title">Customer Details</div>
+        <div class="customer-add-container order-gap">
+          <div class="house">Name: ${order.customer_name}</div>
+          <div class="street">Email: ${order.customer_email}</div>
+          <div class="city">Phone: ${order.customer_phone}</div>
+        </div>
+        <br>
+        <div class="title">Customer Address</div>
+        <div class="customer-add-container order-gap">
+          <div class="house">${order.customer_address.line1}</div>
+          <div class="street">${order.customer_address.city}</div>
+          <div class="city">${order.customer_address.postal_code}</div>
+          <div class="post-code">${order.customer_address.country}</div>
+        </div>
+        <br>
+        <div class="title">Order Receipt</div>
+        <div class="items-container item-container">
+          ${renderLineItems(order.lineItems)}
+        </div>
+        <div class="items-container order-gap">
+          <div class="total">Total</div>
+          <div class="total">£${(order.totalPrice / 100).toFixed(2)}</div>
+        </div>
+        <div class="action container">
+          <button>Delete Order</button>
+          <button>Refunds</button>
+          <button>Contact Customer</button>
+        </div>
+      </div>
+    </div>
+  `).join(''); // Use join to concatenate the array into a string
 
-    // Clear existing table content
-    orderTbody.innerHTML = '';
-
-    // Render orders
-    orders.forEach(order => {
-      const row = orderTbody.insertRow();
-      row.insertCell(0).textContent = order._id;
-      row.insertCell(1).textContent = order.name;
-      row.insertCell(2).innerHTML = order.email;
-      row.insertCell(3).textContent = order.address   
-      row.insertCell(4).innerHTML = renderLineItems(order.lineItems);
-      row.insertCell(5).innerHTML = `£${(order.totalPrice / 100).toFixed(2)}`;
-    });
-  }
-
-  function renderLineItems(lineItems) {
-  return lineItems.map(item => `${item.quantity} x ${item.name} | £${(item.unitPrice * item.quantity) / 100}`).join('<br>');
+  orderContainer.innerHTML = orderCardsHTML;
 }
 
-
-
+function renderLineItems(lineItems) {
+  return lineItems.map(item => `<div>${item.quantity} x ${item.name} | £${(item.unitPrice * item.quantity) / 100}</div>`).join('');
+}
 
 
   // Periodically fetch and render orders (adjust the interval as needed)
@@ -152,6 +168,7 @@
 
   // Initial fetch and render on page load
   fetchAndRenderOrders();
+
 </script>
 </body>
 </html>

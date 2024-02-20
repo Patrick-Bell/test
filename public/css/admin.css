@@ -321,6 +321,50 @@ th{
 
 
 
+/* new render orders code */
+.orders-container{
+  display: block;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  min-width: 100%;
+}
+.order-card{
+  padding: 10px;
+  border: 1px solid black;
+  min-width: 100%;
+  margin-bottom: 10px;
+}
+.order-details-container{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 5px;
+  border-bottom: 1px solid lightgrey;
+}
+.info-container{
+  text-align: center;
+  padding: 5px;
+}
+.items-container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.view-stats{
+  text-align: center;
+}
+.title{
+  font-weight: 900;
+}
+.item-container{
+  border-top: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+}
+.total{
+  font-weight: 900;
+}
+
 
 
 

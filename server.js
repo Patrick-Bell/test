@@ -260,6 +260,8 @@ app.post('/webhooks', async (req, res) => {
     const orderData = {
       id: invoice.id,
       name: invoice.customer_name,
+      email: invoice.customer_email,
+      phone: invoice.customer_phone,
       address: `${invoice.customer_address.line1}\n${invoice.customer_address.city}, ${invoice.customer_address.postal_code}\n${invoice.customer_address.country}`,
       totalPrice: invoice.total,
       lineItems: invoice.lines.data.map(item => ({
