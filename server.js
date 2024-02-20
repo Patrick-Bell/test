@@ -16,7 +16,8 @@ const app = express();
 let stripeGateway = stripe(process.env.stripe_key);
 
 // Set up middleware
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use((req, res, next) => {
   if (req.path === '/webhooks') {
     let data = '';
@@ -95,34 +96,36 @@ app.get('/api/orders', async (req, res) => {
   }
 });
 
-
-app.get('/products', async (req, res) => {
+app.get('/api/products', async (req, res) => {
   try {
-      // Fetch products from the database
-      const products = await ProductModel.find();
-      res.json(products);
+    const products = await ProductModel.find();
+    res.status(200).json(products);
   } catch (error) {
-      console.error('Error fetching products:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-app.post('/add-product', async (req, res) => {
-  const { title, price, description, image, stock } = req.body;
-
+app.post('/api/products', async (req, res) => {
   try {
-      const newProduct = new ProductModel({ title, price, description, image, stock });
-      await newProduct.save();
-      console.log('Product added successfully:', newProduct);
-      res.status(201).send('Product added successfully.');
+    const { id, title, image, price, description, stock } = req.body;
+
+    const newProduct = new ProductModel({
+      id,
+      title,
+      image,
+      price,
+      description,
+      stock,
+    });
+
+    const savedProduct = await newProduct.save();
+    res.status(201).json(savedProduct);
   } catch (error) {
-      console.error('Error adding product:', error);
-      res.status(500).send(`Internal Server Error: ${error.message}`);
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-
-
 
 app.post("/stripe-checkout", async (req, res) => {
     const lineItems = req.body.items.map((item) => {

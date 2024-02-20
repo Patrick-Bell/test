@@ -81,14 +81,14 @@
 
       <div class="add-product-container" id="addProductContainer">
         <h2>Add a Product</h2>
-        <input type="number" name="productID" id="productID" placeholder="Product ID" disabled required>
+        <input type="number" name="productID" id="productID" placeholder="Product ID" required>
         <input type="text" name="producTitlte" id="productTitle" placeholder="Product Name" required>
         <input type="text" name="productDescription" id="productDescription" placeholder="Product Description" required>
         <input type="text" name="productImage" id="productImage" placeholder="Product Image" required>
         <input type="text" name="productPrice" id="productPrice" placeholder="Product Price" required>
         <input type="text" name="productStock" id="productStock" placeholder="Product Stock" required>
         <button class="submit-product" id="submitProductBtn">Submit Product</button>
-        <button class="close-btns">Close</button>
+        <button class="close-btns" id="closeBtn">Close</button>
       </div>
 
       <!-- Edit Product Container -->
@@ -107,7 +107,7 @@
 
 
 
-      <table id="product-table">
+      <table id="productTable">
         <thead>
           <tr>
             <th>ID</th>
@@ -128,7 +128,7 @@
   <script>
 
   </script>
-
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="menu.js"></script>
 <script src="admin.js"></script>
 
