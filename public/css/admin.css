@@ -353,6 +353,13 @@ th{
 }
 .view-stats{
   text-align: center;
+  cursor: pointer;
+}
+.full-order{
+  display: none;
+}
+.full-order.active{
+  display: block;
 }
 .title{
   font-weight: 900;
@@ -363,6 +370,20 @@ th{
 }
 .total{
   font-weight: 900;
+}
+h2{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.paid{
+  background: green;
+  color: white;
+  padding: 0 15px;
+  margin: 0 10px;
+}
+.rotate{
+  transform: rotate(180deg);
 }
 
 

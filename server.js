@@ -3,6 +3,8 @@ const dotenv = require('dotenv')
 const stripe = require('stripe')
 const mongoose = require('mongoose')
 const OrderModel = require('./models/order')
+const ProductModel = require('./models/product');
+
 const { addOrderToTable, getOrdersFromTable } = require('./orders'); // Updated import statement
 
 const bodyParser = require('body-parser')
@@ -12,7 +14,6 @@ dotenv.config();
 
 const app = express();
 let stripeGateway = stripe(process.env.stripe_key);
-let products = [];
 
 // Set up middleware
 app.use(express.static("public"));
@@ -42,9 +43,6 @@ db.once('open', () => {
   console.log('Connected to MongoDB database');
 });
 
-app.get("/get-products", (req, res) => {
-  res.json(products);
-});
 
 app.get("/", (req, res) => {
     res.sendFile("index.html", { root: "public" });
@@ -96,6 +94,34 @@ app.get('/api/orders', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+app.get('/products', async (req, res) => {
+  try {
+      // Fetch products from the database
+      const products = await ProductModel.find();
+      res.json(products);
+  } catch (error) {
+      console.error('Error fetching products:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/add-product', async (req, res) => {
+  const { title, price, description, image, stock } = req.body;
+
+  try {
+      const newProduct = new ProductModel({ title, price, description, image, stock });
+      await newProduct.save();
+      console.log('Product added successfully:', newProduct);
+      res.status(201).send('Product added successfully.');
+  } catch (error) {
+      console.error('Error adding product:', error);
+      res.status(500).send(`Internal Server Error: ${error.message}`);
+  }
+});
+
+
 
 
 app.post("/stripe-checkout", async (req, res) => {
@@ -258,7 +284,7 @@ app.post('/webhooks', async (req, res) => {
     const invoice = event.data.object;
     
     const orderData = {
-      timestamp: new Date(),
+      timestamp: new Date().toLocaleString(),
       id: invoice.id,
       name: invoice.customer_name,
       email: invoice.customer_email,

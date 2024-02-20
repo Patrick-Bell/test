@@ -102,6 +102,7 @@ function fetchAndRenderOrders() {
     })
     .then(orders => {
       renderOrdersTable(orders);
+      setupEventListeners();
       console.log('Rendering orders:', orders);
     })
     .catch(error => {
@@ -115,12 +116,10 @@ function fetchAndRenderOrders() {
   const orderCardsHTML = orders.map(order => `
     <div class="order-card">
       <div class="order-details-container">
-        <p>${order.id}</p>
-        <p>${order.timestamp.toLocaleString()}</p>
-        <p>${order.email}</p>
+        <p><strong>Order ID:</strong> ${order.id}</p>
       </div>
       <div class="info-container">
-        <h2>Total: 21.99 Status: PAID</h2>
+        <h2>Total: ${(order.totalPrice / 100).toFixed(2)} <div class="paid"> Status: PAID</div></h2>
       </div>
       <div class="view-stats"><i class="bx bxs-up-arrow-circle"></i>View Order Information</div>
       <div class="full-order">
@@ -136,11 +135,11 @@ function fetchAndRenderOrders() {
           <div class="house">${order.address}</div>
         </div>
         <br>
-        <div class="title">Order Receipt</div>
+        <div><strong>Order Receipt</strong> (${order.timestamp.toLocaleString()})</div>
         <div class="items-container item-container">
           ${renderLineItems(order.lineItems)}
         </div>
-        <div class="items-container order-gap">
+        <div class="items-container item-container order-gap">
           <div class="total">Shipping</div>
           <div class="total">£${(order.shipping / 100).toFixed(2)}</div>
         </div>
@@ -149,9 +148,9 @@ function fetchAndRenderOrders() {
           <div class="total">£${(order.totalPrice / 100).toFixed(2)}</div>
         </div>
         <div class="action container">
-          <button>Delete Order</button>
-          <button>Refunds</button>
-          <button>Contact Customer</button>
+          <button class="delete-order-btn">Delete Order</button>
+          <button class="refund-order-btn">Refunds</button>
+          <button class="contact-customer-btn">Contact Customer</button>
         </div>
       </div>
     </div>
@@ -162,11 +161,25 @@ function fetchAndRenderOrders() {
 }
 
 function renderLineItems(lineItems) {
-  return lineItems.map(item => `${item.name} x ${item.quantity} | £${(item.unitPrice * item.quantity) / 100}`).join('<br>');
+  return lineItems.map(item => `${item.name} | x ${item.quantity} | £${(item.unitPrice * item.quantity) / 100}`).join('<br>');
+}
+ 
+function setupEventListeners() {
+  let viewStats = document.querySelectorAll(".view-stats");
+  let viewOrders = document.querySelectorAll(".full-order");
+  let arrowIcons = document.querySelectorAll(".bxs-up-arrow-circle");
+
+  viewStats.forEach((viewStat, index) => {
+    viewStat.addEventListener("click", () => {
+      viewOrders[index].classList.toggle("active");
+      arrowIcons[index].classList.toggle("rotate")
+    })
+  })
 }
 
 
   // Initial fetch and render on page load
+  setupEventListeners();
   fetchAndRenderOrders();
 
 </script>

@@ -29,13 +29,31 @@ function generateUniqueID() {
     return newID;
 }
 
+async function fetchProducts() {
+    try {
+        const response = await fetch('http://localhost:3000/products');
+        if (response.ok) {
+            const data = await response.json();
+            products = data.products || [];
+            await fetchProducts(); // Fetch the updated products after adding a new one
+        } else {
+            console.error('Failed to fetch products:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error fetching products:', error.message);
+    }
+}
+
+
 function addProduct() {
-    const productID = generateUniqueID();
     const productTitle = document.getElementById("productTitle").value;
     const productPrice = document.getElementById("productPrice").value;
     const productDescription = document.getElementById("productDescription").value;
     const productImage = document.getElementById("productImage").value;
     const productStock = document.getElementById("productStock").value;
+
+    const productID = generateUniqueID(); // Generate a unique ID
+    console.log(generateUniqueID)
 
     addProductDynamically(productID, productTitle, productPrice, productDescription, productImage, productStock);
 
@@ -46,12 +64,31 @@ function addProduct() {
     productStock.value = '';
 }
 
-function addProductDynamically(id, title, price, description, image, stock) {
-    const newProduct = new Product(id, title, price, description, image, stock);
-    products.push(newProduct);
-    localStorage.setItem('products', JSON.stringify(products));
-    renderTable();
+async function addProductDynamically(id, title, price, description, image, stock) {
+
+    try {
+        const response = await fetch('http://localhost:3000/add-product', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id, title, price, description, image, stock }),
+        });
+
+        if (response.ok) {
+            console.log('Product added successfully.');
+            await fetchProducts();
+        } else {
+            console.error('Failed to add product:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error adding product:', error.message);
+    }
 }
+
+
+
+
 
 function deleteProduct(event) {
     const target = event.target;
