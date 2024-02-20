@@ -79,9 +79,7 @@
         <button class="add-product">Add a Product</button>
       </div>
 
-    <div class="orders-container">
-      
-    </div>
+    <div class="orders-container"></div>
       
 
 
@@ -93,21 +91,24 @@
 <script src="orders.js"></script>
 <script>
   // Function to fetch and render orders from the server
-  function fetchAndRenderOrders() {
-    fetch('/api/orders')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error fetching orders');
-        }
-        return response.json();
-      })
-      .then(orders => {
-        renderOrdersTable(orders);
-      })
-      .catch(error => {
-        console.error('Error fetching orders:', error.message);
-      });
-  }
+  // Function to fetch and render orders from the server
+function fetchAndRenderOrders() {
+  fetch('/api/orders')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error fetching orders');
+      }
+      return response.json();
+    })
+    .then(orders => {
+      renderOrdersTable(orders);
+      console.log('Rendering orders:', orders);
+    })
+    .catch(error => {
+      console.error('Error fetching orders:', error.message);
+    });
+}
+
 
   function renderOrdersTable(orders) {
   const orderContainer = document.querySelector(".orders-container");
@@ -115,8 +116,8 @@
     <div class="order-card">
       <div class="order-details-container">
         <p>${order.id}</p>
-        <p>${new Date().toLocaleString()}</p>
-        <p>${order.customer_email}</p>
+        <p>${order.timestamp.toLocaleString()}</p>
+        <p>${order.email}</p>
       </div>
       <div class="info-container">
         <h2>Total: 21.99 Status: PAID</h2>
@@ -125,22 +126,23 @@
       <div class="full-order">
         <div class="title">Customer Details</div>
         <div class="customer-add-container order-gap">
-          <div class="house">Name: ${order.customer_name}</div>
-          <div class="street">Email: ${order.customer_email}</div>
-          <div class="city">Phone: ${order.customer_phone}</div>
+          <div class="house">Name: ${order.name}</div>
+          <div class="street">Email: ${order.email}</div>
+          <div class="city">Phone: ${order.phone}</div>
         </div>
         <br>
         <div class="title">Customer Address</div>
         <div class="customer-add-container order-gap">
-          <div class="house">${order.customer_address.line1}</div>
-          <div class="street">${order.customer_address.city}</div>
-          <div class="city">${order.customer_address.postal_code}</div>
-          <div class="post-code">${order.customer_address.country}</div>
+          <div class="house">${order.address}</div>
         </div>
         <br>
         <div class="title">Order Receipt</div>
         <div class="items-container item-container">
           ${renderLineItems(order.lineItems)}
+        </div>
+        <div class="items-container order-gap">
+          <div class="total">Shipping</div>
+          <div class="total">£${(order.shipping / 100).toFixed(2)}</div>
         </div>
         <div class="items-container order-gap">
           <div class="total">Total</div>
@@ -153,18 +155,16 @@
         </div>
       </div>
     </div>
-  `).join(''); // Use join to concatenate the array into a string
+  `)
 
+  const ordersHTMLString = orderCardsHTML.join('')
   orderContainer.innerHTML = orderCardsHTML;
 }
 
 function renderLineItems(lineItems) {
-  return lineItems.map(item => `<div>${item.quantity} x ${item.name} | £${(item.unitPrice * item.quantity) / 100}</div>`).join('');
+  return lineItems.map(item => `${item.name} x ${item.quantity} | £${(item.unitPrice * item.quantity) / 100}`).join('<br>');
 }
 
-
-  // Periodically fetch and render orders (adjust the interval as needed)
-  setInterval(fetchAndRenderOrders, 5000);
 
   // Initial fetch and render on page load
   fetchAndRenderOrders();
