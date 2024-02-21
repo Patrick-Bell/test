@@ -40,15 +40,31 @@ document.addEventListener('DOMContentLoaded', () => {
   
     const displayProduct = (product) => {
       const row = productTableBody.insertRow();
-      row.innerHTML = `
-        <td>${product.id}</td>
-        <td>${product.title}</td>
-        <td>${product.image}</td>
-        <td>${product.price}</td>
-        <td>${product.description}</td>
-        <td>${product.stock}</td>
-      `;
-    };
+  
+      // Create cells and set innerHTML
+      const cell1 = row.insertCell(0);
+      cell1.innerHTML = product.id;
+  
+      const cell2 = row.insertCell(1);
+      cell2.innerHTML = product.title;
+  
+      const cell3 = row.insertCell(2);
+      cell3.innerHTML = `<img  class="table-image" src="${product.image}" alt="${product.title}">`;
+  
+      const cell4 = row.insertCell(3);
+      cell4.innerHTML = `£${Number(product.price).toFixed(2)}`;
+  
+      const cell5 = row.insertCell(4);
+      cell5.innerHTML = product.stock;
+  
+      const cell6 = row.insertCell(5);
+      cell6.innerHTML = `<button>Edit</button>`
+  };
+ 
+  
+  
+  
+    
   
     // Function to fetch and display products
     const fetchAndDisplayProducts = async () => {

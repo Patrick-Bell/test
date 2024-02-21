@@ -4,6 +4,7 @@ const stripe = require('stripe')
 const mongoose = require('mongoose')
 const OrderModel = require('./models/order')
 const ProductModel = require('./models/product');
+const path = require('path')
 
 const { addOrderToTable, getOrdersFromTable } = require('./orders'); // Updated import statement
 

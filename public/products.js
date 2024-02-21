@@ -1,16 +1,53 @@
 // Defining the variables
+document.addEventListener('DOMContentLoaded', renderProductsOnPage);
+
 
 const AllProductList = document.getElementById('allItemList'); // This is the product div, all products go inside this
 const coinTypeSelect = document.getElementById("coin-type");
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
-let products = JSON.parse(localStorage.getItem('products')) || [];
+
+// Function to fetch products from the server
+async function fetchProducts() {
+    try {
+        const response = await fetch('/api/products');
+        if (!response.ok) {
+            throw new Error('Failed to fetch products');
+        }
+        products = await response.json(); // Assign the fetched products to the higher-scoped variable
+        console.log('Fetched products:', products);
+        return products;
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        throw error; // Rethrow the error to be caught by the calling function
+    }
+}
+
+// Function to render products on the page
+async function renderProductsOnPage() {
+    try {
+        // Fetch products from the server
+        await fetchProducts();
+
+        // Render products on the page
+        renderProducts(AllProductList, products);
+        addEventListenersToCartButtons();
+    } catch (error) {
+        console.error('Error rendering products on the page:', error);
+    }
+}
 
 
-// Array of products
-
-// Rendering all the products
+// Call the function to render products on the page when the DOM is loaded
 
 function renderProducts(productList, productData) {
+    console.log('Product Data:', productData);
+
+    // Check if the productList element exists
+    if (!productList) {
+        console.error('Product list element not found');
+        return;
+    }
+
     productList.innerHTML = productData.map(product => `
         <div class="product">
             <img src="${product.image}" alt="${product.title}">
@@ -24,7 +61,6 @@ function renderProducts(productList, productData) {
 
     // Add event listeners to the newly rendered "Add to Cart" buttons
     addEventListenersToCartButtons();
-    
 }
 
 
@@ -32,46 +68,71 @@ function addEventListenersToCartButtons() {
     const addToCartButtons = document.getElementsByClassName('add-to-cart');
     for (let i = 0; i < addToCartButtons.length; i++) {
         const addToCartButton = addToCartButtons[i];
-        addToCartButton.addEventListener("click", addToCart);
+        addToCartButton.addEventListener("click", (event) => addToCart(event, [...products])); // Pass a copy of the products array
     }
 }
 
-function addToCart(event) {
-    const productID = parseInt(event.target.dataset.id);
-    const product = products.find((product) => product.id === productID);
+async function addToCart(event) {
+    try {
+      // Fetch products from the server
+      const products = await fetchProducts();
+  
+      // Find the product with the given ID
+          const productId = parseInt(event.target.dataset.id);
 
-    if (product) {
-        const existingItem = cart.find((item) => item.id === productID);
-
+      const product = products.find((product) => product.id === productId);
+  
+      if (product) {
+        const existingItem = cart.find((item) => item.id === product.id);
+  
         if (existingItem) {
-            existingItem.quantity++;
+          // If the item already exists in the cart, increment the quantity
+          existingItem.quantity++;
         } else {
-            const cartItem = {
-                id: product.id,
-                title: product.title,
-                price: product.price,
-                image: product.image,
-                quantity: 1,
-            };
-            cart.push(cartItem);
+          // If the item is not in the cart, add a new entry
+          const cartItem = {
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            image: product.image,
+            quantity: 1,
+          };
+          cart.push(cartItem);
         }
-        updateCartIcon();
-        renderCartItems();
-        saveToLocalStorage();
-        calculateTotal();
+  
+        // You can update the UI or perform other actions here
+        console.log('Cart after adding:', cart);
+      } else {
+        console.error('Product not found');
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
     }
-}
+  }
+  
+
+
+
+
 
 // Removing an item from the cart
 
 function removeFromCart(event) {
     const productID = parseInt(event.target.dataset.id);
+    console.log('Removing product with ID:', productID);
+
+    // Check if the productID exists in the cart before filtering
+    console.log('Cart before removal:', cart);
+
     cart = cart.filter((item) => item.id !== productID);
+    console.log('Updated cart:', cart);
+
     saveToLocalStorage();
     renderCartItems();
     calculateTotal();
     updateCartIcon();
 }
+
 
 // Changing the quantity
 
@@ -94,6 +155,7 @@ function changeQuantity(event) {
 
 function saveToLocalStorage() {
     localStorage.setItem("cart", JSON.stringify(cart));
+    console.log(localStorage.getItem('cart'))
 }
 
 function renderCartItems() {
@@ -104,7 +166,6 @@ function renderCartItems() {
     }
 
     // Cart page layout
-
     cartItemsElement.innerHTML = cart.map(
         (item) => `
         <div class="cart-item">
@@ -120,17 +181,17 @@ function renderCartItems() {
                 />
             </div>
             <h2 class="cart-item-price">£${item.price}</h2>
-            <button data-id="${item.id}" class="remove-from-cart"></button>
+            <button data-id="${item.id}" class="remove-from-cart">Remove</button>
         </div>`
     ).join("");
 
     // Removing item from the cart
-
     const removeButtons = document.getElementsByClassName('remove-from-cart');
     for (let i = 0; i < removeButtons.length; i++) {
         const removeButton = removeButtons[i];
         removeButton.addEventListener("click", removeFromCart);
     }
+
 
     const quantityInputs = document.querySelectorAll(".cart-item-quantity");
     quantityInputs.forEach((input) => {
@@ -168,71 +229,3 @@ function clearCart() {
     saveToLocalStorage();
     updateCartIcon();
 }
-
-
-let numOfItems = document.querySelector(".items-found");
-let lengthItems;
-
-// Filtering system via the select/options 
-
-function filterProducts(category) {
-    let filteredProducts;
-
-    if (category === "all") {
-        filteredProducts = products;
-    } else if (category === "science") {
-        filteredProducts = products.filter(product => product.id >= 47 && product.id <= 52);
-    } else if (category === "olympic") {
-        filteredProducts = products.filter(product => product.id >= 1 && product.id <= 31);
-    } else if (category === "potter") {
-        filteredProducts = products.filter(product => product.id >= 32 && product.id <= 46);
-    } else if (category === "alphabet") {
-        filteredProducts = products.filter(product => product.id >= 53 && product.id <= 78);
-    } else if (category === "collection") {
-        filteredProducts = products.filter(product => product.id == 20 || product.id == 79);
-    }
-
-    // Displaying the number of items
-
-    lengthItems = filteredProducts.length;
-    numOfItems.innerHTML = `Items Found: <strong>${lengthItems}</strong>`;
-
-    // Render the filtered products
-    renderProducts(AllProductList, filteredProducts);
-}
-
-coinTypeSelect.addEventListener("change", () => {
-    const selectedCategory = coinTypeSelect.value;
-    const filteredProducts = filterProducts(selectedCategory);
-    renderProducts(AllProductList, filteredProducts);
-});
-
-renderProducts(AllProductList, products);
-
-
-
-// search function
-
-let productSearch = document.querySelector(".product-search");
-let submitBtn = document.querySelector(".product-submit");
-let itemsFound = document.querySelector(".items-found");
-
-function handleSearch() {
-    let searchInput = productSearch.value.toLowerCase();
-    let foundProducts = products.filter(product => product.title.toLowerCase().includes(searchInput));
-
-    if (foundProducts.length > 0) {
-        itemsFound.innerHTML = `Items Found: <strong>${foundProducts.length}</strong>`;
-        renderProducts(AllProductList, foundProducts);
-    } else if (searchInput) {
-        itemsFound.innerHTML = "Items not found. Please try again.";
-        AllProductList.innerHTML = "";
-    } else {
-        renderProducts(AllProductList, products);
-    }
-}
-
-// As soon as there is a change in input, it will handle the search (search for relevant items)
-
-productSearch.addEventListener("input", handleSearch);
-
