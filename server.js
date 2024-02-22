@@ -109,7 +109,9 @@ app.get('/api/products', async (req, res) => {
 
 app.post('/api/products', async (req, res) => {
   try {
-    const { id, title, image, price, description, stock } = req.body;
+    const { id, title, image, price, description, stock, category, tag } = req.body;
+    console.log('Received product data:', req.body);
+
 
     const newProduct = new ProductModel({
       id,
@@ -118,6 +120,8 @@ app.post('/api/products', async (req, res) => {
       price,
       description,
       stock,
+      category,
+      tag
     });
 
     const savedProduct = await newProduct.save();

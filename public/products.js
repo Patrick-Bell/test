@@ -31,6 +31,7 @@ async function renderProductsOnPage() {
         // Render products on the page
         renderProducts(AllProductList, products);
         addEventListenersToCartButtons();
+        updateCartIcon();
     } catch (error) {
         console.error('Error rendering products on the page:', error);
     }
@@ -52,7 +53,7 @@ function renderProducts(productList, productData) {
         <div class="product">
             <img src="${product.image}" alt="${product.title}">
             <h4>${product.title}</h4>
-            <h5>${product.price}</h5>
+            <h5>£${product.price}</h5>
             <div class="cart">
                 <a><i class="bi bi-cart add-to-cart" data-id="${product.id}"></i></a>
             </div>
@@ -68,7 +69,7 @@ function addEventListenersToCartButtons() {
     const addToCartButtons = document.getElementsByClassName('add-to-cart');
     for (let i = 0; i < addToCartButtons.length; i++) {
         const addToCartButton = addToCartButtons[i];
-        addToCartButton.addEventListener("click", (event) => addToCart(event, [...products])); // Pass a copy of the products array
+        addToCartButton.addEventListener("click", addToCart);
     }
 }
 
@@ -78,9 +79,10 @@ async function addToCart(event) {
       const products = await fetchProducts();
   
       // Find the product with the given ID
-          const productId = parseInt(event.target.dataset.id);
 
-      const product = products.find((product) => product.id === productId);
+      const productId = event.target.dataset.id; // Keep it as a string
+        const product = products.find((product) => product.id === productId);
+
   
       if (product) {
         const existingItem = cart.find((item) => item.id === product.id);
@@ -98,10 +100,13 @@ async function addToCart(event) {
             quantity: 1,
           };
           cart.push(cartItem);
-        }
-  
+        }  
+
+        renderCartItems();
+        saveToLocalStorage();
+        calculateTotal();
+        updateCartIcon(); // Add this line to update the cart icon quantity
         // You can update the UI or perform other actions here
-        console.log('Cart after adding:', cart);
       } else {
         console.error('Product not found');
       }
@@ -118,7 +123,7 @@ async function addToCart(event) {
 // Removing an item from the cart
 
 function removeFromCart(event) {
-    const productID = parseInt(event.target.dataset.id);
+    const productID = event.target.dataset.id;
     console.log('Removing product with ID:', productID);
 
     // Check if the productID exists in the cart before filtering
@@ -181,7 +186,7 @@ function renderCartItems() {
                 />
             </div>
             <h2 class="cart-item-price">£${item.price}</h2>
-            <button data-id="${item.id}" class="remove-from-cart">Remove</button>
+            <button data-id="${item.id}" class="remove-from-cart">X</button>
         </div>`
     ).join("");
 

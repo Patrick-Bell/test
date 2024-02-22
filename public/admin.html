@@ -24,13 +24,13 @@
       </li>
       <li>
        <a href="players.html">
-         <i class='bx bx-user' ></i>
+        <i class='bx bxs-coin-stack'></i>
          <span class="links_name">Products</span>
        </a>
        <span class="tooltip">Products</span>
      </li>
      <li>
-       <a href="matches.html">
+       <a href="orders.html">
         <i class='bx bx-stats'></i>
          <span class="links_name">Orders</span>
        </a>
@@ -38,35 +38,35 @@
      </li>
      <li>
        <a href="table.html">
-        <i class='bx bx-table'></i>
+        <i class='bx bx-credit-card'></i>
          <span class="links_name">Revenue</span>
        </a>
        <span class="tooltip">Revenue</span>
      </li>
      <li>
        <a href="teamgenerator.html">
-        <i class='bx bxl-microsoft-teams'></i>
+        <i class='bx bxs-package'></i>
          <span class="links_name">Refunds</span>
        </a>
        <span class="tooltip">Refunds</span>
      </li>
      <li>
        <a href="awards.html">
-        <i class='bx bx-award'></i>
+        <i class='bx bxs-truck'></i>
          <span class="links_name">Deliveries</span>
        </a>
        <span class="tooltip">Deliveries</span>
      </li>
      <li>
        <a href="comingsoon.html">
-        <i class='bx bx-video-recording' ></i>
+        <i class='bx bx-folder-plus'></i>
          <span class="links_name">Updates</span>
        </a>
        <span class="tooltip">Updates</span>
      </li>
      <li>
        <a href="compare.html">
-        <i class='bx bx-git-compare'></i>
+        <i class='bx bx-mail-send'></i>
         <span class="links_name">Contact</span>
        </a>
        <span class="tooltip">Contact</span>
@@ -79,26 +79,31 @@
         <button class="add-product" id="addProductBtn">Add a Product</button>
       </div>
 
-      <div class="add-product-container" id="addProductContainer">
+      <dialog class="add-product-modal" id="productsModal">
         <h2>Add a Product</h2>
-        <input type="number" name="productID" id="productID" placeholder="Product ID" required>
+        <input type="number" name="productID" id="productID" placeholder="Product ID" disabled>
         <input type="text" name="producTitlte" id="productTitle" placeholder="Product Name" required>
         <input type="text" name="productDescription" id="productDescription" placeholder="Product Description" required>
         <input type="text" name="productImage" id="productImage" placeholder="Product Image" required>
-        <input type="text" name="productPrice" id="productPrice" placeholder="Product Price" required>
-        <input type="text" name="productStock" id="productStock" placeholder="Product Stock" required>
+        <input type="number" name="productPrice" id="productPrice" placeholder="Product Price" required>
+        <input type="number" name="productStock" id="productStock" placeholder="Product Stock" required>
+        <input type="text" name="ProductCategory" id="productCategory" placeholder="Product Category" required>
+        <input type="text" name="productTag" id="productTag" placeholder="Product Tag" required>
         <button class="submit-product" id="submitProductBtn">Submit Product</button>
         <button class="close-btns" id="closeBtn">Close</button>
-      </div>
+    </dialog>
 
       <!-- Edit Product Container -->
 <div class="edit-product-container">
   <h2>Edit a Product</h2>
   <input type="text" name="editProductTitle" id="editProductTitle" placeholder="Product Name" required>
-  <input type="text" name="editProductPrice" id="editProductPrice" placeholder="Product Price" required>
+  <input type="number" name="editProductPrice" id="editProductPrice" placeholder="Product Price" step="0.01" required>
   <input type="text" name="editProductDescription" id="editProductDescription" placeholder="Product Description" required>
   <input type="text" name="editProductImage" id="editProductImage" placeholder="Product Image" required>
-  <input type="text" name="editProductStock" id="editProductStock" placeholder="Product Stock" required>
+  <input type="number" name="editProductStock" id="editProductStock" placeholder="Product Stock" required>
+  <input type="text" name="editProductCategory" id="editProductCategory" placeholder="Product Category" required>
+  <input type="text" name="editProductTag" id="editProductTag" placeholder="Product Tag" required>
+
   <button class="confirm-edit">Confirm Edit</button>
   <button class="cancel-edit">Cancel Edit</button>
 </div>

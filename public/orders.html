@@ -76,7 +76,6 @@
   <section class="home-section">
       <div class="top-container">
         <div class="big-text">Orders</div>
-        <button class="add-product">Add a Product</button>
       </div>
 
     <div class="orders-container"></div>
@@ -139,6 +138,10 @@ function fetchAndRenderOrders() {
         <div class="items-container item-container">
           ${renderLineItems(order.lineItems)}
         </div>
+        <div class="items-container order-gap">
+          <div class="total">Product Total</div>
+          <div class="total">£${((order.totalPrice - order.shipping) / 100).toFixed(2)}</div>
+        </div>
         <div class="items-container item-container order-gap">
           <div class="total">Shipping</div>
           <div class="total">£${(order.shipping / 100).toFixed(2)}</div>
@@ -162,6 +165,7 @@ function fetchAndRenderOrders() {
 
 function renderLineItems(lineItems) {
   return lineItems.map(item => `${item.name} | x ${item.quantity} | £${(item.unitPrice * item.quantity) / 100}`).join('<br>');
+  console.log(lineItems)
 }
  
 function setupEventListeners() {
