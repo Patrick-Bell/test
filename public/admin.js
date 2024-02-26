@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const addProductModal = document.getElementById('addProductBtn')
     const productsModal = document.getElementById('productsModal')
     const closeProductModal = document.getElementById('closeBtn')
+    const editProductsModal = document.getElementById("editProductsModal")
 
   
     // Toggle visibility of the add product modal
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     closeProductModal.addEventListener("click", () => {
       productsModal.close()
+      resetAddProductForm()
     })
 
     function generateRandomProductID() {
@@ -26,6 +28,16 @@ document.addEventListener('DOMContentLoaded', () => {
       return randomID.toString();
     }
 
+    function resetAddProductForm() {
+      document.getElementById('productTitle').value = "";
+      document.getElementById('productImage').value = "";
+      document.getElementById('productPrice').value = "";
+      document.getElementById('productDescription').value = "";
+      document.getElementById('productStock').value = "";
+      document.getElementById('productCategory').value = "";
+      document.getElementById('productTag').value = "";
+    }
+    
 
     // Handle form submission
     submitProductBtn.addEventListener('click', async () => {
@@ -40,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tag: document.getElementById('productTag').value,
       };
 
+      resetAddProductForm()
       productsModal.close()
   
       try {
@@ -54,13 +67,103 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Error adding product:', error);
       }
     });
-  
+
+
+
+    let productId;
+
+
+
+    const parentTable = document.getElementById('productTable');
+    parentTable.addEventListener('click', async (event) => {
+        if (event.target.classList.contains('bxs-edit')) {
+            console.log("Clicking element");
+    
+            // Traverse up the DOM to find the closest table row (tr)
+            const closestTableRow = event.target.closest('tr');
+    
+            // Extract the product ID from the data-product-id attribute
+            productId = closestTableRow.dataset.productId;
+            console.log('Product ID:', productId);
+    
+            // Fetch product details using the product ID
+            try {
+                console.log('Fetching product details for ID:', productId);
+                const response = await axios.get(`/api/products/${productId}`);
+                const productDetails = response.data;
+    
+                // Populate the editProductsModal with productDetails
+                populateEditProductsModal(productDetails);
+    
+                // Open the editProductsModal
+                editProductsModal.showModal();
+            } catch (error) {
+                console.error('Error fetching product details:', error);
+            }
+        }
+    });
+    
+    document.getElementById('updateProductBtn').addEventListener('click', async () => {
+        // Ensure that productId is defined
+        if (!productId) {
+            console.error('Product ID is not defined.');
+            return;
+        }
+    
+        // Gather the updated data from the modal inputs
+        const updatedProductData = {
+            title: document.getElementById('editProductTitle').value,
+            image: document.getElementById('editProductImage').value,
+            price: document.getElementById('editProductPrice').value,
+            description: document.getElementById('editProductDescription').value,
+            stock: document.getElementById('editProductStock').value,
+            category: document.getElementById('editProductCategory').value,
+            tag: document.getElementById('editProductTag').value,
+        };
+    
+        try {
+            // Make a PUT or PATCH request to update the product in the database
+            const response = await axios.put(`/api/products/${productId}`, updatedProductData);
+    
+            // Optionally, you can handle the response or perform additional actions
+            console.log('Product updated successfully:', response.data);
+            fetchAndDisplayProducts()
+    
+            // Close the editProductsModal after updating
+            editProductsModal.close();
+        } catch (error) {
+            console.error('Error updating product:', error);
+        }
+    });
+
+
+// Function to populate the editProductsModal with product details
+const populateEditProductsModal = (productDetails) => {
+    // Assuming you have elements in your modal like productTitleInput, productImageInput, etc.
+    document.getElementById('EditProductID').value = productDetails.id;
+    document.getElementById('editProductTitle').value = productDetails.title;
+    document.getElementById('editProductImage').value = productDetails.image;
+    document.getElementById('editProductPrice').value = productDetails.price;
+    document.getElementById('editProductDescription').value = productDetails.description;
+    document.getElementById('editProductStock').value = productDetails.stock;
+    document.getElementById('editProductCategory').value = productDetails.category;
+    document.getElementById('editProductTag').value = productDetails.tag;
+};
+
+document.querySelector('.cancel-edit').addEventListener('click', () => {
+    editProductsModal.close();
+});
+
+
+
     const displayProduct = (product) => {
       const row = productTableBody.insertRow();
   
       // Create cells and set innerHTML
       const cell1 = row.insertCell(0);
       cell1.innerHTML = product.id;
+      row.dataset.productId = product.id; // Add this line
+
   
       const cell2 = row.insertCell(1);
       cell2.innerHTML = product.title;
@@ -83,16 +186,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
       const cell6 = row.insertCell(5);
       cell6.innerHTML = `<div class="action-cell">
-      <i class="bx bxs-edit"></i>
+      <i class="bx bxs-edit" data-product-id="${product.id}"></i>
       <i class="bx bxs-trash-alt"></i>
       </div>`
   };
- 
-  
-  
-  
-    
-  
+
     // Function to fetch and display products
     const fetchAndDisplayProducts = async () => {
       try {
@@ -114,5 +212,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
     // Call the function to fetch and display products initially
     fetchAndDisplayProducts();
+    
   });
   

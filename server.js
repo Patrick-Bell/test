@@ -107,6 +107,54 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
+app.route('/api/products/:id')
+  .get(async (req, res) => {
+    const productId = req.params.id;
+    console.log('Fetching product details for ID:', productId);
+
+    try {
+      const product = await ProductModel.findOne({ id: productId });
+      if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+
+      res.status(200).json(product);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  })
+  .put(async (req, res) => {
+    const productId = req.params.id;
+
+    // Extract the updated product data from the request body
+    const updatedProductData = req.body;
+
+    try {
+      // Find and update the product in the database
+      const updatedProduct = await ProductModel.findOneAndUpdate(
+        { id: productId },
+        { $set: updatedProductData },
+        { new: true }
+      );
+
+      if (!updatedProduct) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+
+      res.status(200).json(updatedProduct);
+    } catch (error) {
+      console.error('Error updating product:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+
+
+
+
+
+
 app.post('/api/products', async (req, res) => {
   try {
     const { id, title, image, price, description, stock, category, tag } = req.body;

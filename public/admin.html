@@ -94,8 +94,9 @@
     </dialog>
 
       <!-- Edit Product Container -->
-<div class="edit-product-container">
+<dialog class="edit-product-container" id="editProductsModal">
   <h2>Edit a Product</h2>
+  <input type="number" name="editProductID" id="EditProductID" placeholder="Product ID" disabled>
   <input type="text" name="editProductTitle" id="editProductTitle" placeholder="Product Name" required>
   <input type="number" name="editProductPrice" id="editProductPrice" placeholder="Product Price" step="0.01" required>
   <input type="text" name="editProductDescription" id="editProductDescription" placeholder="Product Description" required>
@@ -103,10 +104,9 @@
   <input type="number" name="editProductStock" id="editProductStock" placeholder="Product Stock" required>
   <input type="text" name="editProductCategory" id="editProductCategory" placeholder="Product Category" required>
   <input type="text" name="editProductTag" id="editProductTag" placeholder="Product Tag" required>
-
-  <button class="confirm-edit">Confirm Edit</button>
+  <button class="confirm-edit" id="updateProductBtn">Confirm Edit</button>
   <button class="cancel-edit">Cancel Edit</button>
-</div>
+</dialog>
 
 <!-- Other HTML content for your product list -->
 
