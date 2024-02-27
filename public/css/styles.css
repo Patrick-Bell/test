@@ -149,7 +149,7 @@ h1{
     width: 100%;
 }
 section{
-    padding: 100px 8%;
+    padding: 85px 8%;
 }
 .container{
     display: grid;
@@ -312,10 +312,13 @@ section{
 .contact{
     padding: 80px;
     background: var(--text-color);
+    margin: auto auto;
 }
 .main-contact{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, auto));
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
     gap: 1rem;
     margin-bottom: 3rem;
     width: 100%;
@@ -516,16 +519,18 @@ section{
 
 /* Accordian */
 .faq{
-    position: relative;
-}
-.accordian{
-    display: grid;
-    grid-template-columns: repeat(auto 1fr);
-    align-items: center;
-    justify-content: center;
+    margin: auto;
     position: relative;
     width: 100%;
 }
+.accordian {
+    display: block;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0 -10px; /* Updated to center horizontally */
+}
+
 .accordian li{
     list-style: none;
     margin: 10px;
@@ -590,60 +595,65 @@ input[type="radio"]{
 
 
 /* contact us*/
-input{
-    width: 75%;
-    display: grid;
-    grid-template-rows: auto 1fr;
-    margin: auto auto;
-    padding: 10px;
-    margin-top: 10px;
-    border: none;
-    outline: none;
-    border-radius: 8px;
-}
-input:focus{
-    border-bottom: 5px solid black;
-}
-textarea{
-    width: 75%;
-    margin: auto auto;
-    margin-top: 10px;
-    padding: 10px;
-    display: flex;
-    border: none;
-    outline: none;
-    border-radius: 8px;
-    resize: none;
-}
-button{
-    width: 50%;
-    margin: auto auto;
-    margin-top: 10px;
-    display: flex;
-    padding: 10px;
-    text-align: center;
-    font-size: var(--p-font);
-    align-items: center;
-    justify-content: center;
-    border: none;
-    outline: none;
-    border-radius: 8px;
-    background: white;
-}
-button:hover{
-    opacity: 0.7;
-}
 .contact-us{
     background: #f7f6f6;
 }
-.name-err-msg, .email-err-msg, .num-err-msg, .msg-err-msg, .submit-err{
-    width: 75%;
-    display: grid;
-    grid-template-rows: auto 1fr;
-    margin: auto auto;
-    margin-top: 10px;
-    color: red;
+.input-container {
+    display: flex;
+    align-items: center;
+    position: relative; /* Add relative positioning to the container */
 }
+
+/* Style the icon within the input container */
+.input-container i {
+    position: absolute;
+    right: 0; /* Align the icon to the right within the container */
+    transform: translate(-50%); /* Center the icon vertically */
+    margin: 5px 0;
+    display: none;
+}
+
+/* Style the error message */
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin: 10px 0;
+    display: none;
+}
+
+input,
+textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: 100%;
+    resize: none;
+}
+.textarea-icon{
+    margin-right: 5px;
+    position: absolute;
+    top: 80%;
+    transform: translateY(-50%);
+    right: 5px;
+}
+.send-btn{
+    cursor: not-allowed;
+    border: none;
+    outline: none;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.input-container .text-icon {
+    position: absolute;
+    right: 0; /* Align the icon to the right within the container */
+    transform: translate(-50%, 400%); /* Center the icon vertically */
+    margin: 5px 0;
+    display: none;
+}
+
+
 
 /* Thanks page */
 .thanks-container{

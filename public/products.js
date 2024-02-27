@@ -73,8 +73,10 @@ function getTagStyles(tag) {
             return { backgroundColor: "yellow", color: "black" };
         case "new":
             return { backgroundColor: "blue", color: "white" };
-        case "popular":
+        case "hot":
             return { backgroundColor: "red", color: "white"};
+        case "none":
+            return { backgroundColor: "white", color: "white"};
         default:
             return { backgroundColor: "transparent", color: "black" }; // You can set default colors
     }

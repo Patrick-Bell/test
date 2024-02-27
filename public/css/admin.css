@@ -259,19 +259,6 @@ body{
 .add-product{
     padding: 10px;
 }
-
-
-.add-product-container{
-    display: block;
-    padding: 50px;
-    background: red;
-    display: none;
-}
-input, .submit-product{
-    display: block;
-    margin: auto auto;
-    margin-top: 10px;
-}
 h2{
     text-align: center;
 }
@@ -320,6 +307,33 @@ th{
 .high-stock {
     background: #74e45e;
 }
+.product-label-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0;
+}
+.add-product-height-container{
+  max-height: 100%;
+  margin: 40px 10px;
+}
+.product-label-container, input{
+  margin: 5px 20px;
+}
+.product-label-container, select{
+  margin: 5px 20px;
+}
+.button-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.submit-product, .close-btns{
+  margin: 0 10px;
+  padding: 10px;
+  cursor: pointer;
+}
+
 
 
 
@@ -392,9 +406,11 @@ h2{
 #productsModal{
   width: 75%;
   height: 75%;
-  margin: auto auto;
   position: relative;
   color: black;
+  margin: auto auto;
+  border: none;
+  outline: none;
 }
 #editProductsModal{
   width: 75%;
