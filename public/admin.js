@@ -69,12 +69,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+// deleting a product
+let productId;
 
-    let productId;
+const parentTable = document.getElementById('productTable');
+
+parentTable.addEventListener("click", async (event) => {
+  if (event.target.classList.contains('bxs-trash-alt')) {
+    // Confirm deletion with the user
+    const confirmed = window.confirm("Are you sure you want to delete this product?");
+    if (!confirmed) {
+      return; // Do nothing if the user cancels the deletion
+    }
+
+    const closestElement = event.target.closest('tr');
+    productId = closestElement.dataset.productId;
+
+    try {
+      console.log('Deleting product with ID:', productId);
+
+      // Send a DELETE request to delete the product
+      await axios.delete(`/api/products/${productId}`);
+
+      // Remove the table row from the UI after successful deletion
+      closestElement.remove();
+      
+      console.log("Product deleted successfully");
+    } catch (error) {
+      console.error("Error deleting product", error);
+    }
+  }
+});
 
 
 
-    const parentTable = document.getElementById('productTable');
+
+
+
     parentTable.addEventListener('click', async (event) => {
         if (event.target.classList.contains('bxs-edit')) {
             console.log("Clicking element");
@@ -187,7 +218,7 @@ document.querySelector('.cancel-edit').addEventListener('click', () => {
       const cell6 = row.insertCell(5);
       cell6.innerHTML = `<div class="action-cell">
       <i class="bx bxs-edit" data-product-id="${product.id}"></i>
-      <i class="bx bxs-trash-alt"></i>
+      <i class="bx bxs-trash-alt" data-product-id=${product.id}></i>
       </div>`
   };
 

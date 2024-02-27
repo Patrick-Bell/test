@@ -149,8 +149,31 @@ app.route('/api/products/:id')
     }
   });
 
+  // ... Your existing code ...
+
+  app.delete('/api/products/:id', async (req, res) => {
+    const productId = req.params.id;
+
+    try {
+        // Find the product in the database by the id field
+        const result = await ProductModel.deleteOne({ id: productId });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        // Respond with a success message
+        return res.status(200).json({ message: 'Product deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 
+
+
+// ... Your existing code ...
 
 
 

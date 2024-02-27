@@ -1,5 +1,6 @@
 // Defining the variables
 document.addEventListener('DOMContentLoaded', renderProductsOnPage);
+const tags = document.querySelector('.tags')
 
 
 const AllProductList = document.getElementById('allItemList'); // This is the product div, all products go inside this
@@ -50,19 +51,35 @@ function renderProducts(productList, productData) {
     }
 
     productList.innerHTML = productData.map(product => `
-        <div class="product">
-            <img src="${product.image}" alt="${product.title}">
-            <h4>${product.title}</h4>
-            <h5>£${product.price}</h5>
-            <div class="cart">
-                <a><i class="bi bi-cart add-to-cart" data-id="${product.id}"></i></a>
+    <div class="product">
+        <img src="${product.image}" alt="${product.title}">
+        <h4>${product.title}</h4>
+        <h4>£${product.price}</h4>
+        <div class="cart">
+            <a><i class="bi bi-cart add-to-cart" data-id="${product.id}"></i></a>
+            <div class="tags" style="background-color: ${getTagStyles(product.tag).backgroundColor}; color: ${getTagStyles(product.tag).color}">
+                ${product.tag}
             </div>
-        </div>`
-    ).join("");
-
+        </div>
+    </div>`
+).join("");
     // Add event listeners to the newly rendered "Add to Cart" buttons
     addEventListenersToCartButtons();
 }
+
+function getTagStyles(tag) {
+    switch (tag.toLowerCase()) {
+        case "sale":
+            return { backgroundColor: "yellow", color: "black" };
+        case "new":
+            return { backgroundColor: "blue", color: "white" };
+        case "popular":
+            return { backgroundColor: "red", color: "white"};
+        default:
+            return { backgroundColor: "transparent", color: "black" }; // You can set default colors
+    }
+}
+
 
 
 function addEventListenersToCartButtons() {
