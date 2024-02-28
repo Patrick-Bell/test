@@ -477,8 +477,9 @@ app.post('/webhooks', async (req, res) => {
 
     // Call a function to add this order data to your orders
     addOrderToTable(orderData);
-
     console.log('Order data:', orderData);
+    clearCart();
+
 
 
     res.json({ received: true });
