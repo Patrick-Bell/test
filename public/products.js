@@ -33,6 +33,7 @@ async function renderProductsOnPage() {
         renderProducts(AllProductList, products);
         addEventListenersToCartButtons();
         updateCartIcon();
+        calculateTotal()
     } catch (error) {
         console.error('Error rendering products on the page:', error);
     }
@@ -235,6 +236,7 @@ function calculateTotal() {
     const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     cartTotalElement.textContent = `Total: £${total.toFixed(2)}`;
 }
+console.log(cartTotalElement)
 
 // Updating the number on the cart that shows the quantity
 

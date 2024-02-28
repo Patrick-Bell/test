@@ -4,7 +4,11 @@ const stripe = require('stripe')
 const mongoose = require('mongoose')
 const OrderModel = require('./models/order')
 const ProductModel = require('./models/product');
+const EmailModel = require('./models/message');
 const path = require('path')
+const fs = require('fs').promises;
+const multer = require('multer');
+const nodemailer = require('nodemailer')
 
 const { addOrderToTable, getOrdersFromTable } = require('./orders'); // Updated import statement
 
@@ -16,6 +20,7 @@ dotenv.config();
 const app = express();
 let stripeGateway = stripe(process.env.stripe_key);
 
+const upload = multer({ dest: 'uploads/' });
 // Set up middleware
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -50,41 +55,40 @@ app.get("/", (req, res) => {
     res.sendFile("index.html", { root: "public" });
 });
 
-app.get("/cart.html", (req, res) => {
+app.get("/cart", (req, res) => {
     res.sendFile("cart.html", { root: "public" });
 });
 
-app.get("/faq.html", (req, res) => {
+app.get("/faq", (req, res) => {
     res.sendFile("faq.html", { root: "public" });
 });
 
-app.get("/success.html", (req, res) => {
+app.get("/success", (req, res) => {
     res.sendFile("success.html", { root: "public" });
 });
 
-app.get("/cancel.html", (req, res) => {
+app.get("/cancel", (req, res) => {
     res.sendFile("cancel.html", { root: "public" });
 });
 
-app.get("/thanks.html", (req, res) => {
+app.get("/thanks", (req, res) => {
     res.sendFile("thanks.html", { root: "public" });
 });
 
-app.get("/products.html", (req, res) => {
+app.get("/products", (req, res) => {
     res.sendFile("products.html", { root: "public" });
 });
 
-app.get("/delivery.html", (req, res) => {
+app.get("/delivery", (req, res) => {
   res.sendFile("delivery.html", { root: "public" });
 });
 
-app.get("/admin.html", (req, res) => {
+app.get("/admin", (req, res) => {
   res.sendFile("admin.html", { root: "public" });
 });
 
 app.get('/orders', (req, res) => {
-  const ordersArray = getOrdersArray();
-  res.render('orders.html', { orders: ordersArray });
+  res.sendFile('orders.html', { root: "public" });
 });
 
 app.get('/api/orders', async (req, res) => {
@@ -175,7 +179,99 @@ app.route('/api/products/:id')
 
 // ... Your existing code ...
 
+app.post('/send', upload.array('attachments'), async function (req, res) {
+  let transporter;  // Move the declaration outside the try block
+  try {
+      // Validate form inputs (add your validation logic here)
 
+      const data = req.body;
+      const attachments = req.files; // use req.files for multiple files
+
+      // Create a nodemailer transporter
+       transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+              user: process.env.USER,
+              pass: process.env.PASS,
+          },
+          
+      });
+
+  
+
+      const newEmail = new EmailModel({
+          name: req.body.name,
+          email: req.body.email.toLowerCase(), // Check and convert to lowercase
+          phone: req.body.phone,
+          subject: req.body.subject,
+          message: req.body.message,
+      });
+      console.log("request body", req.body)
+
+      await newEmail.save();
+
+      // Prepare email content
+      const emailContent = `<p>${data.message}</p><p>Phone Number: ${data.phone}</p>`;
+
+      // Prepare attachments array
+      const attachmentsArray = [];
+
+      if (attachments) {
+          // Loop through each attachment
+          for (const attachment of attachments) {
+              const attachmentContent = (await fs.readFile(path.join(__dirname, 'uploads', attachment.filename))).toString('base64');
+              attachmentsArray.push({
+                  filename: attachment.originalname,
+                  content: attachmentContent,
+                  encoding: 'base64',
+                  contentType: attachment.mimetype,
+              });
+          }
+      }
+
+      // Mail options for sending email to admin
+      const adminMailOptions = {
+          from: data.email,
+          to: process.env.USER,
+          subject: data.subject,
+          html: emailContent,
+          replyTo: data.email,
+          attachments: attachmentsArray,
+      };
+
+      // Mail options for sending automatic response to the user
+      const userMailOptions = {
+          from: process.env.USER, // Your email address
+          to: data.email, // User's email address
+          subject: 'Thank you for contacting us, ' + data.name + '!',
+          html: 'Thank you for contacting us! We have received your message and will get back to you as soon as possible.<br><br>For more information, please visit our page at www.info.com',
+      };
+
+      // Send the email to admin
+      transporter.sendMail(adminMailOptions, function (error, info) {
+          if (error) {
+              console.error('Error sending email to admin:', error);
+              res.status(500).send('Error sending email');
+          } else {
+              console.log('Email sent to admin successfully', info.response);
+
+              // Send the automatic response email to the user
+              transporter.sendMail(userMailOptions, function (userError, userInfo) {
+                  if (userError) {
+                      console.error('Error sending automatic response to user:', userError);
+                  } else {
+                      console.log('Automatic response sent to user successfully', userInfo.response);
+                  }
+              });
+
+              res.redirect('/success');
+          }
+      });
+  } catch (error) {
+      console.error('Error processing form submission:', error);
+      res.status(500).send('Internal server error');
+  }
+});
 
 
 app.post('/api/products', async (req, res) => {

@@ -40,6 +40,6 @@ emailSchema.pre('save', function (next) {
 });
 
 
-const Email = mongoose.model('User', emailSchema);
+const EmailModel = mongoose.model('Email', emailSchema);
 
-module.exports = Email;
+module.exports = EmailModel;

@@ -484,6 +484,7 @@ section{
 #cartTotal{
     font-size: 2rem;
     font-weight: 600;
+    visibility: visible !important;
 }
 .checkout-btn{
     background: var(--text-color);
