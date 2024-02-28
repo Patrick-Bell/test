@@ -13,30 +13,6 @@
 .old-price{
     text-decoration: line-through;
 }
-.to-shop{
-    padding: 10px;
-    text-transform: uppercase;
-    width: 200px;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto auto;
-    margin-top: 30px;
-    background: black;
-    color: white !important;
-    border-radius: 8px;
-    cursor: pointer;
-    top: 35px;
-    position: relative;
-}
-.to-shop a{
-    text-decoration: underline;
-    color: white;
-}
-.to-shop a:hover{
-    opacity: 0.7;
-}
 :root{
     --bg-color: #ffffff;
     --text-color: #121212;
@@ -81,7 +57,7 @@ header{
     position: relative;
 }
 .time-measure{
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 900;
     position: relative;
 }
@@ -1304,6 +1280,35 @@ option{
     background-color: #0056b3;
 }
 
+#bgVideo {
+    width: 100%;
+    min-height: 80vh;
+    top: 90px;
+    position: relative;
+    object-fit: cover; /* Ensures the video covers the entire element */
+    z-index: -1; /* Puts the video behind other elements */
+  }
+  .video-container{
+    position: relative;
+  }
+  .to-shop{
+    position: absolute;
+    bottom: 200px; /* Adjust the position as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: black;
+    display: flex;
+    padding: 15px 30px;
+}
+.to-shop a{
+    text-decoration: underline;
+    color: white;
+}
+.to-shop a:hover{
+    opacity: 0.7;
+}
+
 
 
 @media screen and (max-width: 530px){
@@ -1336,6 +1341,11 @@ option{
     }
 }
 
+@media (max-width: 1024px) {
+    .to-shop{
+        bottom: 150px;
+    }
+}
 
 @media (max-width: 800px) {
     .carts-container{
@@ -1393,6 +1403,9 @@ option{
     .time-containers, .time-measure, .times{
         display: none;
     }
+    .sale-text{
+        margin-left: 50px;
+    }
     .sale-wrapper{
         width: 100%;
     }
@@ -1406,6 +1419,7 @@ option{
     .news-boxes .news-img{
         height: 150px;
         width: 200px;
+        margin: auto auto;
     }
     .swiper{
         height: 150px;
