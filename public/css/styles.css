@@ -306,7 +306,10 @@ section{
 }
 
 
-
+.menu-cointology{
+    width: 150px;
+    height: auto;
+}
 
 /* footer */
 .contact{
@@ -319,7 +322,6 @@ section{
     align-items: center;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    gap: 1rem;
     margin-bottom: 3rem;
     width: 100%;
 }
@@ -886,7 +888,7 @@ select{
 .tabs{
     padding-top: 1rem;
     color: black;
-    min-width: 100%;
+    min-width: 95%;
 }
 .tab-item{
     display: flex;
@@ -1046,11 +1048,14 @@ input[type="radio"]:checked + label + .accordian-content{
     justify-content: center;
     gap: 1rem;
 }
+.menu-container-1, .menu-container-2{
+    margin-left: -20px;
+}
 
 
 
 
-
+/* chatbot */
 .chatbot-toggler{
     position: fixed;
     right: 40px;
