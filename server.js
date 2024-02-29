@@ -10,7 +10,7 @@ const fs = require('fs').promises;
 const multer = require('multer');
 const nodemailer = require('nodemailer')
 
-const { addOrderToTable, getOrdersFromTable } = require('./orders'); // Updated import statement
+const { addOrderToTable, getOrdersFromTable, clearCart } = require('./orders'); // Updated import statement
 
 const bodyParser = require('body-parser')
 
