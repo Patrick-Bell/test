@@ -249,9 +249,3 @@ function updateCartIcon() {
 function updateCartIconOnCartChange() {
     updateCartIcon();
 }
-
-function clearCart() {
-    cart = [];
-    saveToLocalStorage();
-    updateCartIcon();
-}
