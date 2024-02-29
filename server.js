@@ -10,7 +10,7 @@ const fs = require('fs').promises;
 const multer = require('multer');
 const nodemailer = require('nodemailer')
 
-const { addOrderToTable, getOrdersFromTable, clearCart } = require('./orders'); // Updated import statement
+const { addOrderToTable, getOrdersFromTable } = require('./orders'); // Updated import statement
 
 const bodyParser = require('body-parser')
 
@@ -64,9 +64,9 @@ app.get("/faq", (req, res) => {
 });
 
 app.get("/success", (req, res) => {
-    clearCart()
-    res.sendFile("success.html", { root: "public" });
+  res.sendFile("success.html", { root: "public" });
 });
+
 
 app.get("/cancel", (req, res) => {
     res.sendFile("cancel.html", { root: "public" });
@@ -175,10 +175,6 @@ app.route('/api/products/:id')
     }
 });
 
-
-
-
-// ... Your existing code ...
 
 app.post('/send', upload.array('attachments'), async function (req, res) {
   let transporter;  // Move the declaration outside the try block
@@ -424,8 +420,8 @@ app.post("/stripe-checkout", async (req, res) => {
           },
           allow_promotion_codes: true,
         mode: "payment",
-        success_url: "https://test-admin-wdmf.onrender.com/success.html?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url: "https://test-admin-wdmf.onrender.com?session_id={CHECKOUT_SESSION_ID}",
+        success_url: "http://localhost:3000/success.html?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url: "http://localhost:3000/cancel.html?session_id={CHECKOUT_SESSION_ID}",
         billing_address_collection: "required",
         line_items: lineItems, 
     })

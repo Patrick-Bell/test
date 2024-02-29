@@ -334,6 +334,34 @@ th{
   cursor: pointer;
 }
 
+/* admin stats */
+.admin-container{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content:center;
+  gap: 1rem;
+  margin: 10px 0;
+}
+.admin-stats-container{
+  padding: 20px;
+  border: 1px solid black;
+  height: 100px;
+  width: 200px;
+}
+.admin-stats-container:nth-of-type(1){
+  background: lightblue;
+}
+.admin-stats-container:nth-of-type(2){
+  background: lightgreen;
+}
+.admin-stats-container:nth-of-type(3){
+  background: lightcoral;
+}
+.admin-stats-container:nth-of-type(4){
+  background: lightyellow;
+}
 
 
 

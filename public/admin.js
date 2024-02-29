@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeProductModal = document.getElementById('closeBtn')
     const editProductsModal = document.getElementById("editProductsModal")
 
-  
+
     // Toggle visibility of the add product modal
     addProductModal.addEventListener("click", () => {
       productsModal.showModal()
@@ -61,7 +61,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
         // Display the newly added product in the table
         displayProduct(response.data);
-  
+        fetchAndDisplayProducts()
+            findTotalProducts();
+            findTotalMonies();
+            findLowItemStocks()
+            findNumberOfCategories();
         // Close the add product modal
       } catch (error) {
         console.error('Error adding product:', error);
@@ -93,6 +97,10 @@ parentTable.addEventListener("click", async (event) => {
 
       // Remove the table row from the UI after successful deletion
       closestElement.remove();
+            findTotalProducts();
+            findTotalMonies();
+            findLowItemStocks()
+            findNumberOfCategories();
       
       console.log("Product deleted successfully");
     } catch (error) {
@@ -100,11 +108,6 @@ parentTable.addEventListener("click", async (event) => {
     }
   }
 });
-
-
-
-
-
 
     parentTable.addEventListener('click', async (event) => {
         if (event.target.classList.contains('bxs-edit')) {
@@ -159,6 +162,10 @@ parentTable.addEventListener("click", async (event) => {
             // Optionally, you can handle the response or perform additional actions
             console.log('Product updated successfully:', response.data);
             fetchAndDisplayProducts()
+            findTotalProducts();
+            findTotalMonies();
+            findLowItemStocks()
+            findNumberOfCategories();
     
             // Close the editProductsModal after updating
             editProductsModal.close();
@@ -184,8 +191,6 @@ const populateEditProductsModal = (productDetails) => {
 document.querySelector('.cancel-edit').addEventListener('click', () => {
     editProductsModal.close();
 });
-
-
 
     const displayProduct = (product) => {
       const row = productTableBody.insertRow();
@@ -245,4 +250,68 @@ document.querySelector('.cancel-edit').addEventListener('click', () => {
     fetchAndDisplayProducts();
     
   });
+  
+
+  const findTotalProducts = async () => {
+    try {
+      let totalProductsFound = document.querySelector(".product-count");
+      const response = await axios.get('/api/products');
+      const products = response.data;
+      totalProductsFound.innerHTML = `Total Products: ${products.length}`;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  findTotalProducts();
+
+  const findTotalMonies = async () => {
+    try {
+      let totalMoniesCalculate = document.querySelector(".total-monies");
+      const response = await axios.get('/api/products');
+      const products = response.data;
+  
+      // Use reduce to calculate the total sum of prices multiplied by quantities
+      const totalMoney = products.reduce((sum, product) => sum + (product.price * product.stock), 0);
+  
+      // Convert totalMoney to a string before setting innerHTML
+      totalMoniesCalculate.innerHTML = `Inventory Value: £${totalMoney.toFixed(2)}`;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  findTotalMonies();
+  
+  const findLowItemStocks = async () => {
+    try {
+      const response = await axios.get('/api/products');
+      const products = response.data
+      let lowStockItems = document.querySelector(".low-stock-count")
+      lowStockItemsCheck = products.filter(product => product.stock < 7)
+      lowStockItems.innerHTML = `Items low in Stock: ${lowStockItemsCheck.length}`
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  findLowItemStocks()
+
+  const findNumberOfCategories = async () => {
+    try {
+      const response = await axios.get('/api/products');
+      const products = response.data;
+  
+      // Extract unique categories from products
+      const uniqueCategories = [...new Set(products.map(product => product.category))];
+  
+      let categoryCounter = document.querySelector(".category-count");
+      categoryCounter.innerHTML = `Categories: ${uniqueCategories.length}`;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  findNumberOfCategories();
+  
   

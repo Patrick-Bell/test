@@ -34,6 +34,8 @@ async function renderProductsOnPage() {
         addEventListenersToCartButtons();
         updateCartIcon();
         calculateTotal()
+        addSearchEventListener();
+        filterProducts(category)
     } catch (error) {
         console.error('Error rendering products on the page:', error);
     }
@@ -178,9 +180,13 @@ function changeQuantity(event) {
 
 // Saving to local storage so it saves after refreshing
 
-function saveToLocalStorage() {
-    localStorage.setItem("cart", JSON.stringify(cart));
-    console.log(localStorage.getItem('cart'))
+async function saveToLocalStorage() {
+    try {
+        localStorage.setItem("cart", JSON.stringify(cart));
+        console.log("Cart saved to local storage:", cart);
+    } catch (error) {
+        console.error("Error saving cart to local storage:", error);
+    }
 }
 
 function renderCartItems() {
@@ -236,8 +242,6 @@ function calculateTotal() {
     const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     cartTotalElement.textContent = `Total: £${total.toFixed(2)}`;
 }
-console.log(cartTotalElement)
-
 // Updating the number on the cart that shows the quantity
 
 function updateCartIcon() {
@@ -249,3 +253,75 @@ function updateCartIcon() {
 function updateCartIconOnCartChange() {
     updateCartIcon();
 }
+
+
+
+// search and filtering system 
+
+let numOfItems = document.querySelector(".items-found");
+let lengthItems;
+
+
+function filterProducts(searchText) {
+    const filteredProducts = products.filter(product => {
+        // You can customize this condition based on your requirements
+        return product.title.toLowerCase().includes(searchText.toLowerCase());
+    });
+
+    renderProducts(AllProductList, filteredProducts);
+}
+
+// Function to add event listener for search input
+function addSearchEventListener() {
+    const searchInput = document.querySelector('.product-search');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', function (event) {
+            const searchText = event.target.value.trim();
+            filterProducts(searchText);
+        });
+    }
+}
+
+function filterProducts(searchText) {
+    const filteredProducts = products.filter(product => {
+        return product.title.toLowerCase().includes(searchText.toLowerCase());
+    });
+
+    lengthItems = filteredProducts.length;
+    numOfItems.innerHTML = `Items Found: <strong>${lengthItems}</strong>`;
+
+    // Render the filtered products
+    renderProducts(AllProductList, filteredProducts);
+}
+
+
+function filterCategory(category) {
+    let filteredProducts;
+
+    if (category === "all") {
+        filteredProducts = products;
+    } else if (category === "olympic") {
+        filteredProducts = products.filter(product => product.category === "olympic");
+    } else if (category === "alphabet") {
+        filteredProducts = products.filter(product => product.category === "alphabet");
+    } else if (category === "collection") {
+        filteredProducts = products.filter(product => product.category === "collection");
+    } else if (category === "price") {
+        filteredProducts = products.slice().sort((a, b) => a.price - b.price);
+    } else if (category === "sale") {
+        filteredProducts = products.filter(product => product.tag === "sale")
+    }
+
+    lengthItems = filteredProducts.length;
+    numOfItems.innerHTML = `Items Found: <strong>${lengthItems}</strong>`;
+    // Render the filtered products
+    renderProducts(AllProductList, filteredProducts);
+}
+
+
+coinTypeSelect.addEventListener("change", () => {
+    const selectedCategory = coinTypeSelect.value;
+    const filteredProducts = filterCategory(selectedCategory);
+    renderProducts(AllProductList, filteredProducts);
+});

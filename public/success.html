@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="main.js" defer></script>
+    <script src="products.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/styles.css" />
     <title>Payment Successful</title>
@@ -15,4 +16,33 @@
         <a href="/" class="back-to-homepage">Back to Homepage</a>
     </div>
 </body>
+
+<script>
+    async function saveToLocalStorage() {
+    try {
+        localStorage.setItem("cart", JSON.stringify(cart));
+        console.log("Cart saved to local storage:", cart);
+    } catch (error) {
+        console.error("Error saving cart to local storage:", error);
+    }
+}
+
+    async function clearCart() {
+    try {
+        console.log("Clearing Cart");
+        cart = []; // Clear the cart data
+        await saveToLocalStorage(); // Wait for the local storage to be updated
+        updateCartIcon();
+        calculateTotal();
+        console.log("Cart cleared:", cart);
+    } catch (error) {
+        console.error("Error clearing cart:", error);
+    }
+}
+
+// Check if the user is on the success page and clear the cart
+if (window.location.pathname === '/success.html') {
+    clearCart();
+}
+</script>
 </html>
