@@ -20,7 +20,7 @@ async function getOrdersFromTable() {
   }
 }
 
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let cart = [];
 
 function saveToLocalStorage() {
   localStorage.setItem("cart", JSON.stringify(cart));
