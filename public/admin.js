@@ -212,7 +212,7 @@ document.querySelector('.cancel-edit').addEventListener('click', () => {
   
       const cell5 = row.insertCell(4);
       cell5.innerHTML = product.stock;
-      if (product.stock > 20) {
+      if (product.stock >= 20) {
         cell5.classList.add("high-stock");
       } else if (product.stock >= 10 && product.stock < 20) {
         cell5.classList.add("medium-stock")
@@ -257,7 +257,7 @@ document.querySelector('.cancel-edit').addEventListener('click', () => {
       let totalProductsFound = document.querySelector(".product-count");
       const response = await axios.get('/api/products');
       const products = response.data;
-      totalProductsFound.innerHTML = `Total Products: ${products.length}`;
+      totalProductsFound.innerHTML = `${products.length}`;
     } catch (error) {
       console.error(error);
     }
@@ -275,7 +275,7 @@ document.querySelector('.cancel-edit').addEventListener('click', () => {
       const totalMoney = products.reduce((sum, product) => sum + (product.price * product.stock), 0);
   
       // Convert totalMoney to a string before setting innerHTML
-      totalMoniesCalculate.innerHTML = `Inventory Value: £${totalMoney.toFixed(2)}`;
+      totalMoniesCalculate.innerHTML = `£${totalMoney.toFixed(2)}`;
     } catch (error) {
       console.error(error);
     }
@@ -288,8 +288,8 @@ document.querySelector('.cancel-edit').addEventListener('click', () => {
       const response = await axios.get('/api/products');
       const products = response.data
       let lowStockItems = document.querySelector(".low-stock-count")
-      lowStockItemsCheck = products.filter(product => product.stock < 7)
-      lowStockItems.innerHTML = `Items low in Stock: ${lowStockItemsCheck.length}`
+      lowStockItemsCheck = products.filter(product => product.stock < 10)
+      lowStockItems.innerHTML = `${lowStockItemsCheck.length}`
     } catch(error) {
       console.log(error)
     }
@@ -306,7 +306,7 @@ document.querySelector('.cancel-edit').addEventListener('click', () => {
       const uniqueCategories = [...new Set(products.map(product => product.category))];
   
       let categoryCounter = document.querySelector(".category-count");
-      categoryCounter.innerHTML = `Categories: ${uniqueCategories.length}`;
+      categoryCounter.innerHTML = `${uniqueCategories.length}`;
     } catch (error) {
       console.log(error);
     }

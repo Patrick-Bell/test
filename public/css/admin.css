@@ -252,6 +252,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    background: #f7f6f6;
 }
 .big-text{
     font-size: 2rem;
@@ -337,18 +338,19 @@ th{
 /* admin stats */
 .admin-container{
   width: 100%;
+  margin: 2px 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content:center;
+  justify-content: center;
   gap: 1rem;
-  margin: 10px 0;
 }
 .admin-stats-container{
   padding: 20px;
   border: 1px solid black;
   height: 100px;
   width: 200px;
+  text-align: center;
 }
 .admin-stats-container:nth-of-type(1){
   background: lightblue;
@@ -361,6 +363,18 @@ th{
 }
 .admin-stats-container:nth-of-type(4){
   background: lightyellow;
+}
+.admin-inner-container{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.admin-inner-container i{
+  font-size: 1.75rem;
+}
+.stat-bold{
+  font-weight: 800;
+  font-size: 1.2rem;
 }
 
 
