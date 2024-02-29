@@ -20,6 +20,17 @@ async function getOrdersFromTable() {
   }
 }
 
+function saveToLocalStorage() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  console.log(localStorage.getItem('cart'))
+}
+
+function updateCartIcon() {
+  const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const cartIcon = document.getElementById("cart-icon");
+  cartIcon.setAttribute("data-quantity", totalQuantity);
+}
+
 function clearCart() {
   cart = [];
   saveToLocalStorage();
