@@ -20,4 +20,10 @@ async function getOrdersFromTable() {
   }
 }
 
-module.exports = { addOrderToTable, getOrdersFromTable };
+function clearCart() {
+  cart = [];
+  saveToLocalStorage();
+  updateCartIcon();
+}
+
+module.exports = { addOrderToTable, getOrdersFromTable, clearCart };
