@@ -23,6 +23,7 @@ let stripeGateway = stripe(process.env.stripe_key);
 const upload = multer({ dest: 'uploads/' });
 // Set up middleware
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public')); // added this line incase something else goes wrong...
 
 app.use((req, res, next) => {
   if (req.path === '/webhooks') {
@@ -111,6 +112,16 @@ app.get('/api/products', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+app.get('/api/totalorders', async (req, res) => {
+  try{
+    const orders = await OrderModel.find()
+    res.status(200).json(orders)
+  }catch (error) {
+    console.log(error)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
 
 app.route('/api/products/:id')
   .get(async (req, res) => {

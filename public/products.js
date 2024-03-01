@@ -6,6 +6,7 @@ const tags = document.querySelector('.tags')
 const AllProductList = document.getElementById('allItemList'); // This is the product div, all products go inside this
 const coinTypeSelect = document.getElementById("coin-type");
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let filteredProducts
 
 // Function to fetch products from the server
 async function fetchProducts() {
@@ -35,7 +36,8 @@ async function renderProductsOnPage() {
         updateCartIcon();
         calculateTotal()
         addSearchEventListener();
-        filterProducts(category)
+        filterProducts(category);
+
     } catch (error) {
         console.error('Error rendering products on the page:', error);
     }
@@ -300,7 +302,7 @@ function filterCategory(category) {
     let filteredProducts;
 
     if (category === "all") {
-        filteredProducts = products;
+        filteredProducts = products.slice().sort((a, b) => b.id - a.id)
     } else if (category === "olympic") {
         filteredProducts = products.filter(product => product.category === "olympic");
     } else if (category === "alphabet") {
@@ -311,6 +313,14 @@ function filterCategory(category) {
         filteredProducts = products.slice().sort((a, b) => a.price - b.price);
     } else if (category === "sale") {
         filteredProducts = products.filter(product => product.tag === "sale")
+    } else if (category === "peter-rabbit") {
+        filteredProducts = products.filter(product => product.category === "peter-rabbit")
+    } else if (category === "nhs") {
+        filteredProducts = products.filter(product => product.category === "nhs")
+    } else if (category === "king-anniversary") {
+        filteredProducts = products.filter(product => product.category === "king-anniversary")
+    } else if (category === "price2") {
+        filteredProducts = products.slice().sort((a, b) => b.price - a.price)
     }
 
     lengthItems = filteredProducts.length;

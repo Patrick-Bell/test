@@ -74,6 +74,54 @@
     </ul>
   </div>
   <section class="home-section">
+
+    <div class="admin-container">
+
+      <div class="admin-stats-container">
+        <div class="admin-inner-container">
+          <i class='bx bxs-coin'></i>
+          <p class="admin-text">Total Orders</p>
+        </div>
+      <div class="total-orders stat-bold"></div>
+      </div>
+  
+      <div class="admin-stats-container">
+        <div class="admin-inner-container">
+          <i class='bx bx-dollar-circle'></i>
+          <p class="admin-text">Gross Value</p>
+        </div>
+      <div class="total-order-value stat-bold"></div>
+      </div>
+  
+      <div class="admin-stats-container">
+        <div class="admin-inner-container">
+          <i class='bx bx-trending-down'></i>        
+          <p class="admin-text">Averge Order Value</p>
+        </div>
+      <div class="average-order-value stat-bold"></div>
+      </div>
+  
+  
+      <div class="admin-stats-container">
+        <div class="admin-inner-container">
+          <i class='bx bxs-category'></i>
+          <p class="admin-text">Item Categories</p>
+        </div>
+      <div class="stat-bold"></div>
+      </div>
+  
+      <div class="admin-stats-container">
+        <div class="admin-inner-container">
+          <i class='bx bxs-category'></i>
+          <p class="admin-text">Out of Stock</p>
+        </div>
+      <div class="best-category stat-bold"></div>
+      </div>
+      </div>
+
+
+
+
       <div class="top-container">
         <div class="big-text">Orders</div>
       </div>
@@ -85,9 +133,10 @@
 
   </section>
 
-
-<script src="menu.js"></script>
-<script src="orders.js"></script>
+<script src="orderadmin.js" defer></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="orders.js" defer></script>
+<script src="menu.js" defer></script>
 <script>
   // Function to fetch and render orders from the server
   // Function to fetch and render orders from the server
@@ -180,7 +229,6 @@ function setupEventListeners() {
     })
   })
 }
-
 
   // Initial fetch and render on page load
   setupEventListeners();

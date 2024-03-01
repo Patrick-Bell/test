@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             findTotalMonies();
             findLowItemStocks()
             findNumberOfCategories();
+            findOutOfStockItems()
         // Close the add product modal
       } catch (error) {
         console.error('Error adding product:', error);
@@ -101,6 +102,7 @@ parentTable.addEventListener("click", async (event) => {
             findTotalMonies();
             findLowItemStocks()
             findNumberOfCategories();
+            findOutOfStockItems()
       
       console.log("Product deleted successfully");
     } catch (error) {
@@ -166,6 +168,7 @@ parentTable.addEventListener("click", async (event) => {
             findTotalMonies();
             findLowItemStocks()
             findNumberOfCategories();
+            findOutOfStockItems()
     
             // Close the editProductsModal after updating
             editProductsModal.close();
@@ -216,8 +219,10 @@ document.querySelector('.cancel-edit').addEventListener('click', () => {
         cell5.classList.add("high-stock");
       } else if (product.stock >= 10 && product.stock < 20) {
         cell5.classList.add("medium-stock")
+      } else if (product.stock == 0) {
+        cell5.classList.add('no-stock')
       } else {
-          cell5.classList.add("low-stock")
+        cell5.classList.add("low-stock")
         }
   
       const cell6 = row.insertCell(5);
@@ -313,5 +318,19 @@ document.querySelector('.cancel-edit').addEventListener('click', () => {
   };
   
   findNumberOfCategories();
+
+  const findOutOfStockItems = async () => {
+    try {
+      const response = await axios.get('/api/products')
+      const products = response.data
+      let outOfStockItems = document.querySelector(".out-of-stock-count")
+      let findOutOfStockItems = products.filter(product => product.stock == 0)
+      outOfStockItems.innerHTML = `${findOutOfStockItems.length}`
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  findOutOfStockItems()
   
   
