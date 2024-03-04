@@ -1,4 +1,5 @@
 const OrderModel = require('./models/order');
+const ProductModel = require('./models/product');
 
 async function addOrderToTable(orderData) {
   try {
