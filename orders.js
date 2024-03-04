@@ -31,15 +31,11 @@ async function updateStock(orderData) {
     for (const lineItem of orderData.lineItems) {
       const { name, quantity } = lineItem;
 
-      // Ensure quantity is a numeric value
-      const numericQuantity = parseInt(quantity, 10);
-
-      console.log(`Numeric quantity for product ${name}: ${numericQuantity}`);
 
       // Use Mongoose to find and update the product
       const updatedProduct = await ProductModel.findOneAndUpdate(
         { title: name },
-        { $inc: { stock: -numericQuantity } },
+        { $inc: { stock: -Number(quantity) } },
         { new: true }
       );
 
