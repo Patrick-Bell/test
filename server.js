@@ -443,8 +443,10 @@ app.post("/stripe-checkout", async (req, res) => {
 
 })
 
+const processedEvents = new Set();
+
 app.post('/webhooks', async (req, res) => {
-      console.log("Received Stripe Webhook request:", req.body);
+  console.log("Received Stripe Webhook request:", req.body);
 
   const sig = req.headers['stripe-signature'];
   const rawBody = req.rawBody;
@@ -462,10 +464,19 @@ app.post('/webhooks', async (req, res) => {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
+  // Check if the event has already been processed
+  if (processedEvents.has(event.id)) {
+    console.log(`Event with ID ${event.id} already processed. Skipping.`);
+    return res.json({ received: true });
+  }
+
+  // Add the event ID to the set of processed events
+  processedEvents.add(event.id);
+
   // Handle the event
   if (event.type === 'invoice.finalized') {
     const invoice = event.data.object;
-    
+
     const orderData = {
       timestamp: new Date().toLocaleString(),
       id: invoice.id,
@@ -481,15 +492,19 @@ app.post('/webhooks', async (req, res) => {
         unitPrice: item.amount / item.quantity,
       })),
     };
-    
 
-    // Call a function to add this order data to your orders
-    updateStock(orderData)
-    addOrderToTable(orderData);
-    console.log('Order data:', orderData);
-    console.log('Stock Update:', updateStock(orderData))
+    try {
+      // Call a function to add this order data to your orders
+      await updateStock(orderData);
+      addOrderToTable(orderData);
+      console.log('Order data:', orderData);
+      console.log('Stock Update:', updateStock(orderData));
 
-    res.json({ received: true });
+      res.json({ received: true });
+    } catch (error) {
+      console.error('Error processing order:', error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   } else {
     // Optionally handle other event types differently, or just ignore them
     // res.json({ received: true });  // Commented out or remove this line

@@ -31,11 +31,10 @@ async function updateStock(orderData) {
     for (const lineItem of orderData.lineItems) {
       const { name, quantity } = lineItem;
 
-
       // Use Mongoose to find and update the product
       const updatedProduct = await ProductModel.findOneAndUpdate(
         { title: name },
-        { $inc: { stock: -Number(quantity) } },
+        { $inc: { stock: -quantity } },
         { new: true }
       );
 
