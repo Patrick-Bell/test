@@ -20,4 +20,38 @@ async function getOrdersFromTable() {
   }
 }
 
-module.exports = { addOrderToTable, getOrdersFromTable };
+async function updateStock(orderData) {
+  console.log('Received order data:', orderData);
+
+  try {
+    console.log('Stock update process started...');
+
+    // Iterate through line items in the order and update the stock
+    for (const lineItem of orderData.lineItems) {
+      const { title, quantity } = lineItem;
+
+      console.log(`Updating stock for product ${title}...`);
+
+      // Use Mongoose to find and update the product
+      const updatedProduct = await ProductModel.findOneAndUpdate(
+        { title: title },
+        { $inc: { stock: -quantity } },
+        { new: true }
+      );
+
+      console.log(`Stock updated for product ${title}`, updatedProduct);
+    }
+
+    console.log('Stock update process completed.');
+
+    // Return a success indicator or any relevant data if needed
+    return { success: true };
+  } catch (error) {
+    // Log the error or handle it accordingly
+    console.error('Error updating stock:', error.message);
+    throw error;
+  }
+}
+
+
+module.exports = { addOrderToTable, getOrdersFromTable, updateStock };
