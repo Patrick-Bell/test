@@ -487,6 +487,7 @@ app.post('/webhooks', async (req, res) => {
     updateStock(orderData)
     addOrderToTable(orderData);
     console.log('Order data:', orderData);
+    console.log('Stock Update:', updateStock(orderData))
 
     res.json({ received: true });
   } else {
