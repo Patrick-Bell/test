@@ -22,12 +22,13 @@ const findTotalOrdersRevenue = async () => {
         // Assuming each order has a 'totalPrice' property, adjust accordingly based on your data structure
         const findTotalOrdersRevenueFigure = orders.reduce((total, order) => total + order.totalPrice, 0);
 
-        totalOrdersRevenue.innerHTML = `£${(findTotalOrdersRevenueFigure / 100).toFixed(2)}`;
+        totalOrdersRevenue.innerHTML = `£${(findTotalOrdersRevenueFigure / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
 
     } catch (error) {
         console.log(error);
     }
 }
+
 
 findTotalOrdersRevenue();
 
@@ -44,7 +45,7 @@ const findAverageOrderValue = async () => {
 
         const findAverageOrderValueFigure = numberOfOrders === 0 ? 0 : totalOrderValue / numberOfOrders;
 
-        averageOrderValue.innerHTML = `£${(findAverageOrderValueFigure / 100).toFixed(2)}`;
+        averageOrderValue.innerHTML = `£${(findAverageOrderValueFigure / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
     } catch (error) {
         console.log(error);
     }

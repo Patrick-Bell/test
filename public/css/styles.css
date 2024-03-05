@@ -10,6 +10,9 @@
     list-style: none;
     text-decoration: none;
 }
+.out-of-stock{
+    background: red;
+}
 .old-price{
     text-decoration: line-through;
 }
@@ -1239,6 +1242,9 @@ option{
 .toast.removed::before, #removed{
     background: red;
 }
+.toast.stocked::before, #stocked{
+    background: orange;
+}
 .toast .column i{
     font-size: 1.75rem;
 }
@@ -1247,6 +1253,9 @@ option{
 }
 .toast.removed .column i{
     color: red;
+}
+.toast.stocked .column i{
+    color: orange;
 }
 .toast .column span{
     font-size: 1.07rem;

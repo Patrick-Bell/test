@@ -29,6 +29,10 @@ const toastDetails = {
         icon: "bi-x-circle-fill",
         text: "Item removed from cart"
     },
+    stocked: {
+        icon: "bi-exclamation-circle-fill",
+        text: "Item out of stock"
+    }
 };
 
 const removeToast = (toast) => {
@@ -57,7 +61,17 @@ document.body.addEventListener("click", function (event) {
     const cartBtn = event.target.closest(".bi-cart");
     if (cartBtn) {
         console.log("Added to cart clicked");
-        createToast("added");
+        const productId = cartBtn.dataset.id;
+        const product = products.find((product) => product.id === productId);
+
+        if (product)
+        {
+            if (product.stock < 1) {
+                createToast("stocked");
+            } else {
+                createToast("added");
+            }
+        }
     }
 
     // Check if the clicked element or its parent has the class "remove-from-cart"

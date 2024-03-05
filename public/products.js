@@ -1,6 +1,8 @@
 // Defining the variables
 document.addEventListener('DOMContentLoaded', renderProductsOnPage);
 const tags = document.querySelector('.tags')
+let products
+let category
 
 
 const AllProductList = document.getElementById('allItemList'); // This is the product div, all products go inside this
@@ -31,12 +33,15 @@ async function renderProductsOnPage() {
         await fetchProducts();
 
         // Render products on the page
+        filterProducts(category);
         renderProducts(AllProductList, products);
+        checkStockProducts()
         addEventListenersToCartButtons();
         updateCartIcon();
         calculateTotal()
         addSearchEventListener();
-        filterProducts(category);
+
+        numOfItems.innerHTML = `Items Found: <strong>${products.length}</strong>`
 
     } catch (error) {
         console.error('Error rendering products on the page:', error);
@@ -72,6 +77,32 @@ function renderProducts(productList, productData) {
     addEventListenersToCartButtons();
 }
 
+async function checkStockProducts() {
+    try {
+        const response = await fetch('/api/products');
+        products = await response.json(); // Assign the fetched products to the higher-scoped variable
+
+        products.forEach(product => {
+            const isProductOutOfStock = product.stock < 1;
+
+            // Get the "Add to Cart" button element
+            const addToCartButton = document.querySelector(`[data-id="${product.id}"]`);
+
+            if (isProductOutOfStock && addToCartButton) {
+                // Disable the button
+                addToCartButton.disabled = true;
+                // Optionally, you can change the button text or style to indicate it's out of stock
+                addToCartButton.style.background = "red"
+                addToCartButton.setAttribute('disabled', 'disabled');
+                addToCartButton.style.cursor = "not-allowed"
+            }
+        });
+    } catch (error) {
+        console.error('Error checking stock:', error);
+    }
+}
+
+
 function getTagStyles(tag) {
     switch (tag.toLowerCase()) {
         case "sale":
@@ -99,46 +130,48 @@ function addEventListenersToCartButtons() {
 
 async function addToCart(event) {
     try {
-      // Fetch products from the server
-      const products = await fetchProducts();
-  
-      // Find the product with the given ID
+        // Fetch products from the server
+        const products = await fetchProducts();
 
-      const productId = event.target.dataset.id; // Keep it as a string
+        // Find the product with the given ID
+        const productId = event.target.dataset.id; // Keep it as a string
         const product = products.find((product) => product.id === productId);
 
-  
-      if (product) {
-        const existingItem = cart.find((item) => item.id === product.id);
-  
-        if (existingItem) {
-          // If the item already exists in the cart, increment the quantity
-          existingItem.quantity++;
-        } else {
-          // If the item is not in the cart, add a new entry
-          const cartItem = {
-            id: product.id,
-            title: product.title,
-            price: product.price,
-            image: product.image,
-            quantity: 1,
-          };
-          cart.push(cartItem);
-        }  
+        if (product) {
+            const isProductOutOfStock = product.stock < 1;
 
-        renderCartItems();
-        saveToLocalStorage();
-        calculateTotal();
-        updateCartIcon(); // Add this line to update the cart icon quantity
-        // You can update the UI or perform other actions here
-      } else {
-        console.error('Product not found');
-      }
+            if (!isProductOutOfStock) {
+                const existingItem = cart.find((item) => item.id === product.id);
+
+                if (existingItem) {
+                    // If the item already exists in the cart, increment the quantity
+                    existingItem.quantity++;
+                } else {
+                    // If the item is not in the cart, add a new entry
+                    const cartItem = {
+                        id: product.id,
+                        title: product.title,
+                        price: product.price,
+                        image: product.image,
+                        quantity: 1,
+                    };
+                    cart.push(cartItem);
+                }
+
+                renderCartItems();
+                saveToLocalStorage();
+                calculateTotal();
+                updateCartIcon(); 
+            } else {
+                console.error('Product is out of stock');
+            }
+        } else {
+            console.error('Product not found');
+        }
     } catch (error) {
-      console.error('Error adding to cart:', error);
+        console.error('Error adding to cart:', error);
     }
-  }
-  
+}
 
 
 
@@ -230,6 +263,9 @@ function renderCartItems() {
     quantityInputs.forEach((input) => {
         input.addEventListener("change", changeQuantity);
     });
+
+    calculateTotal();
+    updateCartIconOnCartChange();
 }
 
 // Calculating the total
@@ -264,11 +300,15 @@ let numOfItems = document.querySelector(".items-found");
 let lengthItems;
 
 
+
 function filterProducts(searchText) {
     const filteredProducts = products.filter(product => {
         // You can customize this condition based on your requirements
         return product.title.toLowerCase().includes(searchText.toLowerCase());
     });
+
+    lengthItems = filteredProducts.length;
+    numOfItems.innerHTML = `Items Found: <strong>${lengthItems}</strong>`;
 
     renderProducts(AllProductList, filteredProducts);
 }
@@ -279,7 +319,8 @@ function addSearchEventListener() {
     
     if (searchInput) {
         searchInput.addEventListener('input', function (event) {
-            const searchText = event.target.value.trim();
+            const searchText = event.target.value.trim()
+            checkStockProducts()
             filterProducts(searchText);
         });
     }
@@ -287,7 +328,7 @@ function addSearchEventListener() {
 
 function filterProducts(searchText) {
     const filteredProducts = products.filter(product => {
-        return product.title.toLowerCase().includes(searchText.toLowerCase());
+        return product.title.toLowerCase().includes(searchText);
     });
 
     lengthItems = filteredProducts.length;
@@ -326,6 +367,7 @@ function filterCategory(category) {
     lengthItems = filteredProducts.length;
     numOfItems.innerHTML = `Items Found: <strong>${lengthItems}</strong>`;
     // Render the filtered products
+    checkStockProducts()
     renderProducts(AllProductList, filteredProducts);
 }
 

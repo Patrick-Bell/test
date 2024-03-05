@@ -280,7 +280,7 @@ document.querySelector('.cancel-edit').addEventListener('click', () => {
       const totalMoney = products.reduce((sum, product) => sum + (product.price * product.stock), 0);
   
       // Convert totalMoney to a string before setting innerHTML
-      totalMoniesCalculate.innerHTML = `£${totalMoney.toFixed(2)}`;
+      totalMoniesCalculate.innerHTML = `£${totalMoney.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
     } catch (error) {
       console.error(error);
     }
