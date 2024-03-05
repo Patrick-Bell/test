@@ -10,7 +10,7 @@ const fs = require('fs').promises;
 const multer = require('multer');
 const nodemailer = require('nodemailer')
 
-const { getOrdersFromTable } = require('./orders'); // Updated import statement
+const { addOrderToTable, getOrdersFromTable } = require('./orders'); // Updated import statement
 
 const bodyParser = require('body-parser')
 
@@ -484,6 +484,8 @@ app.post('/webhooks', async (req, res) => {
 
       // Log order data for debugging
       console.log('Order data:', orderData);
+      addOrderToTable(orderData)
+      console.log("Added Order")
 
       res.json({ received: true });
     } else {
