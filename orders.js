@@ -21,38 +21,4 @@ async function getOrdersFromTable() {
   }
 }
 
-async function updateStock(orderData) {
-  console.log('Received order data (is this duplicated):', orderData);
-
-  try {
-    console.log('Stock update process started... is this duplication');
-
-    // Iterate through line items in the order and update the stock
-    for (const lineItem of orderData.lineItems) {
-      const { name, quantity } = lineItem;
-      const product = await ProductModel.findOne({ title: name });
-
-      // Use Mongoose to find and update the product
-      const updatedProduct = await ProductModel.findOneAndUpdate(
-        { title: name },
-        { $inc: { stock: -quantity } },
-        { new: true }
-      );
-
-      console.log(`Stock updated for product ${name}`, updatedProduct);
-    }
-
-    console.log('Stock update process completed. Duplicate check');
-
-    // Return a success indicator or any relevant data if needed
-    return { success: true };
-  } catch (error) {
-    // Log the error or handle it accordingly
-    console.error('Error updating stock:', error.message);
-    throw error;
-  }
-}
-
-
-
-module.exports = { addOrderToTable, getOrdersFromTable, updateStock };
+module.exports = { addOrderToTable, getOrdersFromTable };

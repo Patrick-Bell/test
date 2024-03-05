@@ -10,7 +10,7 @@ const fs = require('fs').promises;
 const multer = require('multer');
 const nodemailer = require('nodemailer')
 
-const { addOrderToTable, getOrdersFromTable, updateStock } = require('./orders'); // Updated import statement
+const { getOrdersFromTable } = require('./orders'); // Updated import statement
 
 const bodyParser = require('body-parser')
 
@@ -23,9 +23,6 @@ let stripeGateway = stripe(process.env.stripe_key);
 const upload = multer({ dest: 'uploads/' });
 // Set up middleware
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static('public')); // added this line incase something else goes wrong...
-app.use(bodyParser.json());
-
 
 app.use((req, res, next) => {
   if (req.path === '/webhooks') {
@@ -446,50 +443,55 @@ app.post("/stripe-checkout", async (req, res) => {
 })
 
 app.post('/webhooks', async (req, res) => {
-  console.log("Received Stripe Webhook request: test", req.body);
-
-  const sig = req.headers['stripe-signature'];
-  const rawBody = req.rawBody;
-
-  let event;
-
   try {
-    event = stripeGateway.webhooks.constructEvent(
-      rawBody,
-      sig,
-      process.env.STRIPE_ENDPOINT_SECRET
-    );
-  } catch (err) {
-    console.error('Webhook error:', err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
+    console.log("Received Stripe Webhook request:", req.body);
 
-  // Handle the event
-  if (event.type === 'invoice.finalized') {
-    const invoice = event.data.object;
+    const sig = req.headers['stripe-signature'];
+    const rawBody = req.rawBody;
 
-    const orderData = {
-      timestamp: new Date().toLocaleString(),
-      id: invoice.id,
-      name: invoice.customer_name,
-      email: invoice.customer_email,
-      phone: invoice.customer_phone,
-      address: `${invoice.customer_address.line1}\n${invoice.customer_address.city}, ${invoice.customer_address.postal_code}\n${invoice.customer_address.country}`,
-      totalPrice: invoice.total,
-      shipping: invoice.shipping_cost.amount_total,
-      lineItems: invoice.lines.data.map(item => ({
-        name: item.description,
-        quantity: item.quantity,
-        unitPrice: item.amount / item.quantity,
-      })),
-    };
+    let event;
 
-    // Log order data for debugging
-    console.log('Order data, is this duplicated:', orderData);
+    try {
+      event = stripeGateway.webhooks.constructEvent(
+        rawBody,
+        sig,
+        process.env.STRIPE_ENDPOINT_SECRET
+      );
+    } catch (err) {
+      console.error('Webhook error:', err.message);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
 
-    res.json({ received: true });
-  } else {
-    console.log('Received a webhook event of type:', event.type);
+    // Handle the event
+    if (event.type === 'invoice.finalized') {
+      const invoice = event.data.object;
+
+      const orderData = {
+        timestamp: new Date().toLocaleString(),
+        id: invoice.id,
+        name: invoice.customer_name,
+        email: invoice.customer_email,
+        phone: invoice.customer_phone,
+        address: `${invoice.customer_address.line1}\n${invoice.customer_address.city}, ${invoice.customer_address.postal_code}\n${invoice.customer_address.country}`,
+        totalPrice: invoice.total,
+        shipping: invoice.shipping_cost.amount_total,
+        lineItems: invoice.lines.data.map(item => ({
+          name: item.description,
+          quantity: item.quantity,
+          unitPrice: item.amount / item.quantity,
+        })),
+      };
+
+      // Log order data for debugging
+      console.log('Order data:', orderData);
+
+      res.json({ received: true });
+    } else {
+      console.log('Received a webhook event of type:', event.type);
+    }
+  } catch (error) {
+    console.error('Error processing webhook:', error.message);
+    res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 });
 
