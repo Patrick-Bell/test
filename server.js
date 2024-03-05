@@ -24,6 +24,8 @@ const upload = multer({ dest: 'uploads/' });
 // Set up middleware
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('public')); // added this line incase something else goes wrong...
+app.use(bodyParser.json());
+
 
 app.use((req, res, next) => {
   if (req.path === '/webhooks') {
@@ -443,10 +445,8 @@ app.post("/stripe-checkout", async (req, res) => {
 
 })
 
-const processedEvents = new Set();
-
 app.post('/webhooks', async (req, res) => {
-  console.log("Received Stripe Webhook request:", req.body);
+  console.log("Received Stripe Webhook request: test", req.body);
 
   const sig = req.headers['stripe-signature'];
   const rawBody = req.rawBody;
@@ -463,15 +463,6 @@ app.post('/webhooks', async (req, res) => {
     console.error('Webhook error:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
-
-  // Check if the event has already been processed
-  if (processedEvents.has(event.id)) {
-    console.log(`Event with ID ${event.id} already processed. Skipping.`);
-    return res.json({ received: true });
-  }
-
-  // Add the event ID to the set of processed events
-  processedEvents.add(event.id);
 
   // Handle the event
   if (event.type === 'invoice.finalized') {
@@ -493,21 +484,11 @@ app.post('/webhooks', async (req, res) => {
       })),
     };
 
-    try {
-      // Call a function to add this order data to your orders
-      await updateStock(orderData);
-      addOrderToTable(orderData);
-      console.log('Order data:', orderData);
-      console.log('Stock Update:', updateStock(orderData));
+    // Log order data for debugging
+    console.log('Order data, is this duplicated:', orderData);
 
-      res.json({ received: true });
-    } catch (error) {
-      console.error('Error processing order:', error.message);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
+    res.json({ received: true });
   } else {
-    // Optionally handle other event types differently, or just ignore them
-    // res.json({ received: true });  // Commented out or remove this line
     console.log('Received a webhook event of type:', event.type);
   }
 });

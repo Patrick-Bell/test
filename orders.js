@@ -22,14 +22,16 @@ async function getOrdersFromTable() {
 }
 
 async function updateStock(orderData) {
-  console.log('Received order data:', orderData);
+  console.log('Received order data (is this duplicated):', orderData);
 
   try {
-    console.log('Stock update process started...');
+    console.log('Stock update process started... is this duplication');
 
     // Iterate through line items in the order and update the stock
     for (const lineItem of orderData.lineItems) {
       const { name, quantity } = lineItem;
+      const product = await ProductModel.findOne({ title: name });
+      console.log(`Product ${name}: ${product.stock}`);
 
       // Use Mongoose to find and update the product
       const updatedProduct = await ProductModel.findOneAndUpdate(
@@ -51,6 +53,7 @@ async function updateStock(orderData) {
     throw error;
   }
 }
+
 
 
 module.exports = { addOrderToTable, getOrdersFromTable, updateStock };
