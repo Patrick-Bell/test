@@ -31,7 +31,6 @@ async function updateStock(orderData) {
     for (const lineItem of orderData.lineItems) {
       const { name, quantity } = lineItem;
       const product = await ProductModel.findOne({ title: name });
-      console.log(`Product ${name}: ${product.stock}`);
 
       // Use Mongoose to find and update the product
       const updatedProduct = await ProductModel.findOneAndUpdate(
@@ -43,7 +42,7 @@ async function updateStock(orderData) {
       console.log(`Stock updated for product ${name}`, updatedProduct);
     }
 
-    console.log('Stock update process completed.');
+    console.log('Stock update process completed. Duplicate check');
 
     // Return a success indicator or any relevant data if needed
     return { success: true };
