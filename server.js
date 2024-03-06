@@ -442,13 +442,7 @@ app.post("/stripe-checkout", async (req, res) => {
 
 })
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.USER,
-    pass: process.env.PASS,
-  },
-});
+
 
 app.post('/webhooks', async (req, res) => {
   try {
@@ -489,6 +483,14 @@ app.post('/webhooks', async (req, res) => {
           unitPrice: item.amount / item.quantity,
         })),
       };
+
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.USER,
+          pass: process.env.PASS,
+        },
+      });
 
       const webhookUserMailOptions = {
         from: process.env.USER,
