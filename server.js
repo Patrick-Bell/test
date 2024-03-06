@@ -271,7 +271,7 @@ app.post('/send', upload.array('attachments'), async function (req, res) {
                   }
               });
 
-              res.redirect('/success');
+              res.redirect('/thanks');
           }
       });
   } catch (error) {

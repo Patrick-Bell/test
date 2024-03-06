@@ -1202,14 +1202,14 @@ option{
     background: white;
     z-index: 1000;
     justify-content: space-between;
-    animation: show_toast 0.3s ease forwards;
+    animation: show_toast 0.5s ease forwards;
 }
 @keyframes show_toast{
     0%{
         transform: translateX(100%);
     }
     40%{
-        transform: translateX(-5%);
+        transform: translateX(-10%);
     }
     80%{
         transform: translateX(0%);
@@ -1229,7 +1229,7 @@ option{
     bottom: 0px;
     left: 0px;
     z-index: 1000;
-    animation: progress 5s linear forwards;
+    animation: progress 3s linear forwards;
 }
 @keyframes progress{
     100%{

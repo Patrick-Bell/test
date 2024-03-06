@@ -63,7 +63,7 @@ function renderProducts(productList, productData) {
     productList.innerHTML = productData.map(product => `
     <div class="product">
         <img src="${product.image}" alt="${product.title}">
-        <h4>${product.title}</h4>
+        <h4 class="productTitle">${product.title}</h4>
         <h4>£${product.price}</h4>
         <div class="cart">
             <a><i class="bi bi-cart add-to-cart" data-id="${product.id}"></i></a>

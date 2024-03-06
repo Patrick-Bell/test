@@ -20,7 +20,7 @@ menu.addEventListener("click", () => {
 
 const notifications = document.querySelector(".notifications");
 const toastDetails = {
-    timer: 5000,
+    timer: 3000,
     added: {
         icon: "bi-check-circle-fill",
         text: "Item added to cart"
