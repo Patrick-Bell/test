@@ -10,7 +10,7 @@ const fs = require('fs').promises;
 const multer = require('multer');
 const nodemailer = require('nodemailer')
 
-const { addOrderToTable, getOrdersFromTable, updateStock } = require('./orders'); // Updated import statement
+const { addOrderToTable, getOrdersFromTable, updateStock, sendOrderConfirmationEmail } = require('./orders'); // Updated import statement
 
 const bodyParser = require('body-parser')
 
@@ -442,8 +442,6 @@ app.post("/stripe-checkout", async (req, res) => {
 
 })
 
-
-
 app.post('/webhooks', async (req, res) => {
   try {
     console.log("Received Stripe Webhook request:", req.body);
@@ -484,38 +482,17 @@ app.post('/webhooks', async (req, res) => {
         })),
       };
 
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.USER,
-          pass: process.env.PASS,
-        },
-      });
+    
+      // Log order data for debugging
+      console.log('Order data (test#1):', orderData);
+      addOrderToTable(orderData)
+      console.log("Added Order to table")
+      updateStock(orderData)
+      console.log("Updating Stock, test #123")
+      sendOrderConfirmationEmail(orderData)
+      console.log(`Order confirmation email sent to ${orderData.customer_name}`)
 
-      const webhookUserMailOptions = {
-        from: process.env.USER,
-        to: invoice.customer_email,
-        subject: 'Thank you for your purchase!',
-        html: `<p>Thank you, ${invoice.customer_name}, for your purchase!</p><p>Order Details: ${JSON.stringify(orderData)}</p>`,
-      };
-
-      // Send the email to admin
-      transporter.sendMail(webhookUserMailOptions, function (userError, userInfo) {
-        if (userError) {
-          console.error('Error sending automatic response to user:', userError);
-        } else {
-          console.log('Automatic response sent to user successfully', userInfo.response);
-
-          // Log order data for debugging
-          console.log('Order data:', orderData);
-          addOrderToTable(orderData);
-          console.log("Added Order to table");
-          updateStock(orderData);
-          console.log("Updating Stock, test #123");
-
-          res.json({ received: true });
-        }
-      });
+      res.json({ received: true });
     } else {
       console.log('Received a webhook event of type:', event.type);
     }
@@ -524,9 +501,6 @@ app.post('/webhooks', async (req, res) => {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 });
-
-
-
 
 
 

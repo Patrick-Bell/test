@@ -1,5 +1,7 @@
 const OrderModel = require('./models/order');
 const ProductModel = require('./models/product');
+const nodemailer = require('nodemailer');
+
 
 async function addOrderToTable(orderData) {
   try {
@@ -46,4 +48,40 @@ async function updateStock(orderData) {
   }
 }
 
-module.exports = { addOrderToTable, getOrdersFromTable, updateStock };
+
+// emailService.js
+
+function sendOrderConfirmationEmail(orderData) {
+  // Create a nodemailer transporter
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.USER,
+      pass: process.env.PASS,
+    },
+  });
+
+  // Prepare email content
+  const emailContent = `<p>Your order is complete! Thank you for shopping with us.</p><p>Order Details: ${JSON.stringify(orderData)}</p>`;
+
+  // Mail options for sending automatic response to the user
+  const userOrderConfirmation = {
+    from: process.env.USER, // Your email address
+    to: orderData.customer_email, 
+    subject: 'Your Order is Complete!',
+    html: emailContent,
+  };
+
+  // Send the email to the user
+  transporter.sendMail(userOrderConfirmation, (error, info) => {
+    if (error) {
+      console.error('Error sending automatic response to user:', error);
+    } else {
+      console.log('Automatic response sent to user successfully', info.response);
+    }
+  });
+}
+
+
+
+module.exports = { addOrderToTable, getOrdersFromTable, updateStock, sendOrderConfirmationEmail };
