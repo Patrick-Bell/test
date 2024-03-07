@@ -52,6 +52,7 @@ async function updateStock(orderData) {
 // emailService.js
 
 function sendOrderConfirmationEmail(orderData) {
+  console.log('Order Data inside sendOrderConfirmationEmail:', orderData);
   // Create a nodemailer transporter
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -70,10 +71,12 @@ function sendOrderConfirmationEmail(orderData) {
   // Mail options for sending automatic response to the user
   const userOrderConfirmation = {
     from: process.env.USER, // Your email address
-    to: orderData.customer_email, 
+    to: 'butcherleader06@gmail.com', 
     subject: 'Your Order is Complete!',
     html: emailContent,
   };
+
+  console.log('Customer Email:', orderData.customer_email);
 
   // Send the email to the user
   transporter.sendMail(userOrderConfirmation, (error, info) => {
