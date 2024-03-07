@@ -59,7 +59,7 @@ function sendOrderConfirmationEmail(orderData) {
     service: "gmail",
     auth: {
       user: process.env.USER,
-      pass: process.env.pass
+      pass: process.env.PASS
     },
   });
 
