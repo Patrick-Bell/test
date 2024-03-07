@@ -71,8 +71,8 @@ function sendOrderConfirmationEmail(orderData) {
 
   // Mail options for sending automatic response to the user
   const userOrderConfirmation = {
-    from: process.env.USER, // Your email address
-    to: orderData.customer_email, 
+    from:'patrickbell1302@gmail.com', // Your email address
+    to: orderData.email, 
     subject: 'Your Order is Complete!',
     html: emailContent,
   };

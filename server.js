@@ -490,7 +490,7 @@ app.post('/webhooks', async (req, res) => {
       updateStock(orderData)
       console.log("Updating Stock, test #123")
       sendOrderConfirmationEmail(orderData)
-      console.log(`Order confirmation email sent to ${orderData.customer_name}`)
+      console.log(`Order confirmation email sent to ${orderData.name}`)
 
       res.json({ received: true });
     } else {
