@@ -67,8 +67,27 @@ function sendOrderConfirmationEmail(orderData) {
 
 
   // Prepare email content
-  const emailContent = `<p>Your order is complete! Thank you for shopping with us.</p><p>Order Details: ${JSON.stringify(orderData)}</p>`;
-
+  const emailContent = `
+  <p>Dear ${orderData.name},</p>
+  <p>Thank you for your order! Your purchase is complete.</p>
+  <p>Order Details:</p>
+  <ul>
+    <li><strong>Order ID:</strong> ${orderData.id}</li>
+    <li><strong>Name:</strong> ${orderData.name}</li>
+    <li><strong>Email:</strong> ${orderData.email}</li>
+    <li><strong>Phone:</strong> ${orderData.phone}</li>
+    <li><strong>Shipping Address:</strong> ${orderData.address}</li>
+    <li><strong>Total Price:</strong> ${orderData.totalPrice}</li>
+    <li><strong>Shipping Cost:</strong> ${orderData.shipping}</li>
+    <li>
+      <strong>Ordered Items:</strong>
+      <ul>
+        ${orderData.lineItems.map(item => `<li>${item.quantity} x ${item.name} - ${item.unitPrice.toFixed(2)} each</li>`).join('')}
+      </ul>
+    </li>
+  </ul>
+  <p>Thank you for choosing us!</p>
+`;
   // Mail options for sending automatic response to the user
   const userOrderConfirmation = {
     from:'patrickbell1302@gmail.com', // Your email address
