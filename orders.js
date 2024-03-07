@@ -54,12 +54,15 @@ async function updateStock(orderData) {
 function sendOrderConfirmationEmail(orderData) {
   // Create a nodemailer transporter
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.USER,
       pass: process.env.PASS,
     },
   });
+  
 
   // Prepare email content
   const emailContent = `<p>Your order is complete! Thank you for shopping with us.</p><p>Order Details: ${JSON.stringify(orderData)}</p>`;
