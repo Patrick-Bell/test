@@ -1,6 +1,7 @@
 const OrderModel = require('./models/order');
 const ProductModel = require('./models/product');
 const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 
 async function addOrderToTable(orderData) {
@@ -57,8 +58,8 @@ function sendOrderConfirmationEmail(orderData) {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "patrickbell1302@gmail.com",
-      pass: "lawz nukp whvz qusc"
+      user: process.env.USER,
+      pass: process.env.pass
     },
   });
 
@@ -77,12 +78,12 @@ function sendOrderConfirmationEmail(orderData) {
     <li><strong>Email:</strong> ${orderData.email}</li>
     <li><strong>Phone:</strong> ${orderData.phone}</li>
     <li><strong>Shipping Address:</strong> ${orderData.address}</li>
-    <li><strong>Total Price:</strong> ${orderData.totalPrice}</li>
+    <li><strong>Total Price:</strong> £${(orderData.totalPrice / 100)}</li>
     <li><strong>Shipping Cost:</strong> ${orderData.shipping}</li>
     <li>
       <strong>Ordered Items:</strong>
       <ul>
-        ${orderData.lineItems.map(item => `<li>${item.quantity} x ${item.name} - ${item.unitPrice.toFixed(2)} each</li>`).join('')}
+        ${orderData.lineItems.map(item => `<li>${item.quantity} x ${item.name} - £${(item.unitPrice / 100).toFixed(2)} each</li>`).join('')}
       </ul>
     </li>
   </ul>
@@ -90,7 +91,7 @@ function sendOrderConfirmationEmail(orderData) {
 `;
   // Mail options for sending automatic response to the user
   const userOrderConfirmation = {
-    from:'patrickbell1302@gmail.com', // Your email address
+    from: process.env.USER, // Your email address
     to: orderData.email, 
     subject: 'Your Order is Complete!',
     html: emailContent,
