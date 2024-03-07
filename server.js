@@ -1,5 +1,5 @@
 const express = require('express')
-const dotenv = require('dotenv')
+require('dotenv').config();
 const stripe = require('stripe')
 const mongoose = require('mongoose')
 const OrderModel = require('./models/order')
@@ -15,7 +15,6 @@ const { addOrderToTable, getOrdersFromTable, updateStock, sendOrderConfirmationE
 const bodyParser = require('body-parser')
 
 
-dotenv.config();
 
 const app = express();
 let stripeGateway = stripe(process.env.stripe_key);

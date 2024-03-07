@@ -1,7 +1,9 @@
+require('dotenv').config();
 const OrderModel = require('./models/order');
 const ProductModel = require('./models/product');
 const nodemailer = require('nodemailer');
-require('dotenv').config();
+console.log('USER:', process.env.USER);
+console.log('PASS:', process.env.PASS);
 
 
 async function addOrderToTable(orderData) {
