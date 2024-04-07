@@ -59,7 +59,7 @@ app.use(flash());
 
 app.use(
   session({
-    secret: sessionSecret,
+    secret: 'sessionSecret',
     resave: false,
     saveUninitialized: false,
   })
