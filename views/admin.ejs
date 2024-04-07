@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Cointology - Admin Panel </title>
     <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/authenticate.css">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
    </head>
@@ -71,9 +72,29 @@
        </a>
        <span class="tooltip">Contact</span>
      </li>
+     <li class="logout-sidebar">
+      <a onclick="openLogoutModal()">
+       <i class='bx bx-log-out'></i>
+       <span class="links_name">Logout</span>
+      </a>
+      <span class="tooltip">Logout</span>
+    </li>
+     <li>
+    
+    </li>
     </ul>
   </div>
   <section class="home-section">
+
+    <dialog id="log-out-modal">
+      <h1>Are you sure you want to log out?</h1>
+      <div class="logout-buttons">
+        <form class="logout-form" action="/logout?_method=DELETE" method="POST">
+          <button type="submit">Logout</button>
+        </form>
+        <button id="cancel-logout">No</button>
+      </div>
+    </dialog>
 
     <div class="admin-container">
 
@@ -125,6 +146,7 @@
         <div class="big-text">Products</div>
         <button class="add-product" id="addProductBtn">Add a Product</button>
       </div>
+      
 
       <dialog class="add-product-modal" id="productsModal">
         <div class="add-product-height-container">

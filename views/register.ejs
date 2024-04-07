@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/authenticate.css">
+    <title>Document</title>
+</head>
+<body>
+
+<form action="/register" method="POST" id="register-form">
+
+    <h1>Register</h1>
+
+
+    <% if (messages.error && messages.error.length > 0) { %>
+        <p id="error-message">
+          <%= messages.error %>
+        </p>
+      <% } %>
+
+
+    <div class="username-error"></div>
+    <div class="email-error"></div>
+    <div class="password-error"></div>
+    <div class="confirm-password-error"></div>
+
+    <div>
+        <label for="name">Name</label>
+        <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <div class="password-container">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+            <input type="password" id="password" name="password" required>
+            <p class="show_hide">show</p>
+        </div>
+    </div>
+    
+    <div>
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" name="confirm-password" required>
+    </div>
+    <button type="submit" class="btn" id="register-btn" disabled>Register</button>
+    <div class="or">OR</div>
+    <a class="btn tologin" href="/login">Login</a>
+</form>
+
+<script src="/authenticate.js"></script>
+</body>
+</html>

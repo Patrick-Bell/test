@@ -7,6 +7,7 @@ let category
 
 const AllProductList = document.getElementById('allItemList'); // This is the product div, all products go inside this
 const coinTypeSelect = document.getElementById("coin-type");
+const paginationContainer = document.querySelector('.pagination-container')
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let filteredProducts
 
@@ -41,8 +42,6 @@ async function renderProductsOnPage() {
         calculateTotal()
         addSearchEventListener();
 
-        numOfItems.innerHTML = `Items Found: <strong>${products.length}</strong>`
-
     } catch (error) {
         console.error('Error rendering products on the page:', error);
     }
@@ -51,8 +50,11 @@ async function renderProductsOnPage() {
 
 // Call the function to render products on the page when the DOM is loaded
 
-function renderProducts(productList, productData) {
+function renderProducts(productList, productData, pageNumber = 1, pageSize = 15) {
     console.log('Product Data:', productData);
+    const startIndex = (pageNumber - 1) * pageSize;
+    let endIndex = startIndex + pageSize;
+    const productsPerPage = productData.slice(startIndex, endIndex);
 
     // Check if the productList element exists
     if (!productList) {
@@ -60,21 +62,93 @@ function renderProducts(productList, productData) {
         return;
     }
 
-    productList.innerHTML = productData.map(product => `
-    <div class="product">
-        <img src="${product.image}" alt="${product.title}">
-        <h4 class="productTitle">${product.title}</h4>
-        <h4>£${product.price}</h4>
-        <div class="cart">
-            <a><i class="bi bi-cart add-to-cart" data-id="${product.id}"></i></a>
-            <div class="tags" style="background-color: ${getTagStyles(product.tag).backgroundColor}; color: ${getTagStyles(product.tag).color}">
-                ${product.tag}
+    productList.innerHTML = productsPerPage.map(product => `
+        <div class="product">
+            <img src="${product.image}" alt="${product.title}">
+            <h4 class="productTitle">${product.title}</h4>
+            <h4>£${product.price}</h4>
+            <div class="cart">
+                <a><i class="bi bi-cart add-to-cart" data-id="${product.id}"></i></a>
+                <div class="tags" style="background-color: ${getTagStyles(product.tag).backgroundColor}; color: ${getTagStyles(product.tag).color}">
+                    ${product.tag}
+                </div>
             </div>
-        </div>
-    </div>`
-).join("");
-    // Add event listeners to the newly rendered "Add to Cart" buttons
+        </div>`
+    ).join("");
+
+    // Pagination logic
+    const totalPages = Math.ceil(productData.length / pageSize);
+
+    if (endIndex > productData.length) {
+        endIndex = productData.length;
+    }
+
+    numOfItems.innerHTML = `Showing Products <strong>${startIndex + 1} - ${endIndex}</strong> out of <strong>${products.length}</strong>`
+
+
+    paginationContainer.innerHTML = '';
+
+    // Previous page button
+    const previousButton = document.createElement('button');
+    previousButton.textContent = '<';
+    previousButton.addEventListener("click", () => {
+        if (pageNumber > 1) {
+            renderProducts(productList, productData, pageNumber - 1, pageSize);
+            scrollToTop()
+        }
+    });
+    paginationContainer.appendChild(previousButton);
+
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        pageButton.addEventListener("click", () => {
+            renderProducts(productList, productData, i, pageSize);
+            scrollToTop()
+        });
+        if (i === pageNumber) {
+            pageButton.classList.add('active'); // Highlight active page
+        }
+        paginationContainer.appendChild(pageButton);
+    }
+
+    // Next page button
+    const nextPageButton = document.createElement('button');
+    nextPageButton.textContent = '>';
+    nextPageButton.addEventListener("click", () => {
+        if (pageNumber < totalPages) {
+            renderProducts(productList, productData, pageNumber + 1, pageSize);
+            scrollToTop()
+        }
+    });
+    paginationContainer.appendChild(nextPageButton);
+
+    const openPage = document.createElement('input');
+    openPage.placeholder = '#';
+    openPage.addEventListener('input', (event) => {
+    const pageNumber = parseInt(event.target.value); // Extract the page number entered by the user
+    if (!isNaN(pageNumber) && pageNumber > 0 && pageNumber <= totalPages) {
+        // Only render products if the entered page number is valid
+        renderProducts(productList, productData, pageNumber, pageSize);
+        scrollToTop();
+    }
+});
+
+paginationContainer.appendChild(openPage);
+
+    previousButton.disabled = pageNumber === 1;
+    nextPageButton.disabled = pageNumber === totalPages
+
     addEventListenersToCartButtons();
+}
+
+
+const scrollToTop = () => {
+    window.scrollTo({
+        top: 0,
+        behaviour: 'smooth'
+    })
 }
 
 async function checkStockProducts() {
@@ -299,19 +373,6 @@ function updateCartIconOnCartChange() {
 let numOfItems = document.querySelector(".items-found");
 let lengthItems;
 
-
-
-function filterProducts(searchText) {
-    const filteredProducts = products.filter(product => {
-        // You can customize this condition based on your requirements
-        return product.title.toLowerCase().includes(searchText.toLowerCase());
-    });
-
-    lengthItems = filteredProducts.length;
-    numOfItems.innerHTML = `Items Found: <strong>${lengthItems}</strong>`;
-
-    renderProducts(AllProductList, filteredProducts);
-}
 
 // Function to add event listener for search input
 function addSearchEventListener() {

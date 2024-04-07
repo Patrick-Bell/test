@@ -2,8 +2,7 @@ require('dotenv').config();
 const OrderModel = require('./models/order');
 const ProductModel = require('./models/product');
 const nodemailer = require('nodemailer');
-console.log('USER:', process.env.USER);
-console.log('PASS:', process.env.PASS);
+const UserModel = require('./models/user')
 
 
 async function addOrderToTable(orderData) {
@@ -52,11 +51,10 @@ async function updateStock(orderData) {
 }
 
 
-// emailService.js
 
 function sendOrderConfirmationEmail(orderData) {
   console.log('Email Check 1:', orderData);
-  // Create a nodemailer transporter
+
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -66,10 +64,6 @@ function sendOrderConfirmationEmail(orderData) {
   });
 
 
-    console.log('Email Check 2:', orderData);
-
-
-  // Prepare email content
   const emailContent = `
   <p>Dear ${orderData.name},</p>
   <p>Thank you for your order! Your purchase is complete.</p>
@@ -81,7 +75,7 @@ function sendOrderConfirmationEmail(orderData) {
     <li><strong>Phone:</strong> ${orderData.phone}</li>
     <li><strong>Shipping Address:</strong> ${orderData.address}</li>
     <li><strong>Total Price:</strong> £${(orderData.totalPrice / 100)}</li>
-    <li><strong>Shipping Cost:</strong> ${orderData.shipping}</li>
+    <li><strong>Shipping Cost:</strong> £${(orderData.shipping / 100).toFixed(2)}</li>
     <li>
       <strong>Ordered Items:</strong>
       <ul>
@@ -91,9 +85,9 @@ function sendOrderConfirmationEmail(orderData) {
   </ul>
   <p>Thank you for choosing us!</p>
 `;
-  // Mail options for sending automatic response to the user
-  const userOrderConfirmation = {
-    from: process.env.USER, // Your email address
+
+const userOrderConfirmation = {
+    from: process.env.USER,
     to: orderData.email, 
     subject: 'Your Order is Complete!',
     html: emailContent,
@@ -105,14 +99,10 @@ function sendOrderConfirmationEmail(orderData) {
   transporter.sendMail(userOrderConfirmation, (error, info) => {
     if (error) {
       console.error('Error sending automatic response to user:', error);
-      console.log('Email Check 4:', orderData);
     } else {
       console.log('Automatic response sent to user successfully', info.response);
-      console.log('Email Check 5:', orderData);
     }
   });
 }
-
-
 
 module.exports = { addOrderToTable, getOrdersFromTable, updateStock, sendOrderConfirmationEmail };

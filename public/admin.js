@@ -333,4 +333,16 @@ document.querySelector('.cancel-edit').addEventListener('click', () => {
 
   findOutOfStockItems()
   
+
+
+  const logoutModal = document.getElementById('log-out-modal');
+  const cancelLogout = document.getElementById('cancel-logout')
+
+  function openLogoutModal () {
+    logoutModal.showModal()
+  }
+
+  cancelLogout.addEventListener("click", () => {
+    logoutModal.close()
+  })
   

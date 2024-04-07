@@ -5,9 +5,17 @@ const mongoose = require('mongoose')
 const OrderModel = require('./models/order')
 const ProductModel = require('./models/product');
 const EmailModel = require('./models/message');
+const User = require('./models/user'); // Importing the User model
+const registerRouter = require('./register');
+const sessionSecret = require('./secret');
+const bcrypt = require('bcrypt');
+const passport = require('passport');
+const flash = require('express-flash');
+const session = require('express-session');
+const methodOverride = require('method-override');
 const path = require('path')
 const fs = require('fs').promises;
-const multer = require('multer');
+const multer = require('multer'); 
 const nodemailer = require('nodemailer')
 
 const { addOrderToTable, getOrdersFromTable, updateStock, sendOrderConfirmationEmail } = require('./orders'); // Updated import statement
@@ -17,11 +25,49 @@ const bodyParser = require('body-parser')
 
 
 const app = express();
+const initializePassport = require('./passport-setup');
+initializePassport(
+  passport,
+  async (email) => {
+    try {
+      const user = await User.findOne({ email: email });
+      return user;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
+  async (id) => {
+    try {
+      const user = await User.findById(id);
+      return user;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+);
+
 let stripeGateway = stripe(process.env.stripe_key);
 
 const upload = multer({ dest: 'uploads/' });
 // Set up middleware
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: false }));
+app.use(flash());
+
+
+app.use(
+  session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(methodOverride('_method'));
 
 app.use((req, res, next) => {
   if (req.path === '/webhooks') {
@@ -83,13 +129,25 @@ app.get("/delivery", (req, res) => {
   res.sendFile("delivery.html", { root: "public" });
 });
 
-app.get("/admin", (req, res) => {
-  res.sendFile("admin.html", { root: "public" });
+app.get(['/admin', '/admin.ejs'], checkAuthenticated, (req, res) => {
+  res.render('admin.ejs',);
 });
 
-app.get('/orders', (req, res) => {
+
+app.get(['/orders', '/orders.html'], checkAuthenticated, (req, res) => {
   res.sendFile('orders.html', { root: "public" });
 });
+
+app.get('/login', checkNotAuthenticated, (req, res) => {
+  res.render('login.ejs');
+});
+
+app.get('/register', (req, res) => {
+  res.render('register.ejs');
+});
+
+app.use('/register', registerRouter);
+
 
 app.get('/api/orders', async (req, res) => {
   try {
@@ -118,6 +176,17 @@ app.get('/api/totalorders', async (req, res) => {
   }catch (error) {
     console.log(error)
     res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
+
+
+app.get('/api/product/:id', async (req, res) => {
+  try {
+    const productId = req.params.id
+    console.log('received data for', productId)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: 'error'})
   }
 })
 
@@ -182,6 +251,30 @@ app.route('/api/products/:id')
         console.error('Error deleting product:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
+});
+
+app.delete('/logout', (req, res) => {
+  console.log("logging out")
+  // Use a callback function as required by req.logout
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/login');
+  });
+});
+
+app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
+  successRedirect: '/admin',
+  failureRedirect: '/login',
+  failureFlash: true,
+}), (req, res, next) => {
+  // This callback will be called after authentication is successful
+  // You can use req.user here
+  console.log('Authenticated User:', req.user);
+
+  // Continue with the next middleware
+  next();
 });
 
 
@@ -503,8 +596,22 @@ app.post('/webhooks', async (req, res) => {
 
 
 
-app.listen(3000, () => {
-    console.log("Listening on port 3000");
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/login');
+}
+
+function checkNotAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return res.redirect('/login');
+  }
+  next();
+}
+
+app.listen(3001, () => {
+    console.log("Listening on port 3001");
 });
 
 
