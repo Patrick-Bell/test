@@ -7,7 +7,6 @@ const ProductModel = require('./models/product');
 const EmailModel = require('./models/message');
 const User = require('./models/user'); // Importing the User model
 const registerRouter = require('./register');
-const sessionSecret = require('./secret');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const flash = require('express-flash');
