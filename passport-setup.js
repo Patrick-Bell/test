@@ -57,12 +57,10 @@ function initialize(passport, getUserByEmail, getUserById) {
   passport.use(new LocalStrategy({ usernameField: 'email' }, authenticateUser));
 
   passport.serializeUser((user, done) => {
-    console.log('Serializing user. User ID:', user.id);
     done(null, user.id);
   });
 
   passport.deserializeUser(async (id, done) => {
-    console.log('Deserializing user. User ID:', id);
     // Implement logic to fetch user by id and pass it to done
     const user = await getUserById(id);
     done(null, user);

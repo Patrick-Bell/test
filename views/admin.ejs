@@ -5,236 +5,211 @@
     <title>Cointology - Admin Panel </title>
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/authenticate.css">
-    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
    </head>
 <body>
-  <div class="sidebar">
-    <div class="logo-details">
-      <i class='bx bxl-c-plus-plus icon'></i>
-        <div class="logo_name">Cointology</div>
-        <i class='bx bx-menu' id="btn" ></i>
+
+  <div class="top-nav">
+  <i class="bi bi-list" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
+  </i>
+</div>
+  
+  <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="staticBackdropLabel">Cointology</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <ul class="nav-list">
-      <li>
-        <a href="dashboard.html">
-          <i class='bx bx-grid-alt'></i>
-          <span class="links_name">Dashboard</span>
-        </a>
-         <span class="tooltip">Dashboard</span>
-      </li>
-      <li>
-       <a href="players.html">
-        <i class='bx bxs-coin-stack'></i>
-         <span class="links_name">Products</span>
-       </a>
-       <span class="tooltip">Products</span>
-     </li>
-     <li>
-       <a href="orders.html">
-        <i class='bx bx-stats'></i>
-         <span class="links_name">Orders</span>
-       </a>
-       <span class="tooltip">Orders</span>
-     </li>
-     <li>
-       <a href="table.html">
-        <i class='bx bx-credit-card'></i>
-         <span class="links_name">Revenue</span>
-       </a>
-       <span class="tooltip">Revenue</span>
-     </li>
-     <li>
-       <a href="teamgenerator.html">
-        <i class='bx bxs-package'></i>
-         <span class="links_name">Refunds</span>
-       </a>
-       <span class="tooltip">Refunds</span>
-     </li>
-     <li>
-       <a href="awards.html">
-        <i class='bx bxs-truck'></i>
-         <span class="links_name">Deliveries</span>
-       </a>
-       <span class="tooltip">Deliveries</span>
-     </li>
-     <li>
-       <a href="comingsoon.html">
-        <i class='bx bx-folder-plus'></i>
-         <span class="links_name">Updates</span>
-       </a>
-       <span class="tooltip">Updates</span>
-     </li>
-     <li>
-       <a href="compare.html">
-        <i class='bx bx-mail-send'></i>
-        <span class="links_name">Contact</span>
-       </a>
-       <span class="tooltip">Contact</span>
-     </li>
-     <li class="logout-sidebar">
-      <a onclick="openLogoutModal()">
-       <i class='bx bx-log-out'></i>
-       <span class="links_name">Logout</span>
-      </a>
-      <span class="tooltip">Logout</span>
-    </li>
-     <li>
-    
-    </li>
-    </ul>
+    <div class="offcanvas-body">
+      <div>
+        <div class="nav-body">
+          Products
+        </div>
+        <div class="nav-body">
+          Orders
+        </div>
+        <div class="nav-body">
+          <div id="addProductBtn">Add Product</div>
+        </div>
+        <div class="nav-body">
+          Log Out
+        </div>
+      </div>
+    </div>
   </div>
-  <section class="home-section">
 
-    <dialog id="log-out-modal">
-      <h1>Are you sure you want to log out?</h1>
-      <div class="logout-buttons">
-        <form class="logout-form" action="/logout?_method=DELETE" method="POST">
-          <button type="submit">Logout</button>
-        </form>
-        <button id="cancel-logout">No</button>
-      </div>
-    </dialog>
 
-    <div class="admin-container">
 
-    <div class="admin-stats-container">
-      <div class="admin-inner-container">
-        <i class='bx bxs-coin'></i>
-        <p class="admin-text">Product Count</p>
-      </div>
-    <div class="product-count stat-bold"></div>
+
+
+<div class="product-section">
+
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="fw-bold fs-4 mb-0"><i class='bx bxs-coin-stack'></i> Total Products</div>
+      <div class="fs-6 mt-0 product-count"></div>
     </div>
-
-    <div class="admin-stats-container">
-      <div class="admin-inner-container">
-        <i class='bx bx-dollar-circle'></i>
-        <p class="admin-text">Inventory Value</p>
-      </div>
-    <div class="total-monies stat-bold"></div>
+    <div class="stat-card">
+      <div class="fw-bold fs-4 mb-0"><i class='bx bxs-receipt'></i> Stock Revenue</div>
+      <div class="fs-6 mt-0 total-monies"></div>
     </div>
-
-    <div class="admin-stats-container">
-      <div class="admin-inner-container">
-        <i class='bx bx-trending-down'></i>        
-        <p class="admin-text">Low Stock Items</p>
-      </div>
-    <div class="low-stock-count stat-bold"></div>
+    <div class="stat-card">
+      <div class="fw-bold fs-4 mb-0"><i class='bx bxs-purchase-tag-alt'></i> Low Stock Items</div>
+      <div class="fs-6 mt-0 low-stock-count"></div>
     </div>
-
-
-    <div class="admin-stats-container">
-      <div class="admin-inner-container">
-        <i class='bx bxs-category'></i>
-        <p class="admin-text">Item Categories</p>
-      </div>
-    <div class="category-count stat-bold"></div>
+    <div class="stat-card">
+      <div class="fw-bold fs-4 mb-0"><i class='bx bxs-error'></i> Out of Stock</div>
+      <div class="fs-6 mt-0 out-of-stock-count"></div>
     </div>
-
-    <div class="admin-stats-container">
-      <div class="admin-inner-container">
-        <i class='bx bxs-category'></i>
-        <p class="admin-text">Out of Stock</p>
-      </div>
-    <div class="out-of-stock-count stat-bold"></div>
-    </div>
-    </div>
-    
+  </div>
+  
+  
 
 
-      <div class="top-container">
-        <div class="big-text">Products</div>
-        <button class="add-product" id="addProductBtn">Add a Product</button>
-      </div>
-      
-
-      <dialog class="add-product-modal" id="productsModal">
-        <div class="add-product-height-container">
-        <h2>Add a Product</h2>
-        <label for="" class="product-label-container">Product ID
-        <input type="number" name="productID" id="productID" placeholder="Product ID" disabled>
-        </label>
-        <label class="product-label-container" for="productTitle">Product Name
-        <input type="text" name="producTitlte" id="productTitle" placeholder="Product Name" required>
-        </label>
-        <label for="" class="product-label-container">Product Description
-        <input type="text" name="productDescription" id="productDescription" placeholder="Product Description" required>
-        </label>
-        <label for="" class="product-label-container">Product Image
-        <input type="text" name="productImage" id="productImage" placeholder="Product Image" required>
-        </label>
-        <label for="" class="product-label-container">Product Price
-        <input type="number" name="productPrice" id="productPrice" placeholder="Product Price" required>
-        </label>
-        <label for="" class="product-label-container">Product Stock
-        <input type="number" name="productStock" id="productStock" placeholder="Product Stock" required>
-        </label>
-        <label for="" class="product-label-container">Product Category
-          <select name="productCategory" id="productCategory" required>
-            <option value="olympic">Olympic</option>
-            <option value="alphabet">Alphabet</option>
-            <option value="peter-rabbit">Peter Rabbit</option>
-            <option value="nhs">NHS (Limited Edition)</option>
-            <option value="king-anniversary">King Anniverary (Limited)</option>
-            <option value="collection">Collection</option>
-        </select>
-        </label>
-        <label for="" class="product-label-container">Product Tag
-        <select name="productTag" id="productTag" required>
-          <option value="none">No Tag</option>
-          <option value="new">New</option>
-          <option value="sale">Sale</option>
-          <option value="hot">Hot</option>
+    <div class="modal fade add-product-modal"  tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Add Product</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body add-product-text">
+            <input type="number" name="productID" id="productID" placeholder="Product ID" class="form-control mb-3" disabled>
+      <input type="text" name="producTitlte" id="productTitle" placeholder="Product Name" class="form-control mb-3" required>
+      <input type="text" name="productDescription" id="productDescription" placeholder="Product Description" class="form-control mb-3" required>
+      <input type="text" name="productImage" id="productImage" placeholder="Product Image" class="form-control mb-3" required>
+      <input type="number" name="productPrice" id="productPrice" placeholder="Product Price" class="form-control mb-3" required>
+      <input type="number" name="productStock" id="productStock" placeholder="Product Stock" class="form-control mb-3" required>
+        <select name="productCategory" id="productCategory" class="form-control mb-3" required>
+          <option value="olympic">Olympic</option>
+          <option value="alphabet">Alphabet</option>
+          <option value="peter-rabbit">Peter Rabbit</option>
+          <option value="nhs">NHS (Limited Edition)</option>
+          <option value="king-anniversary">King Anniverary (Limited)</option>
+          <option value="collection">Collection</option>
       </select>
-        </label>
-        <div class="button-container">
-        <button class="submit-product" id="submitProductBtn">Submit Product</button>
-        <button class="close-btns" id="closeBtn">Close</button>
+      <select name="productTag" id="productTag" class="form-control mb-3" required>
+        <option value="none">No Tag</option>
+        <option value="new">New</option>
+        <option value="sale">Sale</option>
+        <option value="hot">Hot</option>
+    </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-outline-success" id="submitProductBtn">Add Product</button>
+          </div>
+        </div>
       </div>
+    </div>
+
+
+
+
+    <!-- Modal -->
+<div class="modal fade delete-modal"  tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Product</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-    </dialog>
+      <div class="modal-body delete-text">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-danger" id="confirmDeleteBtn">Delete Product</button>
+      </div>
+    </div>
+  </div>
+</div>
+   
 
-      <!-- Edit Product Container -->
-<dialog class="edit-product-container" id="editProductsModal">
-  <h2>Edit a Product</h2>
-  <input type="number" name="editProductID" id="EditProductID" placeholder="Product ID" disabled>
-  <input type="text" name="editProductTitle" id="editProductTitle" placeholder="Product Name" required>
-  <input type="number" name="editProductPrice" id="editProductPrice" placeholder="Product Price" step="0.01" required>
-  <input type="text" name="editProductDescription" id="editProductDescription" placeholder="Product Description" required>
-  <input type="text" name="editProductImage" id="editProductImage" placeholder="Product Image" required>
-  <input type="number" name="editProductStock" id="editProductStock" placeholder="Product Stock" required>
-  <input type="text" name="editProductCategory" id="editProductCategory" placeholder="Product Category" required>
-  <input type="text" name="editProductTag" id="editProductTag" placeholder="Product Tag" required>
-  <button class="confirm-edit" id="updateProductBtn">Confirm Edit</button>
-  <button class="cancel-edit">Cancel Edit</button>
-</dialog>
+    <div class="modal fade edit-product-modal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5 edit-text"></h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+          <input type="text" name="editProductID" id="EditProductID" class="form-control mb-3" disabled> <!-- Hidden input for product ID -->
+        <input type="text" name="editProductTitle" id="editProductTitle" class="form-control mb-3" placeholder="Product Name" required>
+        <input type="number" name="editProductPrice" id="editProductPrice" class="form-control mb-3" placeholder="Product Price" step="0.01" required>
+        <input type="text" name="editProductDescription" id="editProductDescription" class="form-control mb-3" placeholder="Product Description" required>
+        <input type="text" name="editProductImage" id="editProductImage" class="form-control mb-3" placeholder="Product Image URL" required>
+        <input type="number" name="editProductStock" id="editProductStock" class="form-control mb-3" placeholder="Product Stock" required>
+        <input type="text" name="editProductCategory" id="editProductCategory" class="form-control mb-3" placeholder="Product Category" required>
+        <input type="text" name="editProductTag" id="editProductTag" class="form-control mb-3" placeholder="Product Tag" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-outline-success" id="updateProductBtn">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<!-- Other HTML content for your product list -->
+
+<div class="filter-container">
+<input type="text" id="search-input" placeholder="Search product name or product id">
+<select name="stock" id="stock-level">
+  <option value="all">Stock</option>
+  <option value="zero">Out of Stock</option>
+  <option value="low">Low Stock</option>
+  <option value="medium">Medium Stock</option>
+  <option value="good">Good Stock</option>
+</select>
+<select name="price" id="sort-price">
+  <option value="all">Price</option>
+  <option value="h-l">High to Low</option>
+  <option value="l-h">Low to High</option>
+</select>
+<select name="category" id="sort-category">Category
+  <option value="all">Category</option>
+  <option value="olympic">Olympic</option>
+  <option value="a-z">Alphabet</option>
+  <option value="nhs">NHS</option>
+  <option value="king-anniversary">Anniversary</option>
+  <option value="peter-rabbit">Peter Rabbit</option>
+  <option value="collection">Collections</option>
+</select>
+</div>
+
+    <table id="productTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Image</th>
+          <th>Price (£)</th>
+          <th>Stock</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="pagination-container">
+      <div id="back-btn">Prev</div>
+      <div id="next-btn">Next</div>
+      <div id="page-text">Showing...</div>
+    </div>
 
 
+  </div>
 
-      <table id="productTable">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Image</th>
-            <th>Price (£)</th>
-            <th>Stock</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+
       
 
-
-
-  </section>
-  <script>
-
-  </script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 <script src="menu.js"></script>
 <script src="admin.js"></script>
 

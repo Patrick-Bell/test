@@ -128,7 +128,7 @@ app.get("/delivery", (req, res) => {
   res.sendFile("delivery.html", { root: "public" });
 });
 
-app.get(['/admin', '/admin.ejs'], checkAuthenticated, (req, res) => {
+app.get(['/admin', '/admin.ejs'], (req, res) => {
   res.render('admin.ejs',);
 });
 

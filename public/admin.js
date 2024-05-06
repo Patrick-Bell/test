@@ -1,22 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const addProductForm = document.getElementById('addProductContainer');
     const submitProductBtn = document.getElementById('submitProductBtn');
     const productTableBody = document.querySelector('#productTable tbody');
-    const addProductModal = document.getElementById('addProductBtn')
     const productsModal = document.getElementById('productsModal')
-    const closeProductModal = document.getElementById('closeBtn')
-    const editProductsModal = document.getElementById("editProductsModal")
+    const editProductsModal = document.querySelector(".edit-product-modal")
+    const editProductBootstrap = new bootstrap.Modal(editProductsModal)
+    const deleteProductModal = document.querySelector('.delete-modal');
+    const deleteProductBootstrap = new bootstrap.Modal(deleteProductModal)
+    const addProductModal = document.querySelector('.add-product-modal');
+    const addProductBootstrap = new bootstrap.Modal(addProductModal)
+    const openAddProductModal = document.getElementById('addProductBtn');
 
 
-    // Toggle visibility of the add product modal
-    addProductModal.addEventListener("click", () => {
-      productsModal.showModal()
+let currentProductPage = 1
+const productsPerPage = 5
+let totalProducts = 0
+
+    openAddProductModal.addEventListener('click', () => {
+      addProductBootstrap.show()
     })
 
-    closeProductModal.addEventListener("click", () => {
-      productsModal.close()
-      resetAddProductForm()
-    })
+
+
+   
 
     function generateRandomProductID() {
       const minID = 1;
@@ -53,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       resetAddProductForm()
-      productsModal.close()
+      addProductBootstrap.hide()
   
       try {
         // Send a POST request to the server to add a new product
@@ -73,110 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-
-// deleting a product
-let productId;
-
-const parentTable = document.getElementById('productTable');
-
-parentTable.addEventListener("click", async (event) => {
-  if (event.target.classList.contains('bxs-trash-alt')) {
-    // Confirm deletion with the user
-    const confirmed = window.confirm("Are you sure you want to delete this product?");
-    if (!confirmed) {
-      return; // Do nothing if the user cancels the deletion
-    }
-
-    const closestElement = event.target.closest('tr');
-    productId = closestElement.dataset.productId;
-
-    try {
-      console.log('Deleting product with ID:', productId);
-
-      // Send a DELETE request to delete the product
-      await axios.delete(`/api/products/${productId}`);
-
-      // Remove the table row from the UI after successful deletion
-      closestElement.remove();
-            findTotalProducts();
-            findTotalMonies();
-            findLowItemStocks()
-            findNumberOfCategories();
-            findOutOfStockItems()
-      
-      console.log("Product deleted successfully");
-    } catch (error) {
-      console.error("Error deleting product", error);
-    }
-  }
-});
-
-    parentTable.addEventListener('click', async (event) => {
-        if (event.target.classList.contains('bxs-edit')) {
-            console.log("Clicking element");
     
-            // Traverse up the DOM to find the closest table row (tr)
-            const closestTableRow = event.target.closest('tr');
-    
-            // Extract the product ID from the data-product-id attribute
-            productId = closestTableRow.dataset.productId;
-            console.log('Product ID:', productId);
-    
-            // Fetch product details using the product ID
-            try {
-                console.log('Fetching product details for ID:', productId);
-                const response = await axios.get(`/api/products/${productId}`);
-                const productDetails = response.data;
-    
-                // Populate the editProductsModal with productDetails
-                populateEditProductsModal(productDetails);
-    
-                // Open the editProductsModal
-                editProductsModal.showModal();
-            } catch (error) {
-                console.error('Error fetching product details:', error);
-            }
-        }
-    });
-    
-    document.getElementById('updateProductBtn').addEventListener('click', async () => {
-        // Ensure that productId is defined
-        if (!productId) {
-            console.error('Product ID is not defined.');
-            return;
-        }
-    
-        // Gather the updated data from the modal inputs
-        const updatedProductData = {
-            title: document.getElementById('editProductTitle').value,
-            image: document.getElementById('editProductImage').value,
-            price: document.getElementById('editProductPrice').value,
-            description: document.getElementById('editProductDescription').value,
-            stock: document.getElementById('editProductStock').value,
-            category: document.getElementById('editProductCategory').value,
-            tag: document.getElementById('editProductTag').value,
-        };
-    
-        try {
-            // Make a PUT or PATCH request to update the product in the database
-            const response = await axios.put(`/api/products/${productId}`, updatedProductData);
-    
-            // Optionally, you can handle the response or perform additional actions
-            console.log('Product updated successfully:', response.data);
-            fetchAndDisplayProducts()
-            findTotalProducts();
-            findTotalMonies();
-            findLowItemStocks()
-            findNumberOfCategories();
-            findOutOfStockItems()
-    
-            // Close the editProductsModal after updating
-            editProductsModal.close();
-        } catch (error) {
-            console.error('Error updating product:', error);
-        }
-    });
-
 
 // Function to populate the editProductsModal with product details
 const populateEditProductsModal = (productDetails) => {
@@ -191,9 +93,45 @@ const populateEditProductsModal = (productDetails) => {
     document.getElementById('editProductTag').value = productDetails.tag;
 };
 
-document.querySelector('.cancel-edit').addEventListener('click', () => {
-    editProductsModal.close();
-});
+
+const editProduct = async (productId) => {
+  const editText = document.querySelector('.edit-text')
+  editText.innerHTML = `Edit Product <strong>${productId}</strong>`;
+
+  try {
+    const response = await axios.get(`/api/products/${productId}`);
+    const productDetails = response.data;
+    populateEditProductsModal(productDetails);
+
+    document.getElementById('updateProductBtn').addEventListener('click', async () => {
+      const updatedProductData = {
+        title: document.getElementById('editProductTitle').value,
+        image: document.getElementById('editProductImage').value,
+        price: document.getElementById('editProductPrice').value,
+        description: document.getElementById('editProductDescription').value,
+        stock: document.getElementById('editProductStock').value,
+        category: document.getElementById('editProductCategory').value,
+        tag: document.getElementById('editProductTag').value
+      };
+
+      try {
+        const updatedResponse = await axios.put(`/api/products/${productId}`, updatedProductData);
+        console.log('Updated product:', updatedResponse.data);
+        editProductBootstrap.hide();
+      } catch (err) {
+        console.error('Error updating product:', err);
+        alert('Failed to update product. Please try again.');
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching product details:', error);
+    alert('Failed to fetch product details. Please try again.');
+  }
+};
+
+
+
+
 
     const displayProduct = (product) => {
       const row = productTableBody.insertRow();
@@ -227,35 +165,205 @@ document.querySelector('.cancel-edit').addEventListener('click', () => {
   
       const cell6 = row.insertCell(5);
       cell6.innerHTML = `<div class="action-cell">
-      <i class="bx bxs-edit" data-product-id="${product.id}"></i>
-      <i class="bx bxs-trash-alt" data-product-id=${product.id}></i>
+      <i class="bx bxs-edit"></i>
+      <i class="bx bxs-trash-alt"></i>
       </div>`
+      const deleteButton = cell6.querySelector('.bxs-trash-alt');
+      const editButton = cell6.querySelector('.bxs-edit')
+      deleteButton.addEventListener('click', () => {
+        deleteProduct(row, product.id)
+      })
+      editButton.addEventListener('click', () => {
+        editProduct(product.id)
+        editProductBootstrap.show()
+
+      })
   };
+
+  // Function to delete a product
+const deleteProduct = async (row, productId) => {
+  // Show the delete confirmation modal
+  const deleteText = document.querySelector('.delete-text')
+  deleteText.innerHTML = `Are you sure you want to delete product <strong>${productId}</strong>. This action cannot be <strong>CANNOT</strong> be undone.`
+  deleteProductBootstrap.show();
+
+  // Handle confirmation when delete button is clicked
+  const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+  confirmDeleteBtn.addEventListener('click', async () => {
+    try {
+      // Send DELETE request to delete the product
+      const response = await axios.delete(`/api/products/${productId}`);
+      console.log('Product deleted:', response.data);
+
+      // Remove the corresponding row from the table
+      row.remove();
+
+      // Close the modal after deletion
+      deleteProductBootstrap.hide();
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+  });
+};
+
+
+const searchInput = document.getElementById('search-input')
+searchInput.addEventListener('input', () => {
+  currentProductPage = 1;
+  fetchAndDisplayProducts()
+})
+
 
     // Function to fetch and display products
     const fetchAndDisplayProducts = async () => {
       try {
-        // Fetch products from the server
         const response = await axios.get('/api/products');
-        const products = response.data;
-  
+        let products = response.data;
+        console.log(products)
+    
+        const searchQuery = searchInput.value.trim().toLowerCase();
+        const stockLevel = stockLevelSelect.value;
+        const sortPriceOption = priceOptionSelect.value;
+        const chosenCategory = categorySelect.value
+
+// Filter products based on search query, stock level, and price option
+  products = products.filter(product => {
+    const matchesSearch = product.title.toLowerCase().includes(searchQuery) || product.id.includes(searchQuery);
+    const meetsStockLevel = (stockLevel === 'all') ||
+    (stockLevel === 'zero' && product.stock <= 0) ||
+    (stockLevel === 'low' && product.stock > 0 && product.stock < 10) ||
+    (stockLevel === 'medium' && product.stock >= 10 && product.stock < 20) ||
+    (stockLevel === 'good' && product.stock >= 20);
+    const categoryLevel = (chosenCategory === 'all') ||
+    (chosenCategory === 'olympic' && product.category === 'olympic') ||
+    (chosenCategory === 'a-z' && product.category === 'alphabet') ||
+    (chosenCategory === 'nhs' && product.category === 'nhs') ||
+    (chosenCategory === 'king-anniversary' && product.category === 'king-anniversary') ||
+    (chosenCategory === 'peter-rabbit' && product.category === 'peter-rabbit') ||
+    (chosenCategory === 'collection' && product.category === 'collection')
+
+  // Convert product price to numeric value
+  product.numericPrice = parseFloat(product.price);
+
+  let matchesPriceOption = true;
+  if (sortPriceOption === 'l-h') {
+    matchesPriceOption = product.numericPrice >= 0; // Adjust this condition if needed
+  } else if (sortPriceOption === 'h-l') {
+    matchesPriceOption = product.numericPrice >= 0; // Adjust this condition if needed
+  }
+
+  return matchesSearch && meetsStockLevel && matchesPriceOption && categoryLevel;
+});
+
+// Sort products based on price option
+if (sortPriceOption === 'l-h') {
+  products.sort((a, b) => a.numericPrice - b.numericPrice); // Low to high price
+} else if (sortPriceOption === 'h-l') {
+  products.sort((a, b) => b.numericPrice - a.numericPrice); // High to low price
+}
+
+        // Reset current page to 1 when applying a new filter
+    
+        totalProducts = products.length;
+    
+        const startIndex = (currentProductPage - 1) * productsPerPage;
+        const endIndex = Math.min(startIndex + productsPerPage, totalProducts);
+        const paginatedProducts = products.slice(startIndex, endIndex);
+    
         // Clear existing table rows
         productTableBody.innerHTML = '';
-  
-        // Populate the table with products
-        products.forEach((product) => {
+    
+        // Populate the table with filtered products
+        paginatedProducts.forEach((product) => {
           displayProduct(product);
         });
+    
+        updatePaginationButtons();
+    
+        const productPageInfo = document.getElementById('page-text');
+        productPageInfo.innerHTML = `Showing products <strong>${startIndex + 1}</strong> - <strong>${endIndex}</strong> out of <strong>${totalProducts}</strong>`;
       } catch (error) {
         console.error('Error fetching products:', error);
       }
     };
-  
+    
+    // Event listener for search input
+    searchInput.addEventListener('input', fetchAndDisplayProducts);
+    
+    // Event listener for stock level filter
+    const stockLevelSelect = document.getElementById('stock-level');
+    stockLevelSelect.addEventListener('change', () => {
+      // Reset current page to 1 when stock level filter changes
+      currentProductPage = 1;
+      fetchAndDisplayProducts();
+    });
+    
+    const priceOptionSelect = document.getElementById('sort-price')
+    priceOptionSelect.addEventListener('change', () => {
+      currentProductPage = 1
+      fetchAndDisplayProducts()
+    })
+
+    const categorySelect = document.getElementById('sort-category')
+    categorySelect.addEventListener('change', () => {
+      currentProductPage = 1
+      fetchAndDisplayProducts()
+    })
     // Call the function to fetch and display products initially
     fetchAndDisplayProducts();
     
+
+
+
+  const updatePaginationButtons = () => {
+    const totalPages = Math.ceil(totalProducts / productsPerPage)
+    console.log(totalPages)
+
+    const backButton = document.getElementById('back-btn')
+    const nextButton = document.getElementById('next-btn')
+
+    backButton.disabled = currentProductPage === 1;
+    nextButton.disabled = currentProductPage === totalPages
+  }
+
+  document.getElementById('back-btn').addEventListener('click', () => {
+    if (currentProductPage > 1) {
+      currentProductPage--;
+      fetchAndDisplayProducts(); // Fetch and display products for the previous page
+    }
   });
   
+  document.getElementById('next-btn').addEventListener('click', () => {
+    const totalPages = Math.ceil(totalProducts / productsPerPage);
+    if (currentProductPage < totalPages) {
+      currentProductPage++;
+      fetchAndDisplayProducts(); // Fetch and display products for the next page
+    }
+  });
+  
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const findTotalProducts = async () => {
     try {
@@ -302,22 +410,6 @@ document.querySelector('.cancel-edit').addEventListener('click', () => {
 
   findLowItemStocks()
 
-  const findNumberOfCategories = async () => {
-    try {
-      const response = await axios.get('/api/products');
-      const products = response.data;
-  
-      // Extract unique categories from products
-      const uniqueCategories = [...new Set(products.map(product => product.category))];
-  
-      let categoryCounter = document.querySelector(".category-count");
-      categoryCounter.innerHTML = `${uniqueCategories.length}`;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  
-  findNumberOfCategories();
 
   const findOutOfStockItems = async () => {
     try {
@@ -332,17 +424,7 @@ document.querySelector('.cancel-edit').addEventListener('click', () => {
   }
 
   findOutOfStockItems()
-  
 
 
-  const logoutModal = document.getElementById('log-out-modal');
-  const cancelLogout = document.getElementById('cancel-logout')
 
-  function openLogoutModal () {
-    logoutModal.showModal()
-  }
-
-  cancelLogout.addEventListener("click", () => {
-    logoutModal.close()
-  })
-  
+})
