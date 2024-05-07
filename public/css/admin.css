@@ -239,8 +239,44 @@ h2{
   text-align: center;
   background-color: #f9f9f9;
 }
+.product-section{
+  display: none;
+}
 
 
+/* orders section */
+.month-style{
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+.order-container {
+  display: flex; /* Use flexbox to arrange children in a row */
+  align-items: center; /* Align children vertically in the center */
+  justify-content: space-between; /* Distribute space between children */
+  padding: 10px; /* Add padding for spacing */
+  border: 1px solid #ccc; /* Add border for visual separation */
+  border-radius: 8px; /* Add border radius for rounded corners */
+  margin: 5px;
+}
+
+.order-num {
+  font-weight: bold; /* Apply bold font weight */
+  margin-right: 10px; /* Add right margin for spacing */
+}
+
+.filter {
+  display: flex; /* Use flexbox to align icon and text */
+  align-items: center; /* Align icon and text vertically */
+  padding: 8px 12px; /* Add padding inside the filter box */
+  background-color: #007bff; /* Set background color */
+  color: white; /* Set text color to white */
+  border-radius: 4px; /* Add border radius for rounded corners */
+}
+
+.filter i {
+  margin-right: 8px; /* Add right margin between icon and text */
+}
 
 
 @media screen and (max-width: 600px) {

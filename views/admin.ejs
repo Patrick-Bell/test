@@ -36,7 +36,7 @@
           <div id="addProductBtn">Add Product</div>
         </div>
         <div class="nav-body">
-          Log Out
+          <div id="logOutBtn"><i class='bx bx-log-out'></i> Log Out</div>
         </div>
       </div>
     </div>
@@ -108,7 +108,23 @@
     </div>
 
 
-
+    <div class="modal fade logout-modal"  tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5">Log Out</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to log out?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-outline-danger">Log Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Modal -->
 <div class="modal fade delete-modal"  tabindex="-1" aria-hidden="true">
@@ -203,6 +219,111 @@
 
   </div>
 
+  <div class="orders-section">
+
+
+  <!-- Filter Panel HTML -->
+<div class="offcanvas offcanvas-end filter-canvas" tabindex="-1" id="filter-modal" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasRightLabel">Filter</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <!-- Customer Name Filter -->
+    <div class="mb-3">
+      <label for="customerName" class="form-label">Customer Name:</label>
+      <input type="text" id="customerName" class="form-control">
+    </div>
+
+    <!-- Order ID Filter -->
+    <div class="mb-3">
+      <label for="orderID" class="form-label">Order ID:</label>
+      <input type="text" id="orderID" class="form-control">
+    </div>
+
+    <!-- Price Sorting -->
+    <div class="mb-3">
+      <label for="sortByPrice" class="form-label">Sort by Price:</label>
+      <select id="sortByPrice" class="form-select">
+        <option value="asc">Low to High</option>
+        <option value="desc">High to Low</option>
+      </select>
+    </div>
+
+    <!-- Month and Year Filters -->
+    <div class="mb-3">
+      <label for="sortByMonth" class="form-label">Sort by Month:</label>
+      <select id="sortByMonth" class="form-select">
+        <option value="all">All Months</option>
+        <option value="february">February</option>
+        <option value="march">March</option>
+        <option value="april">April</option>
+        <option value="may">May</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="sortByYear" class="form-label">Sort by Year:</label>
+      <select id="sortByYear" class="form-select">
+        <option value="all">All Years</option>
+        <option value="2024">2024</option>
+      </select>
+    </div>
+
+    <!-- Shipping Method Filter -->
+    <div class="mb-3">
+      <label for="shippingMethod" class="form-label">Shipping Method:</label>
+      <select id="shippingMethod" class="form-select">
+        <option value="all">All Shipping</option>
+        <option value="standard">Standard Shipping</option>
+        <option value="express">Express Shipping</option>
+      </select>
+    </div>
+
+    <!-- Apply Filters Button -->
+    <div class="mb-3">
+    <button type="button" class="btn btn-primary form-control" id="apply-filters-btn">Apply Filters</button>
+    <button type="button" class="btn btn-secondary form-control">Reset Filters</button>
+  </div>
+  </div>
+</div>
+
+
+
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="fw-bold fs-4 mb-0"><i class='bx bxs-coin-stack'></i> Total Orders</div>
+        <div class="fs-6 mt-0"></div>
+      </div>
+      <div class="stat-card">
+        <div class="fw-bold fs-4 mb-0"><i class='bx bxs-receipt'></i> Revenue</div>
+        <div class="fs-6 mt-0"></div>
+      </div>
+      <div class="stat-card">
+        <div class="fw-bold fs-4 mb-0"><i class='bx bxs-purchase-tag-alt'></i> Average Order</div>
+        <div class="fs-6 mt-0"></div>
+      </div>
+      <div class="stat-card">
+        <div class="fw-bold fs-4 mb-0"><i class='bx bxs-error'></i> Last 30 Days</div>
+        <div class="fs-6 mt-0"></div>
+      </div>
+    </div>
+
+    <div class="order-container">
+      <div class="order-num">5 orders</div>
+      <div data-bs-toggle="offcanvas" data-bs-target="#filter-modal" id="filter-btn" class="filter"><i class="bx bx-filter"></i> Filter</div>
+    </div>
+
+
+    
+    <div id="order-list"></div>
+
+
+
+
+
+    
+  </div>
+
 
       
 
@@ -211,7 +332,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 <script src="menu.js"></script>
-<script src="admin.js"></script>
+<script src="admin.js" defer></script>
 
 </body>
 </html>
