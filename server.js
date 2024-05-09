@@ -17,7 +17,7 @@ const fs = require('fs').promises;
 const multer = require('multer'); 
 const nodemailer = require('nodemailer')
 
-const { addOrderToTable, getOrdersFromTable, updateStock, sendOrderConfirmationEmail } = require('./orders'); // Updated import statement
+const { addOrderToTable, getOrdersFromTable, updateStock, sendOrderConfirmationEmail, sendOrderStatusEmail } = require('./orders'); // Updated import statement
 
 const bodyParser = require('body-parser')
 
@@ -178,6 +178,33 @@ app.get('/api/totalorders', async (req, res) => {
   }
 })
 
+app.put('/api/orders/:id', async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    const { status } = req.body; // Assuming the client sends { "newStatus": "delivered" }
+
+    console.log('Updating order status:', orderId, status);
+
+    // Update order status in the database
+    const updatedOrder = await OrderModel.findOneAndUpdate(
+      { id: orderId },
+      { status: status },
+      { new: true } // Ensure to return the updated document
+    );
+
+    if (!updatedOrder) {
+      // Handle case where order with given ID is not found
+      return res.status(404).json({ error: 'Order not found' });
+    }
+    sendOrderStatusEmail(updatedOrder)
+    console.log('Updated order:', updatedOrder);
+
+    res.status(200).json({ message: 'Order status updated successfully', order: updatedOrder });
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    res.status(500).json({ error: 'Failed to update order status' });
+  }
+});
 
 app.get('/api/product/:id', async (req, res) => {
   try {
@@ -526,6 +553,8 @@ app.post("/stripe-checkout", async (req, res) => {
         billing_address_collection: "required",
         line_items: lineItems, 
     })
+
+    // "https://test-admin-wdmf.onrender.com/success.html?session_id={CHECKOUT_SESSION_ID}"
     
     console.log(session); // Log the session object to the console   
 
@@ -571,6 +600,7 @@ app.post('/webhooks', async (req, res) => {
           quantity: item.quantity,
           unitPrice: item.amount / item.quantity,
         })),
+        status: 'pending'
       };
 
     

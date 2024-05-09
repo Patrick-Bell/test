@@ -261,7 +261,6 @@ h2{
 }
 
 .order-num {
-  font-weight: bold; /* Apply bold font weight */
   margin-right: 10px; /* Add right margin for spacing */
 }
 
@@ -272,12 +271,22 @@ h2{
   background-color: #007bff; /* Set background color */
   color: white; /* Set text color to white */
   border-radius: 4px; /* Add border radius for rounded corners */
+  cursor: pointer;
 }
 
 .filter i {
   margin-right: 8px; /* Add right margin between icon and text */
 }
 
+.flex-container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status-border{
+  padding: 10px;
+}
 
 @media screen and (max-width: 600px) {
   td:nth-child(1) {
