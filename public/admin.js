@@ -436,3 +436,74 @@ if (sortPriceOption === 'l-h') {
 
 
 })
+
+
+const findTotalOrders = async () => {
+  try {
+    let totalOrdersFound = document.querySelector(".order-count");
+    const response = await axios.get('/api/orders');
+    const orders = response.data;
+    totalOrdersFound.innerHTML = `${orders.length}`;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+findTotalOrders();
+
+const findTotalOrderRevenue = async () => {
+  try {
+    let totalOrderRevenueElement = document.querySelector('.order-revenue');
+    let totalOrderAverage = document.querySelector('.order-average')
+    const response = await axios.get('/api/orders');
+    const orders = response.data;
+    const totalRevenue = orders.reduce((sum, order) => {
+      return sum + (order.totalPrice || 0); // Accumulate the total price of each order
+    }, 0);
+    const totalAverage = totalRevenue / orders.length
+    totalOrderRevenueElement.innerHTML = `£${(totalRevenue / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`; // Display total revenue with two decimal places
+    totalOrderAverage.innerHTML = `£${(totalAverage / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`
+  } catch (error) {
+    console.log('Error fetching total order revenue:', error);
+  }
+};
+
+findTotalOrderRevenue()
+
+
+const calculateSalesLast30Days = async () => {
+  try {
+    const currentDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(currentDate.getDate() - 0);
+    const last30DaysText = document.querySelector('.last-30-text')
+
+    const formattedStartDate = startDate.toISOString().split('T')[0];
+
+    const response = await axios.get(`/api/date-orders?startDate=${formattedStartDate}`);
+    const orders = response.data;
+
+    const totalSalesLast30Days = orders.reduce((sum, order) => {
+      return sum + (order.totalPrice || 0);
+    }, 0);
+
+    last30DaysText.innerHTML = `£${(totalSalesLast30Days / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`
+    return totalSalesLast30Days.toFixed(2);
+
+  } catch (error) {
+    console.log('Error calculating sales for the last 30 days:', error);
+    return null;
+  }
+};
+
+calculateSalesLast30Days().then(total => {
+  if (total !== null) {
+    console.log(`Total sales in the last 30 days: £${total}`);
+    // Handle/display the total sales amount
+  } else {
+    console.log('Failed to calculate total sales for the last 30 days.');
+  }
+});
+
+
+calculateSalesLast30Days()

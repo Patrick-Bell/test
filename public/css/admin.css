@@ -106,20 +106,29 @@ tr:hover {
 
 
 
-.pagination-container{
+.pagination-flex{
   display: flex;
   align-items: center;
-  margin: 0 10px;
+  justify-content: space-between;
   padding: 5px;
+  margin: 0 5px;
 }
-#back-btn, #next-btn, #page-text{
-  margin: 0 10px;
+.pagination-container{
+  display: flex;
+  margin: 0 5px;
 }
-#back-btn, #next-btn{
+#back-btn{
   background: darkgrey;
-  border-radius: 0.4rem;
   padding: 5px 10px;
   cursor: pointer;
+}
+#next-btn{
+  background: darkgrey;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+#back-btn:hover, #next-btn:hover{
+  opacity: 0.7;
 }
 
 
@@ -240,9 +249,15 @@ h2{
   background-color: #f9f9f9;
 }
 .product-section{
-  display: none;
+  display: block;
 }
-
+.order-details{
+  border-bottom: 1px solid grey;
+  padding: 10px;
+}
+#apply-filters-btn{
+  margin: 5px 0;
+}
 
 /* orders section */
 .month-style{

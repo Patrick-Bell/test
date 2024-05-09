@@ -102,7 +102,7 @@ function sendOrderStatusEmail(updatedOrder) {
         </ul>
       </li>
       <strong>Shipping Cost:</strong> £${(updatedOrder.shipping / 100).toFixed(2)}<br>
-      <strong>Total Price:</strong> £${(updatedOrder.totalPrice / 100)}<br><br>`
+      <strong>Total Price:</strong> £${(updatedOrder.totalPrice / 100).toFixed(2)}<br><br>`
   
       // Check the shipping value to personalize the message
       if (updatedOrder.shipping === 0) {
@@ -118,11 +118,23 @@ function sendOrderStatusEmail(updatedOrder) {
       break;
     case 'delivered':
       emailSubject = `Your order has been delivered!`;
-      emailBody = `Dear Customer,<br>
-        Your order with ID <strong>${updatedOrder.id}</strong> has been successfully delivered.<br>
+      emailBody = `Dear ${updatedOrder.name},<br><br>
+        Your order with ID <strong>${updatedOrder.id}</strong> has been successfully delivered.<br><br>
+        Remember to keep an eye out for our new products coming soon! You can find them on the shop 
+        <a href="https://test-admin-wdmf.onrender.com/products">here</a>.<br><br>
         We hope you enjoy your purchase!<br>
         Thank you for shopping with us!`;
       break;
+      case 'cancelled':
+        emailSubject = `Your order can been cancelled.`;
+        emailBody = `Hi ${updatedOrder.name}<br><br>
+        This is confirmation that your order (<strong>${updatedOrder.id}</strong>) with us has been <strong>cancelled</strong>.<br><br>
+        You will be refunded the total payment of <strong>£${((updatedOrder.totalPrice - updatedOrder.shipping) / 100).toFixed(2)}</strong> within 3-5 working days.<br><br>
+        Please note that we are unable to refund shipping if you have paid for this.<br><br>
+        Thank you,<br>
+        Cointology Customer Service
+        `
+        break;
     default:
       emailSubject = `Update on your order (ID: ${updatedOrder.id})`;
       emailBody = `Dear Customer,<br>
@@ -171,7 +183,7 @@ function sendOrderConfirmationEmail(orderData) {
     <li><strong>Email:</strong> ${orderData.email}</li>
     <li><strong>Phone:</strong> ${orderData.phone}</li>
     <li><strong>Shipping Address:</strong> ${orderData.address}</li>
-    <li><strong>Total Price:</strong> £${(orderData.totalPrice / 100)}</li>
+    <li><strong>Total Price:</strong> £${(orderData.totalPrice / 100).toFixed(2)}</li>
     <li><strong>Shipping Cost:</strong> £${(orderData.shipping / 100).toFixed(2)}</li>
     <li>
       <strong>Ordered Items:</strong>
@@ -204,4 +216,82 @@ const userOrderConfirmation = {
   });
 }
 
-module.exports = { addOrderToTable, getOrdersFromTable, updateStock, sendOrderConfirmationEmail, sendOrderStatusEmail };
+
+
+
+async function sendStockUpdateEmail() {
+  try {
+    // Retrieve all products from the database
+    const products = await ProductModel.find();
+
+    // Filter products with low stock (less than 10)
+    const lowStockProducts = products.filter(product => product.stock < 10 && product.stock > 0);
+    const outOfStockProducts = products.filter(product => product.stock <= 0)
+
+    if (lowStockProducts.length === 0) {
+      console.log('No low-stock products found.');
+      return; // Exit function if no low-stock products
+    }
+
+    if (outOfStockProducts.length === 0) {
+      console.log('No products out of stock')
+      return
+    }
+
+    const date = new Date();
+    const options = {
+        year: 'numeric', // "numeric" or "2-digit"
+        month: 'short', // "short", "long", "numeric", "2-digit"
+        day: 'numeric', // "numeric", "2-digit"
+        weekday: 'long', // "short", "long", "narrow"
+        hour: 'numeric', // "numeric", "2-digit"
+        minute: 'numeric', // "numeric", "2-digit"
+    };
+    
+    const formattedDate = date.toLocaleDateString('en-US', options);
+    console.log(formattedDate);
+    
+  
+  // Format the date using specified options
+    let emailContent = `This is an update for low and out of stock products. This report is generated on ${formattedDate}<br><br>`
+    emailContent += `<h2>Low Stock Alert (${lowStockProducts.length})</h2>`;
+    emailContent += '<ul>';
+    lowStockProducts.forEach(product => {
+      emailContent += `<li>${product.title} - <strong>Stock: ${product.stock}</strong></li>`;
+    });
+    emailContent += '</ul>';
+    emailContent += `<h2>Out of Stock Items (${outOfStockProducts.length})</h2>`
+    emailContent += `<ul>`;
+    outOfStockProducts.forEach(product => {
+      emailContent += `<li>${product.title} - <strong> Stock: ${product.stock}</strong></li>`
+    })
+    emailContent += `</ul>`
+
+
+
+    // Create Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.USER,
+        pass: process.env.PASS
+      }
+    });
+
+    // Email options
+    const emailOptions = {
+      from: process.env.USER,
+      to: process.env.USER, // Change recipient email address as needed
+      subject: 'Low Stock Alert',
+      html: emailContent
+    };
+
+    // Send the email
+    const info = await transporter.sendMail(emailOptions);
+    console.log('Low stock alert email sent successfully:', info.response);
+  } catch (error) {
+    console.error('Error sending low stock alert email:', error);
+  }
+}
+
+module.exports = { addOrderToTable, getOrdersFromTable, updateStock, sendOrderConfirmationEmail, sendOrderStatusEmail, sendStockUpdateEmail };

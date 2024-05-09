@@ -215,13 +215,14 @@ async function addToCart(event) {
             const isProductOutOfStock = product.stock < 1;
 
             if (!isProductOutOfStock) {
-                const existingItem = cart.find((item) => item.id === product.id);
+                // Check if the product is already in the cart
+                const existingItemIndex = cart.findIndex((item) => item.id === product.id);
 
-                if (existingItem) {
+                if (existingItemIndex !== -1) {
                     // If the item already exists in the cart, increment the quantity
-                    existingItem.quantity++;
+                    cart[existingItemIndex].quantity++;
                 } else {
-                    // If the item is not in the cart, add a new entry
+                    // If the item is not in the cart, add a new entry with quantity 1
                     const cartItem = {
                         id: product.id,
                         title: product.title,
@@ -246,6 +247,8 @@ async function addToCart(event) {
         console.error('Error adding to cart:', error);
     }
 }
+
+
 
 
 
@@ -280,12 +283,13 @@ function changeQuantity(event) {
         const cartItem = cart.find((item) => item.id === productID);
         if (cartItem) {
             cartItem.quantity = quantity;
-            saveToLocalStorage();
-            calculateTotal();
-            updateCartIcon();
+            saveToLocalStorage(); // Save updated cart to localStorage
+            calculateTotal(); // Recalculate total based on updated quantities
+            updateCartIcon(); // Update cart icon or UI to reflect changes
         }
     }
 }
+
 
 // Saving to local storage so it saves after refreshing
 
@@ -318,6 +322,7 @@ function renderCartItems() {
                     min="1" 
                     value="${item.quantity}" 
                     data-id="${item.id}" 
+                    disabled
                 />
             </div>
             <h2 class="cart-item-price">£${item.price}</h2>
@@ -336,6 +341,7 @@ function renderCartItems() {
     const quantityInputs = document.querySelectorAll(".cart-item-quantity");
     quantityInputs.forEach((input) => {
         input.addEventListener("change", changeQuantity);
+        console.log(input)
     });
 
     calculateTotal();

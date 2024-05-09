@@ -210,11 +210,15 @@
       </thead>
       <tbody></tbody>
     </table>
+
+    <div class="pagination-flex">
     <div class="pagination-container">
       <div id="back-btn">Prev</div>
       <div id="next-btn">Next</div>
-      <div id="page-text">Showing...</div>
     </div>
+    <div id="page-text">Showing...</div>
+  </div>
+
 
 
   </div>
@@ -223,7 +227,7 @@
 
 
   <!-- Filter Panel HTML -->
-<div class="offcanvas offcanvas-end filter-canvas" tabindex="-1" id="filter-modal" aria-labelledby="offcanvasRightLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="filter-modal" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
     <div class="offcanvas-title" id="offcanvasRightLabel">Filter</div>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -268,13 +272,14 @@
         <option value="pending">Pending Orders</option>
         <option value="shipped">Shipped Orders</option>
         <option value="delivered">Delivered Orders</option>
+        <option value="cancelled">Cancelled Orders</option>
       </select>
     </div>
 
     <!-- Apply Filters Button -->
     <div class="mb-3">
     <button type="button" class="btn btn-primary form-control" id="apply-filters-btn">Apply Filters</button>
-    <button type="button" class="btn btn-secondary form-control">Reset Filters</button>
+    <button type="button" class="btn btn-secondary form-control" id="reset-filters-btn">Reset Filters</button>
   </div>
   </div>
 </div>
@@ -284,19 +289,19 @@
     <div class="stats-container">
       <div class="stat-card">
         <div class="fw-bold fs-4 mb-0"><i class='bx bxs-coin-stack'></i> Total Orders</div>
-        <div class="fs-6 mt-0"></div>
+        <div class="fs-6 mt-0 order-count"></div>
       </div>
       <div class="stat-card">
         <div class="fw-bold fs-4 mb-0"><i class='bx bxs-receipt'></i> Revenue</div>
-        <div class="fs-6 mt-0"></div>
+        <div class="fs-6 mt-0 order-revenue"></div>
       </div>
       <div class="stat-card">
         <div class="fw-bold fs-4 mb-0"><i class='bx bxs-purchase-tag-alt'></i> Average Order</div>
-        <div class="fs-6 mt-0"></div>
+        <div class="fs-6 mt-0 order-average"></div>
       </div>
       <div class="stat-card">
-        <div class="fw-bold fs-4 mb-0"><i class='bx bxs-error'></i> Last 30 Days</div>
-        <div class="fs-6 mt-0"></div>
+        <div class="fw-bold fs-4 mb-0"><i class='bx bxs-error'></i> Orders Today</div>
+        <div class="fs-6 mt-0 last-30-text"></div>
       </div>
     </div>
 

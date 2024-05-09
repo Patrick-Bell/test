@@ -16,8 +16,9 @@ const path = require('path')
 const fs = require('fs').promises;
 const multer = require('multer'); 
 const nodemailer = require('nodemailer')
+const cron = require('node-cron')
 
-const { addOrderToTable, getOrdersFromTable, updateStock, sendOrderConfirmationEmail, sendOrderStatusEmail } = require('./orders'); // Updated import statement
+const { addOrderToTable, getOrdersFromTable, updateStock, sendOrderConfirmationEmail, sendOrderStatusEmail, sendStockUpdateEmail } = require('./orders'); // Updated import statement
 
 const bodyParser = require('body-parser')
 
@@ -146,6 +147,22 @@ app.get('/register', (req, res) => {
 });
 
 app.use('/register', registerRouter);
+
+// Server-side route definition (assuming Express.js)
+app.get('/api/date-orders', async (req, res) => {
+  try {
+    const { startDate } = req.query;
+
+    // Use startDate to filter orders from your database
+    const orders = await OrderModel.find({ timestamp: { $gte: new Date(startDate) } });
+
+    res.json(orders); // Send the filtered orders as JSON response
+  } catch (error) {
+    console.log('Error fetching orders:', error);
+    res.status(500).json({ error: 'Failed to fetch orders' });
+  }
+});
+
 
 
 app.get('/api/orders', async (req, res) => {
@@ -623,6 +640,10 @@ app.post('/webhooks', async (req, res) => {
   }
 });
 
+
+cron.schedule('0 9,18 * * *', () => {
+  sendStockUpdateEmail()
+})
 
 
 function checkAuthenticated(req, res, next) {

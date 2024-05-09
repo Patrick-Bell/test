@@ -53,7 +53,7 @@ async function applyFilters() {
 
     // Display number of filtered orders
     const numOfOrders = document.querySelector('.order-num');
-    numOfOrders.innerHTML = `Number of Orders: <strong>${filteredOrders.length}</strong>`;
+    numOfOrders.innerHTML = `Number of filtered orders: <strong>${filteredOrders.length}</strong> out of ${data.length}`;
 
     if (filteredOrders.length === 0) {
       numOfOrders.innerHTML = 'No orders found with these filters.';
@@ -68,6 +68,22 @@ async function applyFilters() {
     console.error('Error applying filters:', error);
   }
 }
+
+
+function resetFilters() {
+  document.getElementById('customerName').value = ''
+  document.getElementById('orderID').value = ''
+  document.getElementById('sortByMonth').value = 'all'
+  document.getElementById('orderStatus').value = 'all'
+
+  fetchOrders()
+}
+
+const resetFiltersBtn = document.getElementById('reset-filters-btn')
+resetFiltersBtn.addEventListener('click', () => {
+  console.log('clicking reset filters')
+  resetFilters()
+})
 
 function renderOrders(orders) {
   const ordersByMonthYear = groupOrdersByMonthYear(orders);
@@ -140,6 +156,10 @@ function renderOrdersByMonthYear(ordersByMonthYear) {
           backgroundColor = '#99CC99'; // Light Green
           iconClass = `bx bx-package`
           break;
+        case 'cancelled':
+          backgroundColor = 'red';
+          iconClass = 'bx bx-x'
+          break;
         default:
           backgroundColor = 'transparent'; // Default color if none of the cases match
       }
@@ -165,6 +185,7 @@ function renderOrdersByMonthYear(ordersByMonthYear) {
             <option value="pending">Pending</option>
             <option value="shipped">Shipped</option>
             <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
           </select>
           
             </div>
@@ -188,7 +209,7 @@ function renderOrdersByMonthYear(ordersByMonthYear) {
             <div>
               <i class='bx bx-phone'></i> ${phone}
             </div>
-            <div style="background: ${backgroundColor}; width: 165px; border-radius: 0.4rem"; class="status-border">
+            <div style="background: ${backgroundColor}; width: 175px; border-radius: 0.4rem"; class="status-border">
               <i class='${iconClass}'></i> order ${status}
             </div>
           </div>
@@ -227,7 +248,7 @@ function renderOrdersByMonthYear(ordersByMonthYear) {
 
 
 
-        <div class="modal status-update-modal" tabindex="-1">
+        <div class="modal fade status-update-modal" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -239,7 +260,7 @@ function renderOrdersByMonthYear(ordersByMonthYear) {
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary"id="status-btn">Save changes</button>
+            <button type="button" class="btn btn-outline-success"id="status-btn">Save changes</button>
           </div>
         </div>
       </div>
