@@ -625,10 +625,6 @@ app.post('/webhooks', async (req, res) => {
         status: 'pending'
       };
 
-      console.log('coupon', invoice.discount.coupon)
-
-
-    
       // Log order data for debugging
       console.log('Order data (test#1):', orderData);
       addOrderToTable(orderData)
