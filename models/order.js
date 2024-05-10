@@ -16,6 +16,9 @@ const orderSchema = new mongoose.Schema({
     address: String,
     lineItems: [{ name: String, quantity: Number, unitPrice: Number }],
     shipping: Number,
+    discount: {
+      type: String,
+    },
     totalPrice: Number,
     status: {
       type: String,

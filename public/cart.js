@@ -1,20 +1,26 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const stockToast = document.querySelector('.stock-modal')
-    const stockBootstrap = new bootstrap.Modal(stockToast)
-    const stockBody = document.querySelector('.modal-body')
+    const stockToast = document.querySelector('.stock-modal');
+    const stockBootstrap = new bootstrap.Modal(stockToast);
+    const stockBody = document.querySelector('.modal-body');
     const payBtn = document.querySelector(".checkout-btn");
 
+    updateCheckoutButtonState()
+
+    // Retrieve cart items from localStorage
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+
+    // Add event listener to checkout button if it exists
     if (payBtn) {
         payBtn.addEventListener("click", async (event) => {
-            payBtn.innerHTML = "Checking out...";
-            event.preventDefault();
-
-            const cartItems = JSON.parse(localStorage.getItem('cart'));
-
-            // Array to hold details of products with insufficient stock
-            const insufficientStockItems = [];
-
             try {
+                event.preventDefault();
+                payBtn.innerHTML = "Checking out...";
+                payBtn.disabled = true; // Disable the button during processing
+
+                // Array to hold details of products with insufficient stock
+                const insufficientStockItems = [];
+
                 // Check stock for each item in the cart
                 for (const item of cartItems) {
                     const response = await fetch(`/api/products/${item.id}`);
@@ -30,10 +36,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 if (insufficientStockItems.length > 0) {
-                    stockBootstrap.show()
-                    stockBody.innerHTML = `<strong>${insufficientStockItems.length}</strong> item(s) require attention before proceeding to checkout.<br><br>`
+                    // Show modal with stock issue details
+                    stockBootstrap.show();
+                    stockBody.innerHTML = `<strong>${insufficientStockItems.length}</strong> item(s) require attention before proceeding to checkout.<br><br>`;
                     stockBody.innerHTML += insufficientStockItems.map(item => {
-                        const remainingStock = parseInt(item.requestedQuantity - item.availableStock);
+                        const remainingStock = Math.max(0, item.requestedQuantity - item.availableStock);
                         return `
                             <div>
                                 <strong>${item.title}</strong><br>
@@ -43,10 +50,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             </div>
                         `;
                     }).join('<br>');
-                    
 
-                    stockBody.innerHTML += `<br>Please remove the items from your cart. Feel free to contact us to see if we will be getting more stock in these coins.`
-
+                    stockBody.innerHTML += `<br>Please remove the items from your cart or adjust quantities.`;
                 } else {
                     // All stock checks passed, proceed to checkout
                     const response = await fetch("/stripe-checkout", {
@@ -58,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             items: cartItems
                         }),
                     });
-                    
+
                     const data = await response.json();
                     if (data.url) {
                         window.location.href = data.url;
@@ -69,8 +74,9 @@ document.addEventListener('DOMContentLoaded', function () {
             } catch (error) {
                 console.error("Error checking stock:", error);
             } finally {
-                // Reset button text after processing
+                // Reset button text and enable button after processing
                 payBtn.innerHTML = "Checkout";
+                payBtn.disabled = false;
             }
         });
     } else {

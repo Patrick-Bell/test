@@ -202,6 +202,21 @@ function addEventListenersToCartButtons() {
     }
 }
 
+// Function to update checkout button state based on cart content
+function updateCheckoutButtonState() {
+    const payBtn = document.querySelector(".checkout-btn");
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Disable checkout button if cart is empty
+    if (cartItems.length === 0) {
+        payBtn.disabled = true;
+        console.log('no items so disable button')
+    } else {
+        payBtn.disabled = false;
+        console.log('more than 1 item so undisable buutton')
+    }
+}
+
 async function addToCart(event) {
     try {
         // Fetch products from the server
@@ -237,6 +252,7 @@ async function addToCart(event) {
                 saveToLocalStorage();
                 calculateTotal();
                 updateCartIcon(); 
+                updateCheckoutButtonState()
             } else {
                 console.error('Product is out of stock');
             }
@@ -270,6 +286,7 @@ function removeFromCart(event) {
     renderCartItems();
     calculateTotal();
     updateCartIcon();
+    updateCheckoutButtonState()
 }
 
 
@@ -286,6 +303,7 @@ function changeQuantity(event) {
             saveToLocalStorage(); // Save updated cart to localStorage
             calculateTotal(); // Recalculate total based on updated quantities
             updateCartIcon(); // Update cart icon or UI to reflect changes
+            updateCheckoutButtonState()
         }
     }
 }

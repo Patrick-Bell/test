@@ -139,7 +139,7 @@ function renderOrdersByMonthYear(ordersByMonthYear) {
 
     // Iterate over each order within the current month-year group
     orders.forEach(order => {
-      const { id, name, email, address, phone, lineItems, shipping, totalPrice, timestamp, status } = order;
+      const { id, name, email, address, phone, lineItems, shipping, totalPrice, timestamp, status, discount } = order;
 
       let backgroundColor, iconClass;
 
@@ -236,6 +236,10 @@ function renderOrdersByMonthYear(ordersByMonthYear) {
             <tr>
               <td colspan="2" style="text-align: right; padding: 8px;"><strong><i class='bx bx-truck'></i> Shipping:</strong></td>
               <td style="border-top: 1px solid #ccc; padding: 8px;">£${(shipping / 100).toFixed(2)}</td>
+            </tr>
+            <tr>
+              <td colspan="2" style="text-align: right; padding: 8px;"><strong><i class='bx bx-truck'></i> Discount:</strong></td>
+              <td style="border-top: 1px solid #ccc; padding: 8px;">£${(discount / 100).toFixed(2)}</td>
             </tr>
             <tr>
               <td colspan="2" style="text-align: right; padding: 8px;"><strong><i class='bx bx-dollar'></i> Total:</strong></td>

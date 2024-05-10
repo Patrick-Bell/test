@@ -565,7 +565,7 @@ app.post("/stripe-checkout", async (req, res) => {
           },
           allow_promotion_codes: true,
         mode: "payment",
-        success_url: "https://test-admin-wdmf.onrender.com/success.html?session_id={CHECKOUT_SESSION_ID}",
+        success_url: "http://localhost:3001/success.html?session_id={CHECKOUT_SESSION_ID}",
         cancel_url: "https://test-admin-wdmf.onrender.com/cancel.html?session_id={CHECKOUT_SESSION_ID}",
         billing_address_collection: "required",
         line_items: lineItems, 
@@ -603,6 +603,10 @@ app.post('/webhooks', async (req, res) => {
     if (event.type === 'invoice.finalized') {
       const invoice = event.data.object;
 
+      const discountAmount = invoice.total_discount_amounts?.[0]?.amount || 0;
+
+
+      
       const orderData = {
         timestamp: new Date().toLocaleString(),
         id: invoice.id,
@@ -612,6 +616,7 @@ app.post('/webhooks', async (req, res) => {
         address: `${invoice.customer_address.line1}\n${invoice.customer_address.city}, ${invoice.customer_address.postal_code}\n${invoice.customer_address.country}`,
         totalPrice: invoice.total,
         shipping: invoice.shipping_cost.amount_total,
+        discount: discountAmount,
         lineItems: invoice.lines.data.map(item => ({
           name: item.description,
           quantity: item.quantity,
@@ -620,15 +625,15 @@ app.post('/webhooks', async (req, res) => {
         status: 'pending'
       };
 
+      console.log('coupon', invoice.discount.coupon)
+
+
     
       // Log order data for debugging
       console.log('Order data (test#1):', orderData);
       addOrderToTable(orderData)
-      console.log("Added Order to table")
       updateStock(orderData)
-      console.log("Updating Stock, test #123")
       sendOrderConfirmationEmail(orderData)
-      console.log(`Order confirmation email sent to ${orderData.name}`)
 
       res.json({ received: true });
     } else {

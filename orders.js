@@ -223,6 +223,7 @@ async function sendStockUpdateEmail() {
   try {
     // Retrieve all products from the database
     const products = await ProductModel.find();
+    const orders = await OrderModel.find()
 
     // Filter products with low stock (less than 10)
     const lowStockProducts = products.filter(product => product.stock < 10 && product.stock > 0);
@@ -250,10 +251,53 @@ async function sendStockUpdateEmail() {
     
     const formattedDate = date.toLocaleDateString('en-US', options);
     console.log(formattedDate);
+
+
+    const productQuantities = {};
+
+    // Iterate over each order and aggregate product quantities
+    orders.forEach(order => {
+      order.lineItems.forEach(item => {
+        const productName = item.name;
+        const productQuantity = item.quantity;
+
+        // Update or initialize product quantity in the object
+        if (productQuantities[productName]) {
+          productQuantities[productName] += productQuantity;
+        } else {
+          productQuantities[productName] = productQuantity;
+        }
+      });
+    });
+
+    // Convert productQuantities object to array of { productName, quantity } objects
+    const productQuantitiesArray = Object.entries(productQuantities).map(([productName, quantity]) => ({
+      productName,
+      quantity
+    }));
+
+    // Sort productQuantitiesArray by quantity (descending order)
+    const sortedOrders = productQuantitiesArray.sort((a, b) => b.quantity - a.quantity);
+
+    // Log the top 5 best-selling products
+    console.log('Top 5 Best Sellers:');
+    sortedOrders.slice(0, 5).forEach((product, index) => {
+      console.log(`${index + 1} - ${product.productName}: ${product.quantity}`);
+    });
+
+    // Log the bottom 5 least-selling products
+    console.log('Bottom 5 Least Sellers:');
+    sortedOrders.slice(-5).reverse().forEach((product, index) => {
+      console.log(`${index + 1} - ${product.productName}: ${product.quantity}`);
+    });
     
   
   // Format the date using specified options
-    let emailContent = `This is an update for low and out of stock products. This report is generated on ${formattedDate}<br><br>`
+    let emailContent = `This is an update for low and out of stock products, as well as best and worse selling products. This report is generated on ${formattedDate}.<br>
+    <strong>Low Stock Items</strong> - Items less than 10 quantities remaining.<br>
+    <strong>Out of Stock Items</strong> - Items with 0 stock remaining.<br>
+    <strong>Best Sellers</strong> - Items that have sold the most across all orders.<br>
+    <strong>Worse Sellers</strong> - Items that have sold the least across all orders (items with 0 sales will not show here).<br><br>`
     emailContent += `<h2>Low Stock Alert (${lowStockProducts.length})</h2>`;
     emailContent += '<ul>';
     lowStockProducts.forEach(product => {
@@ -266,6 +310,15 @@ async function sendStockUpdateEmail() {
       emailContent += `<li>${product.title} - <strong> Stock: ${product.stock}</strong></li>`
     })
     emailContent += `</ul>`
+    emailContent += `<h2>Best Sellers</h2>`
+    sortedOrders.slice(0, 5).forEach((product, index) => {
+      emailContent += `<li>${index + 1} - ${product.productName}: <strong>${product.quantity}</strong> sold</li>`;
+    });
+    emailContent += `<h2>Worse Sellers</h2>`
+    sortedOrders.slice(-5).reverse().forEach((product, index) => {
+     emailContent += `<li>${index + 1} - ${product.productName}: <strong>${product.quantity}</strong> sold </li>`;
+    });
+    
 
 
 
@@ -293,5 +346,61 @@ async function sendStockUpdateEmail() {
     console.error('Error sending low stock alert email:', error);
   }
 }
+
+
+
+
+async function countProductQuantities() {
+  try {
+    // Fetch all orders from the database
+    const orders = await OrderModel.find();
+
+    // Object to store product quantities across all orders
+    const productQuantities = {};
+
+    // Iterate over each order and aggregate product quantities
+    orders.forEach(order => {
+      order.lineItems.forEach(item => {
+        const productName = item.name;
+        const productQuantity = item.quantity;
+
+        // Update or initialize product quantity in the object
+        if (productQuantities[productName]) {
+          productQuantities[productName] += productQuantity;
+        } else {
+          productQuantities[productName] = productQuantity;
+        }
+      });
+    });
+
+    // Convert productQuantities object to array of { productName, quantity } objects
+    const productQuantitiesArray = Object.entries(productQuantities).map(([productName, quantity]) => ({
+      productName,
+      quantity
+    }));
+
+    // Sort productQuantitiesArray by quantity (descending order)
+    const sortedOrders = productQuantitiesArray.sort((a, b) => b.quantity - a.quantity);
+
+    // Log the top 5 best-selling products
+    console.log('Top 5 Best Sellers:');
+    sortedOrders.slice(0, 5).forEach((product, index) => {
+      console.log(`${index + 1} - ${product.productName}: ${product.quantity}`);
+    });
+
+    // Log the bottom 5 least-selling products
+    console.log('Bottom 5 Least Sellers:');
+    sortedOrders.slice(-5).reverse().forEach((product, index) => {
+      console.log(`${index + 1} - ${product.productName}: ${product.quantity}`);
+    });
+
+  } catch (error) {
+    console.error('Error counting product quantities:', error);
+  }
+}
+
+
+
+
 
 module.exports = { addOrderToTable, getOrdersFromTable, updateStock, sendOrderConfirmationEmail, sendOrderStatusEmail, sendStockUpdateEmail };
