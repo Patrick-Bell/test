@@ -163,10 +163,14 @@ function renderOrdersByMonthYear(ordersByMonthYear) {
         default:
           backgroundColor = 'transparent'; // Default color if none of the cases match
       }
-      
+      let effectivePrice = (totalPrice + discount);
+      let discountAmount = totalPrice - effectivePrice;
 
 
-     
+      let percentageDiscount = Math.abs(((discountAmount / (effectivePrice - shipping)) * 100).toFixed(0));
+
+  
+   
       // Create a div element to represent each order item
       const orderItem = document.createElement('div');
       orderItem.classList.add('order-item');
@@ -218,32 +222,32 @@ function renderOrdersByMonthYear(ordersByMonthYear) {
           <table style="width: 100%; margin-top: 10px; border-collapse: collapse;">
           <thead>
             <tr>
-              <th style="border-bottom: 1px solid #ccc; padding: 8px;"><i class='bx bx-package'></i> Item</th>
-              <th style="border-bottom: 1px solid #ccc; padding: 8px;"><i class='bx bx-shopping-bag'></i> Quantity</th>
-              <th style="border-bottom: 1px solid #ccc; padding: 8px;"><i class='bx bx-dollar-circle'></i> Cost</th>
+              <th style="padding: 8px;"><i class='bx bx-package'></i> Item</th>
+              <th style="padding: 8px;"><i class='bx bx-shopping-bag'></i> Quantity</th>
+              <th style="padding: 8px;"><i class='bx bx-dollar-circle'></i> Cost</th>
             </tr>
           </thead>
           <tbody>
             ${lineItems.map(item => `
               <tr>
-                <td style="border-bottom: 1px solid #ccc; padding: 8px;">${item.name}</td>
-                <td style="border-bottom: 1px solid #ccc; padding: 8px;">${item.quantity}</td>
-                <td style="border-bottom: 1px solid #ccc; padding: 8px;">£${((item.quantity * item.unitPrice / 100)).toFixed(2)}</td>
+                <td style="padding: 8px;">${item.name}</td>
+                <td style="padding: 8px;">${item.quantity}</td>
+                <td style="padding: 8px;">£${((item.quantity * item.unitPrice / 100)).toFixed(2)}</td>
               </tr>
             `).join('')}
           </tbody>
           <tfoot>
             <tr>
               <td colspan="2" style="text-align: right; padding: 8px;"><strong><i class='bx bx-truck'></i> Shipping:</strong></td>
-              <td style="border-top: 1px solid #ccc; padding: 8px;">£${(shipping / 100).toFixed(2)}</td>
+              <td style="padding: 8px;">£${(shipping / 100).toFixed(2)}</td>
             </tr>
             <tr>
-              <td colspan="2" style="text-align: right; padding: 8px;"><strong><i class='bx bx-truck'></i> Discount:</strong></td>
-              <td style="border-top: 1px solid #ccc; padding: 8px;">£${(discount / 100).toFixed(2)}</td>
+              <td colspan="2" style="text-align: right; padding: 8px;"><strong><i class='bx bx-info-circle'></i> Discount:</strong></td>
+              <td style="padding: 8px;">- £${(discount / 100).toFixed(2)} (${percentageDiscount}%)</td>
             </tr>
             <tr>
               <td colspan="2" style="text-align: right; padding: 8px;"><strong><i class='bx bx-dollar'></i> Total:</strong></td>
-              <td style="border-top: 1px solid #ccc; padding: 8px;">£${(totalPrice / 100).toFixed(2)}</td>
+              <td style="padding: 8px;">£${(totalPrice / 100).toFixed(2)}</td>
             </tr>
           </tfoot>
         </table>
@@ -276,6 +280,18 @@ function renderOrdersByMonthYear(ordersByMonthYear) {
 
       // Append the orderItem to the container
       container.appendChild(orderItem);
+
+
+      let informationBtn = orderItem.querySelector('.bx-info-circle')
+
+      tippy(informationBtn, {
+        content: `Original Price: <strong>£${(effectivePrice / 100).toFixed(2)}</strong><br>
+        Discount: <strong>£${(discount / 100).toFixed(2)}</strong><br>
+        New Total: <strong>£${(totalPrice / 100).toFixed(2)}</strong><br>
+        *** Shipping costs is not included in discounts.`,
+        allowHTML: true,
+        placement: 'left',
+      });
 
       // Add event listener to save button inside the order item
       const selectStatusType = orderItem.querySelector('.select-status');
@@ -329,6 +345,34 @@ const updateStatus = async (id, newStatus) => {
 
 
 
+const navBarCanvas = document.querySelector('.offcanvas')
+const bsOffcanvas = new bootstrap.Offcanvas(navBarCanvas)
+
+const productNavBtn = document.querySelector('.product-nav')
+const orderNavBtn = document.querySelector('.order-nav')
+
+const productSection = document.querySelector('.product-section')
+const orderSection = document.querySelector('.orders-section')
+
+const addProductBody = document.querySelector('.addProductBody')
+
+
+orderNavBtn.addEventListener('click', () => {
+  orderSection.style.display = 'block'
+  productSection.style.display = 'none'
+  addProductBody.style.display = 'none'
+  bsOffcanvas.hide()
+})
+
+productNavBtn.addEventListener('click', () => {
+  orderSection.style.display = 'none';
+  productSection.style.display = 'block';
+  addProductBody.style.display = 'block'
+  bsOffcanvas.hide()
+})
+
+
+
 
   
 
@@ -337,11 +381,34 @@ const updateStatus = async (id, newStatus) => {
 
 // Attach event listener to Apply Filters button
 const applyFiltersBtn = document.getElementById('apply-filters-btn');
-applyFiltersBtn.addEventListener('click', applyFilters);
+applyFiltersBtn.addEventListener('click', () => {
+  let filterCanvas = document.getElementById('filter-modal')
+  const bootstrapFilter = new bootstrap.Offcanvas(filterCanvas)
+  applyFilters()
+  bootstrapFilter.hide()
+
+});
 
 // Fetch orders when the page loads
 
+   function toggleDarkMode() {
+    const darkModeIcon = document.getElementById('darkmode-btn')
+    const lightModeIcon = document.getElementById('lightmode-btn')
+        document.body.classList.add('dark-mode');
+        document.getElementById('lightmode-btn').style.display = 'inline-block';
+        darkModeIcon.style.border = '3px solid yellow'
+        lightModeIcon.style.border = 'none'
+    }
 
+    // Function to toggle between dark mode and light mode
+    function toggleLightMode() {
+      const darkModeIcon = document.getElementById('darkmode-btn')
+      const lightModeIcon = document.getElementById('lightmode-btn')
+        document.body.classList.remove('dark-mode');
+        document.getElementById('darkmode-btn').style.display = 'inline-block';
+        lightModeIcon.style.border = '3px solid yellow'
+        darkModeIcon.style.border = 'none'
+    }
 
 
 

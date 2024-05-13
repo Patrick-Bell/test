@@ -101,6 +101,7 @@ function sendOrderStatusEmail(updatedOrder) {
         ${updatedOrder.lineItems.map(item => `<li>${item.quantity} x ${item.name} - £${(item.unitPrice / 100).toFixed(2)} each</li>`).join('')}
         </ul>
       </li>
+      <strong>Discounts:</strong> £${(updatedOrder.discount / 100).toFixed(2)}<br>
       <strong>Shipping Cost:</strong> £${(updatedOrder.shipping / 100).toFixed(2)}<br>
       <strong>Total Price:</strong> £${(updatedOrder.totalPrice / 100).toFixed(2)}<br><br>`
   

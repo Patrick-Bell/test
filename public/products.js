@@ -157,7 +157,7 @@ async function checkStockProducts() {
         products = await response.json(); // Assign the fetched products to the higher-scoped variable
 
         products.forEach(product => {
-            const isProductOutOfStock = product.stock < 1;
+            const isProductOutOfStock = product.stock === 0;
 
             // Get the "Add to Cart" button element
             const addToCartButton = document.querySelector(`[data-id="${product.id}"]`);
@@ -175,7 +175,6 @@ async function checkStockProducts() {
         console.error('Error checking stock:', error);
     }
 }
-
 
 function getTagStyles(tag) {
     switch (tag.toLowerCase()) {
@@ -281,6 +280,8 @@ function removeFromCart(event) {
 
     cart = cart.filter((item) => item.id !== productID);
     console.log('Updated cart:', cart);
+
+    window.location.reload()
 
     saveToLocalStorage();
     renderCartItems();
@@ -455,6 +456,8 @@ function filterCategory(category) {
     checkStockProducts()
     renderProducts(AllProductList, filteredProducts);
 }
+
+checkStockProducts()
 
 
 coinTypeSelect.addEventListener("change", () => {

@@ -17,14 +17,15 @@ const orderSchema = new mongoose.Schema({
     lineItems: [{ name: String, quantity: Number, unitPrice: Number }],
     shipping: Number,
     discount: {
-      type: String,
+      type: Number,
     },
     totalPrice: Number,
     status: {
       type: String,
       enum: ['pending', 'shipped', 'delivered', 'cancelled'],
       default: 'pending'
-    }
+    },
+    invoice: String,
   });
     
 

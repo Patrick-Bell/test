@@ -57,7 +57,6 @@ table {
 th, td {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
 }
 th {
   background-color: #f2f2f2;
@@ -68,9 +67,6 @@ tr:nth-child(even) {
 }
 td:nth-child(5), th:nth-child(5), th:nth-child(6){
   text-align: center;
-}
-tr:hover {
-  background-color: #f9f9f9;
 }
 .table-image{
     width: 50px;
@@ -248,8 +244,8 @@ h2{
   text-align: center;
   background-color: #f9f9f9;
 }
-.product-section{
-  display: block;
+.orders-section{
+  display: none;
 }
 .order-details{
   border-bottom: 1px solid grey;
@@ -302,6 +298,107 @@ h2{
 .status-border{
   padding: 10px;
 }
+
+
+/* dark mode */
+.mode-toggle{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 10px;
+}
+.mode-toggle i{
+  background: grey;
+  color: white;
+  position: relative;
+  padding: 10px;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+.bx-sun{
+  border: 3px solid yellow;
+}
+body.light-mode {
+  background-color: #f8f9fa;
+  color: #333;
+}
+/* Dark Mode Styles */
+body.dark-mode {
+  background: black;
+}
+body.dark-mode .bi-list{
+  color: white;
+}
+/* Dark Mode Styles */
+body.dark-mode tr:nth-child(even) {
+  background-color: #3d3a3a; /* Alternate row color for even rows in dark mode */
+  color: white; /* Text color for even rows in dark mode */
+}
+body.dark-mode option{
+  color: black;
+}
+
+body.dark-mode tr:nth-child(odd) {
+  background-color: black; /* Alternate row color for odd rows in dark mode */
+  color: white; /* Text color for odd rows in dark mode */
+}
+body.dark-mode #search-input {
+  background: #3d3a3a;
+  color: white;
+}
+body.dark-mode select {
+  color: white;
+}
+body.dark-mode select {
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="%23FFF" d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>') no-repeat right 10px center/16px;
+}
+body.dark-mode .stat-card {
+  background: #3d3a3a;
+  color: white;
+}
+body.dark-mode #page-text{
+  color: white;
+}
+body.dark-mode .orders-section{
+  color: white;
+}
+body.dark-mode .modal-header .btn-close {
+  color: white; /* Set close button color to white */
+  background-color: white; /* Transparent background for close button */
+}
+body.dark-mode .modal-content {
+  background-color: #333; /* Dark background color for modal content */
+  color: white; /* Text color for modal content in dark mode */
+}
+
+body.dark-mode .modal-header {
+  border-bottom: 1px solid #666; /* Dark border color for modal header */
+}
+
+body.dark-mode .btn-close {
+  color: white; /* Close button color in dark mode */
+}
+
+body.dark-mode .modal-body {
+  background-color: #333; /* Dark background color for modal body */
+}
+
+body.dark-mode .modal-footer {
+  border-top: 1px solid #666; /* Dark border color for modal footer */
+}
+
+body.dark-mode .offcanvas {
+  background-color: #333; /* Dark background color for offcanvas */
+  color: white; /* Text color for offcanvas in dark mode */
+}
+body.dark-mode .nav-body{
+  background: black;
+}
+body.dark-mode .offcanvas .btn-close {
+  color: black !important; /* Set the color of the close button icon to black */
+  background-color: white !important; /* Set the background color of the close button to white */
+}
+
 
 @media screen and (max-width: 600px) {
   td:nth-child(1) {

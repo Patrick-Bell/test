@@ -9,6 +9,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css">
+    <link
+  rel="stylesheet"
+  href="https://unpkg.com/tippy.js@6/animations/scale.css"
+/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
    </head>
@@ -26,22 +30,46 @@
     </div>
     <div class="offcanvas-body">
       <div>
-        <div class="nav-body">
-          Products
+        <div class="nav-body product-nav">
+          <div class="product-nav"><i class='bx bx-coin-stack'></i> Products</div>
         </div>
-        <div class="nav-body">
-          Orders
+        <div class="nav-body order-nav">
+          <div class="order-nav"><i class='bx bx-cart'></i> Orders</div>
         </div>
-        <div class="nav-body">
-          <div id="addProductBtn">Add Product</div>
+        <div class="nav-body addProductBody">
+          <div id="addProductBtn"><i class='bx bx-add-to-queue'></i> Add Product</div>
         </div>
-        <div class="nav-body">
-          <div id="logOutBtn"><i class='bx bx-log-out'></i> Log Out</div>
+        <div class="nav-body logout-body">
+          <div id="logOutBtn" type="submit"><i class='bx bx-log-out'></i> Log Out</div>
         </div>
+        <div class="mode-toggle">
+          <i class='bx bx-sun' id="lightmode-btn" onclick="toggleLightMode()"></i>
+          <i class='bx bxs-moon' id="darkmode-btn" onclick="toggleDarkMode()"></i>
+        </div>
+      </div>
       </div>
     </div>
   </div>
 
+
+  <div class="modal fade logout-modal"  tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">Log Out</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to log out?
+        </div>
+        <div class="modal-footer">
+          <form action="/logout?_method=DELETE" method="POST">
+          <button type="submit" class="btn btn-outline-danger">Log Out</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 
@@ -107,24 +135,6 @@
       </div>
     </div>
 
-
-    <div class="modal fade logout-modal"  tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5">Log Out</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to log out?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-outline-danger">Log Out</button>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- Modal -->
 <div class="modal fade delete-modal"  tabindex="-1" aria-hidden="true">
@@ -278,8 +288,8 @@
 
     <!-- Apply Filters Button -->
     <div class="mb-3">
-    <button type="button" class="btn btn-primary form-control" id="apply-filters-btn">Apply Filters</button>
-    <button type="button" class="btn btn-secondary form-control" id="reset-filters-btn">Reset Filters</button>
+    <button type="button" class="btn btn-primary form-control" id="apply-filters-btn" data-bs-dismiss="offcanvas">Apply Filters</button>
+    <button type="button" class="btn btn-secondary form-control" id="reset-filters-btn" data-bs-dismiss="offcanvas">Reset Filters</button>
   </div>
   </div>
 </div>
@@ -326,6 +336,8 @@
 
       
 
+  <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://unpkg.com/@popperjs/core@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

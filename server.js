@@ -296,14 +296,14 @@ app.route('/api/products/:id')
     }
 });
 
-app.delete('/logout', (req, res) => {
+app.delete('/logout', checkAuthenticated, (req, res) => {
   console.log("logging out")
   // Use a callback function as required by req.logout
   req.logout(function (err) {
     if (err) {
       return next(err);
     }
-    res.redirect('/login');
+    res.redirect('/');
   });
 });
 
@@ -622,10 +622,9 @@ app.post('/webhooks', async (req, res) => {
           quantity: item.quantity,
           unitPrice: item.amount / item.quantity,
         })),
-        status: 'pending'
+        status: 'pending',
+        invoice: invoice.hosted_invoice_url,
       };
-
-      console.log('coupon', invoice.discount.coupon)
 
 
     
