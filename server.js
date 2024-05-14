@@ -626,8 +626,11 @@ app.post('/webhooks', async (req, res) => {
         invoice: invoice.hosted_invoice_url,
       };
 
+<<<<<<< HEAD
 
     
+=======
+>>>>>>> a0214e86150bb5bcf3c5206147fea74b5f7129da
       // Log order data for debugging
       console.log('Order data (test#1):', orderData);
       addOrderToTable(orderData)
