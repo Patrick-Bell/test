@@ -139,7 +139,9 @@ function renderOrdersByMonthYear(ordersByMonthYear) {
 
     // Iterate over each order within the current month-year group
     orders.forEach(order => {
-      const { id, name, email, address, phone, lineItems, shipping, totalPrice, timestamp, status, discount } = order;
+      const { id, name, email, address, phone, lineItems, shipping, totalPrice, timestamp, status, discount, invoice } = order;
+
+      console.log(invoice)
 
       let backgroundColor, iconClass;
 
