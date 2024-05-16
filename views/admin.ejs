@@ -164,14 +164,32 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
+            <label for="editProductID">Product ID</label>
           <input type="text" name="editProductID" id="EditProductID" class="form-control mb-3" disabled> <!-- Hidden input for product ID -->
+        <label for="editProductTitle">Product Title</label>
         <input type="text" name="editProductTitle" id="editProductTitle" class="form-control mb-3" placeholder="Product Name" required>
+        <label for="editProductPrice">Product Price</label>
         <input type="number" name="editProductPrice" id="editProductPrice" class="form-control mb-3" placeholder="Product Price" step="0.01" required>
+        <label for="editProductDescription">Product Description</label>
         <input type="text" name="editProductDescription" id="editProductDescription" class="form-control mb-3" placeholder="Product Description" required>
+        <label for="editProductImage">Product Image</label>
         <input type="text" name="editProductImage" id="editProductImage" class="form-control mb-3" placeholder="Product Image URL" required>
+        <label for="editProductStock">Product Stock</label>
         <input type="number" name="editProductStock" id="editProductStock" class="form-control mb-3" placeholder="Product Stock" required>
-        <input type="text" name="editProductCategory" id="editProductCategory" class="form-control mb-3" placeholder="Product Category" required>
-        <input type="text" name="editProductTag" id="editProductTag" class="form-control mb-3" placeholder="Product Tag" required>
+        <select name="editProductCategory" id="editProductCategory">
+          <option value="olympic">Olympic</option>
+          <option value="alphabet">Alphabet</option>
+          <option value="peter-rabbit">Peter Rabbit</option>
+          <option value="nhs">NHS (Limited Edition)</option>
+          <option value="king-anniversary">King Anniverary (Limited)</option>
+          <option value="collection">Collection</option>
+        </select>
+        <select name="editProductTag" id="editProductTag">
+          <option value="none">No Tag</option>
+          <option value="new">New</option>
+          <option value="sale">Sale</option>
+          <option value="hot">Hot</option>
+        </select>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -204,6 +222,12 @@
   <option value="king-anniversary">Anniversary</option>
   <option value="peter-rabbit">Peter Rabbit</option>
   <option value="collection">Collections</option>
+</select>
+<select name="tag" id="tag">Tag
+  <option value="all">Tag</option>
+  <option value="sale">Sale</option>
+  <option value="hot">Hot</option>
+  <option value="new">New</option>
 </select>
 </div>
 

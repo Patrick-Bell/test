@@ -51,7 +51,9 @@ async function renderProductsOnPage() {
 // Call the function to render products on the page when the DOM is loaded
 
 function renderProducts(productList, productData, pageNumber = 1, pageSize = 15) {
+    checkStockProducts()
     console.log('Product Data:', productData);
+    console.log('product list', productList)
     const startIndex = (pageNumber - 1) * pageSize;
     let endIndex = startIndex + pageSize;
     const productsPerPage = productData.slice(startIndex, endIndex);
@@ -62,19 +64,24 @@ function renderProducts(productList, productData, pageNumber = 1, pageSize = 15)
         return;
     }
 
-    productList.innerHTML = productsPerPage.map(product => `
+    productList.innerHTML = productsPerPage.map(product => {
+        let displayText = ''
+        if (product.stock > 0 && product.stock <= 5) {
+            displayText = `- <i class="bi bi-fire"></i> <strong>${product.stock}</strong> left!`
+        }
+      return `
         <div class="product">
             <img src="${product.image}" alt="${product.title}">
-            <h4 class="productTitle">${product.title}</h4>
+            <h4 class="productTitle">${product.title} ${displayText}</h4>
             <h4>£${product.price}</h4>
             <div class="cart">
                 <a><i class="bi bi-cart add-to-cart" data-id="${product.id}"></i></a>
-                <div class="tags" style="background-color: ${getTagStyles(product.tag).backgroundColor}; color: ${getTagStyles(product.tag).color}">
+                <div class="tags" style="border-radius: 0.4rem; background-color: ${getTagStyles(product.tag).backgroundColor}; color: ${getTagStyles(product.tag).color}">
                     ${product.tag}
                 </div>
             </div>
         </div>`
-    ).join("");
+}).join("");
 
     // Pagination logic
     const totalPages = Math.ceil(productData.length / pageSize);

@@ -215,6 +215,9 @@ function renderOrdersByMonthYear(ordersByMonthYear) {
             <div>
               <i class='bx bx-phone'></i> ${phone}
             </div>
+            <div>
+            <a class="invoice-stripe" style="text-decoration: none;" href="${invoice}" target="_blank"><i class='bx bx-receipt'></i> view invoice</a>
+            </div>
             <div style="background: ${backgroundColor}; width: 175px; border-radius: 0.4rem"; class="status-border">
               <i class='${iconClass}'></i> order ${status}
             </div>

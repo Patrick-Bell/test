@@ -22,9 +22,14 @@
   background: rgb(208, 203, 203);
   margin: 10px 0;
   border-radius: 0.4rem;
+  cursor: pointer;
 }
 
 
+
+.edit-product-modal select{
+  width: 49.5%
+}
 
 
 
@@ -397,6 +402,9 @@ body.dark-mode .nav-body{
 body.dark-mode .offcanvas .btn-close {
   color: black !important; /* Set the color of the close button icon to black */
   background-color: white !important; /* Set the background color of the close button to white */
+}
+body.dark-mode .invoice-stripe{
+  color: white;
 }
 
 

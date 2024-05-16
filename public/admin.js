@@ -234,6 +234,7 @@ searchInput.addEventListener('input', () => {
         const stockLevel = stockLevelSelect.value;
         const sortPriceOption = priceOptionSelect.value;
         const chosenCategory = categorySelect.value
+        const chosenTag = tagSelect.value
 
 // Filter products based on search query, stock level, and price option
   products = products.filter(product => {
@@ -250,6 +251,10 @@ searchInput.addEventListener('input', () => {
     (chosenCategory === 'king-anniversary' && product.category === 'king-anniversary') ||
     (chosenCategory === 'peter-rabbit' && product.category === 'peter-rabbit') ||
     (chosenCategory === 'collection' && product.category === 'collection')
+    const tagLevel = (chosenTag === 'all') ||
+    (chosenTag === 'sale' && product.tag === 'sale') ||
+    (chosenTag === 'hot' && product.tag === 'hot') ||
+    (chosenTag === 'new' && product.tag === 'new')
 
   // Convert product price to numeric value
   product.numericPrice = parseFloat(product.price);
@@ -261,7 +266,7 @@ searchInput.addEventListener('input', () => {
     matchesPriceOption = product.numericPrice >= 0; // Adjust this condition if needed
   }
 
-  return matchesSearch && meetsStockLevel && matchesPriceOption && categoryLevel;
+  return matchesSearch && meetsStockLevel && matchesPriceOption && categoryLevel && tagLevel;
 });
 
 // Sort products based on price option
@@ -306,6 +311,13 @@ if (sortPriceOption === 'l-h') {
       currentProductPage = 1;
       fetchAndDisplayProducts();
     });
+
+    const tagSelect = document.getElementById('tag')
+tagSelect.addEventListener('change', () => {
+  currentProductPage = 1
+  fetchAndDisplayProducts()
+})
+
     
     const priceOptionSelect = document.getElementById('sort-price')
     priceOptionSelect.addEventListener('change', () => {
