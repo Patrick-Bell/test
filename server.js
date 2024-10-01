@@ -1,4 +1,4 @@
-const express = require('express')
+/*const express = require('express')
 require('dotenv').config();
 const stripe = require('stripe')
 const mongoose = require('mongoose')
@@ -665,5 +665,6 @@ function checkNotAuthenticated(req, res, next) {
 app.listen(3001, () => {
     console.log("Listening on port 3001");
 });
+*/
 
 
